@@ -1,0 +1,622 @@
+<%- include('../layouts/Shopheader') %>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap11.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style11.css" type="text/css">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Your custom CSS file (if any) -->
+    <link rel="stylesheet" href="/css/custom-styles.css">
+
+    <!-- Optional: Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" href="path/to/elevatezoom.css">
+
+    
+
+</head>
+
+<style>
+
+   
+/* Navbar Styles */
+.navbar {
+    height: 100px;
+}
+
+.navbar .navbar-brand .logoname {
+    font-family: 'Poppins', sans-serif;
+    font-size: 54px;
+    color: #fff;
+}
+
+.navbar .nav-link {
+    color: #fff !important;
+}
+
+.navbar .nav-item.cta a {
+    background-color: #82ae46;
+    border-radius: 30px;
+    padding: 5px 15px;
+}
+
+.navbar .nav-item.cta a .icon-shopping_cart {
+    margin-right: 5px;
+}
+
+.shopping__cart__table img {
+    width: 80px; /* Adjust as needed */
+    height: 80px; /* Adjust as needed */
+    object-fit: cover; /* Ensures the image covers the defined dimensions */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+}
+
+.pro-qty-2 {
+    display: flex;
+    align-items: center;
+}
+
+.qty-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.qty-btn:hover {
+    background-color: #e0e0e0;
+}
+
+input[type="number"] {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    height: 30px;
+    font-size: 16px;
+}
+
+.stock-message {
+        margin-top: 10px;
+        color: red;
+    }
+
+    .out-of-stock {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid red;
+    color: rgb(244, 243, 243);
+    background-color: #ee0e0e; /* Light red background */
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px; /* Optional, to add some space above the message */
+}
+
+</style>
+
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__option">
+        <div class="offcanvas__links">
+            <a href="#">Sign in</a>
+            <a href="#">FAQs</a>
+        </div>
+        <div class="offcanvas__top__hover">
+            <span>Usd <i class="arrow_carrot-down"></i></span>
+            <ul>
+                <li>USD</li>
+                <li>EUR</li>
+                <li>USD</li>
+            </ul>
+        </div>
+    </div>
+    <div class="offcanvas__nav__option">
+        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
+        <a href="#"><img src="img/icon/heart.png" alt=""></a>
+        <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+        <div class="price">$0.00</div>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__text">
+        <p>Free shipping, 30-day return or refund guarantee.</p>
+    </div>
+</div>
+<!-- Offcanvas Menu End -->
+
+ 
+<!-- Navbar section -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                    <!-- Add dropdown content if needed -->
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar section -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (cart && cart[0] && cart[0].products && cart[0].products.length > 0) { %>
+                                <% cart[0].products.forEach(product => { %>
+                                    <tr>
+                                        <td class="product__cart__item">
+                                            <div class="product__cart__item__pic">
+                                                <a href="/productView/product/<%= product.productId._id %>/variant/<%= product.variantId %>">
+                                                    <% const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString()); %>
+                                                    <% if (variant && variant.images && variant.images.length > 0) { %>
+                                                        <img src="/uploads/<%= variant.images[0] %>" alt="Product image">
+                                                    <% } else { %>
+                                                        <img src="/path/to/default/image.jpg" alt="Default Image">
+                                                    <% } %>
+                                                </a>
+                                            </div>
+                                            <div class="product__cart__item__text">
+                                                <h6><%= product.productId.name %></h6>
+                                                 <h5>₹<%= product.productId.price %></h5>
+                                            </div>
+                                        </td>
+                                        <td class="quantity__item">
+                                            <div class="quantity">
+                                                <% if (variant.quantity < 1) { %>
+                                                    <div class="out-of-stock">Out Of Stock</div>
+                                                <% } else { %>
+                                                    <% 
+                                                        let maxQuantity = Math.min(5, variant.quantity);
+                                                        var stockMessage = "";
+                                                        if (variant.quantity > 0 && variant.quantity < 5) {
+                                                            stockMessage = 'only ' + variant.quantity + ' left in stock';
+                                                        }
+                                                    %>
+                                                    <button class="qty-btn qty-decrease">-</button>
+                                                    <input type="number" value="<%= product.quantity %>" max="<%= maxQuantity %>" min="1" data-price="<%= product.productId.price %>" data-product-id="<%= product.productId._id %>" data-variant-id="<%= product.variantId %>" data-available-stock="<%= variant.quantity %>">
+                                                    <button class="qty-btn qty-increase">+</button>
+                                                </div>
+                                               
+                                                    <% if (stockMessage) { %>
+                                                        <p class="stock-message"><%= stockMessage %></p>
+                                                    <% } %>
+                                                    
+                                                <% } %>
+                                            </td>
+                                        
+                                        <td class="cart__price">
+                                            <% if (variant.quantity < 1) { %>
+                                                ₹<span class="item-total">0.00</span>
+                                            <% } else { %>
+                                                ₹<span class="item-total"><%= (product.productId.price * product.quantity).toFixed(2) %></span>
+                                            <% } %>
+                                        </td>
+                                        <td class="cart__close">
+                                            <form id="removeProduct">
+                                                <input type="hidden" name="productId" value="<%= product.productId._id %>">
+                                                <input type="hidden" name="variantId" value="<%= product.variantId %>">
+                                                <button onclick="removeCart(event, '<%= product.productId._id %>', '<%= product.variantId %>')"><i class="fa fa-close"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4">Your cart is empty.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a href="#">Continue Shopping</a>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit">Apply</button>
+                    </form>
+                </div>
+                <div class="cart__total">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Subtotal <span>₹<span id="subtotal">
+                            <%= cart && cart[0] ? cart[0].products.reduce((sum, product) => {
+                                const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
+                                return variant && variant.quantity > 0 ? sum + product.productId.price * product.quantity : sum;
+                            }, 0).toFixed(2) : 0 %>
+                        </span></span></li>
+                        <li>Total <span>₹<span id="total">
+                            <%= cart && cart[0] ? cart[0].products.reduce((sum, product) => {
+                                const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
+                                return variant && variant.quantity > 0 ? sum + product.productId.price * product.quantity : sum;
+                            }, 0).toFixed(2) : 0 %>
+                        </span></span></li>
+                    </ul>
+                    <a href="/user/cheakOut" class="primary-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="footer__about">
+                    <div class="footer__logo">
+                        <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                    </div>
+                    <p>The customer is at the heart of our unique business model, which includes design.</p>
+                    <a href="#"><img src="img/payment.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="#">Clothing Store</a></li>
+                        <li><a href="#">Trending Shoes</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Payment Methods</a></li>
+                        <li><a href="#">Delivary</a></li>
+                        <li><a href="#">Return & Exchanges</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                <div class="footer__widget">
+                    <h6>NewLetter</h6>
+                    <div class="footer__newslatter">
+                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                        <form action="#">
+                            <input type="text" placeholder="Your email">
+                            <button type="submit"><span class="icon_mail_alt"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="footer__copyright__text">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <p>Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>2020
+                        All rights reserved | This template is made with <i class="fa fa-heart-o"
+                        aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to update stock message
+    function updateStockMessage(input) {
+        const availableStock = parseInt(input.getAttribute('data-available-stock'), 10);
+        const quantity = parseInt(input.value, 10);
+        const stockMessageDiv = document.getElementById('stockMessage' + input.getAttribute('data-variant-id'));
+
+        if (availableStock === 0) {
+            stockMessageDiv.textContent = 'Out of stock';
+        } else if (availableStock < 5) {
+            stockMessageDiv.textContent = `Only ${availableStock} left in stock`;
+        } else {
+            stockMessageDiv.textContent = '';
+        }
+    }
+
+
+        // Select all quantity inputs
+        const quantityInputs = document.querySelectorAll('.quantity input[type="number"]');
+
+        // Initialize stock message for each quantity input
+        quantityInputs.forEach(input => {
+            updateStockMessage(input);
+
+            // Add event listener for input changes
+            input.addEventListener('input', function() {
+                updateStockMessage(input);
+            });
+
+            // Add event listeners for increase and decrease buttons
+            const decreaseButton = input.previousElementSibling;
+            const increaseButton = input.nextElementSibling;
+
+            decreaseButton.addEventListener('click', function() {
+                let quantity = parseInt(input.value, 10);
+                if (quantity > 1) {
+                    input.value = quantity - 1;
+                    updateStockMessage(input);
+                }
+            });
+
+            increaseButton.addEventListener('click', function() {
+                let quantity = parseInt(input.value, 10);
+                if (quantity < input.max) {
+                    input.value = quantity + 1;
+                    updateStockMessage(input);
+                }
+            });
+        });
+    });
+    // d
+    
+    async function removeCart(event,productId,variantId){
+        event.preventDefault()
+        const data={
+            productId,
+            variantId
+        }
+        console.log(data)
+        const response=await fetch('/user/productCart/remove',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({data})
+        })
+        if (!response.ok) {
+                throw new Error('Failed to remove product from cart');
+            }
+            console.log('this is response' , response);
+            const datas = await response.json();
+            if(response.ok){
+                Swal.fire({
+                    title : 'Success',
+                    text : datas.message,
+                    icon : 'success',
+                    confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '/user/productCart';
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: datas.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+           
+
+            // Remove the row from the table
+            row.remove();
+            updateTotalSum();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+    const quantityInputs = document.querySelectorAll('.quantity input[type="number"]');
+    const incrementButtons = document.querySelectorAll('.quantity .qty-increase');
+    const decrementButtons = document.querySelectorAll('.quantity .qty-decrease');
+    // const removeProductForms = document.querySelectorAll('.removeProductForm');
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            updateQuantity(this);
+        });
+    });
+
+    incrementButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const input = this.parentElement.querySelector('input[type="number"]');
+            input.stepUp();
+            updateQuantity(input);
+        });
+    });
+
+    decrementButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const input = this.parentElement.querySelector('input[type="number"]');
+            input.stepDown();
+            updateQuantity(input);
+        });
+    });
+
+    // removeProductForms.forEach(form => {
+    //     form.addEventListener('submit', function(e) {
+    //         e.preventDefault();
+    //         removeProduct(this);
+    //     });
+    // });
+
+    async function updateQuantity(input) {
+        const price = parseFloat(input.dataset.price);
+        const quantity = parseInt(input.value);
+        const productId = input.dataset.productId;
+        const variantId = input.dataset.variantId;
+
+        const itemTotalElement = input.closest('tr').querySelector('.item-total');
+        const itemTotal = price * quantity;
+        itemTotalElement.textContent = itemTotal.toFixed(2);
+
+        updateTotalSum();
+
+        // Send an AJAX request to update the quantity on the server
+        try {
+            const response = await fetch('/user/cartUpdate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    variantId: variantId,
+                    quantity: quantity
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update cart');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function removeProduct(form) {
+        const productId = form.querySelector('input[name="productId"]').value;
+        const variantId = form.querySelector('input[name="variantId"]').value;
+        const row = form.closest('tr');
+        console.log('this is form button')
+        // Send an AJAX request to remove the product from the cart
+        try {
+            // const response = await fetch('/user/productCart/remove', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({
+            //         productId: productId,
+            //         variantId: variantId
+            //     })
+            // });
+
+           
+        } catch (error) {
+            console.error('Error during the remove cart:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Something went wrong. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+
+    function updateTotalSum() {
+        let totalSum = 0;
+        document.querySelectorAll('.item-total').forEach(element => {
+            totalSum += parseFloat(element.textContent);
+        });
+        document.getElementById('subtotal').textContent = totalSum.toFixed(2);
+        document.getElementById('total').textContent = totalSum.toFixed(2);
+    }
+});
+
+    </script>
+
+
+
+<!-- Search End -->
+ <!-- Js Plugins -->
+ <script src="/js/jquery-3.4.1.min.js"></script>
+ <script src="/js/bootstrap11.min.js"></script>
+ <script src="/js/jquery.nice-select.min.js"></script>
+ <script src="/js/jquery.nicescroll.min.js"></script>
+ <script src="/js/jquery.magnific-popup.min.js"></script>
+ <script src="/js/jquery.countdown.min.js"></script>
+ <script src="/js/jquery.slicknav.js"></script>
+ <script src="/js/mixitup.min.js"></script>
+ <script src="/js/owl.carousel1.min.js"></script>
+ <script src="/js/main3.js"></script>
+ 
+ <!-- Bootstrap JS bundle (includes Popper) -->
+ <script src="/js/bootstrap.bundle.min.js"></script>
+
+ <!-- Your custom JavaScript file (if any) -->
+ <script src="/js/custom-scripts.js"></script>
+<%- include('../layouts/footer') %>

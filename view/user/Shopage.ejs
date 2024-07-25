@@ -1,0 +1,407 @@
+<%- include('../layouts/Shopheader') %>
+
+<style>
+    .image-container {
+  height: 300px; /* Adjust height as needed */
+  width: 100%; /* Ensure full width */
+}
+
+.image-container .img-prod img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
+}
+
+.logoname {
+    font-size: 2.5rem; /* Adjust as needed */
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; /* Example font family */
+    color: #eac90b; 
+    text-transform: uppercase; /* Example text transformation */
+    letter-spacing: 2px; /* Example letter spacing */
+    margin: 0; /* Remove default margin */
+  }
+ /* Custom styles for navbar links */
+.custom-nav-link, .navbar-nav .nav-link {
+    color: white !important; /* Change this to your desired color */
+}
+
+.custom-nav-link:hover, .navbar-nav .nav-link:hover {
+    color: #ff4500 !important; /* Change this to your desired hover color */
+}
+
+/* If you want to target the dropdown items specifically */
+.dropdown-item.custom-nav-link, .dropdown-item {
+    color: white !important; /* Change this to your desired color */
+}
+
+.dropdown-item.custom-nav-link:hover, .dropdown-item:hover {
+    color: #ff4500 !important; /* Change this to your desired hover color */
+}
+.widgets_inner {
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.widgets_inner ul.list {
+    padding: 0;
+    margin: 0;
+}
+
+.widgets_inner ul.list li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px; /* Space for the bullet dot */
+    list-style: none; /* Remove default list styles */
+}
+
+.widgets_inner ul.list li::before {
+    content: '\2022'; /* Bullet dot Unicode character */
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+}
+
+.widgets_inner ul.list li a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.widgets_inner ul.list li a:hover {
+    background-color: #f0f0f0;
+    color: #222;
+}
+.out-of-stock-btn {
+    color: rgb(229, 15, 15); /* Text color */
+    border: 2px solid red; /* Red border */
+    background-color: red; /* Red background */
+    border-radius: 4px; /* Rounded corners */
+    font-weight: bold; /* Bold text */
+    display: inline-block; /* Inline block for sizing */
+    width: 100%; /* Full width (adjust if necessary) */
+    text-align: center; /* Center text */
+    padding: 10px 0; /* Padding */
+    text-decoration: none; /* Remove underline */
+}
+
+.out-of-stock-btn span {
+    /* If you have specific styles for the span element inside the button */
+}
+
+.out-of-stock-btn i {
+    color: rgb(231, 20, 20); /* Ensure icons are also white */
+}
+</style>
+
+</head>
+<body class="goto-here">
+
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href=""> <h1 class="logoname">GAMZY</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item" ><a href="/" class="nav-link">Home</a></li>
+              <li class="nav-item dropdown active">
+                  <a class="nav-link " href=""  aria-haspopup="true" aria-expanded="false">Shop</a>
+        
+              </li>
+              <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+              <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+              <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+              <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+          </ul>
+      </div>
+      </div>
+    </nav>
+  <!-- END nav -->
+
+  <!-- <div class="hero-wrap hero-bread" style="background-image: url('/img/bac.jpg');">
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
+          <h1 class="mb-0 bread">Shop</h1>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="hero-wrap hero-bread" style="background-image: url('/img/Gaming.jpg'); background-size: 100% auto; background-position: center; background-repeat: no-repeat;">
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
+          <h1 class="mb-0 bread">Shop</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-lg-10 order-md-last">
+            <div class="row">
+                <!-- Products -->
+                <% products.forEach(product => { %>
+                    <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
+                        <div class="product d-flex flex-column">
+                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
+                                <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
+                                <div class="overlay"></div>
+                            </a>
+                            <div class="text py-3 pb-4 px-3">
+                                <div class="d-flex">
+                                    <div class="cat">
+                                        <span><%= product.category %></span>
+                                    </div>
+                                    
+                                </div>
+                                <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.name %></a></h3>
+                                <div class="pricing">
+                                    <p class="price"><span>₹<%= product.price %></span></p>
+                                    <p class="price"><span><%= product.productDescription %></span></p>
+                                </div>
+                                <p class="bottom-area d-flex px-3">
+                                  <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart</i></span></a>
+                                  <% if (product.variants[0].quantity < 1) { %>
+                                    <a href="#" class=" out-of-stock-btn " style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
+                                  <% } else { %>
+                                      <a href="#" class="buy-now text-center py-2">Buy now<span></i></span></a>
+                                  <% } %>
+                              </p>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+            <div class="col-md-4 col-lg-2">
+                <div class="sidebar">
+                    <div class="sidebar-box-2">
+                        <h2 class="heading">Categories</h2>
+                        <div class="widgets_inner">
+                          <ul class="list">
+                              <% categories.forEach(category => { %>
+                                  <li>
+                                      <a href=""><%= category.name %></a>
+                                  </li>
+                              <% }); %>
+                          </ul>
+                      </div>
+                    </div>
+
+                    
+
+
+
+                    <div class="sidebar-box-2">
+                        <h2 class="heading">Price Range</h2>
+                        <form method="post" class="colorlib-form-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="price_from">Price from:</label>
+                                        <div class="form-field">
+                                            <i class="icon icon-arrow-down3"></i>
+                                            <select name="price_from" id="price_from" class="form-control">
+                                                <option value="1">$1</option>
+                                                <option value="200">$200</option>
+                                                <option value="300">$300</option>
+                                                <option value="400">$400</option>
+                                                <option value="1000">$1000</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="price_to">Price to:</label>
+                                        <div class="form-field">
+                                            <i class="icon icon-arrow-down3"></i>
+                                            <select name="price_to" id="price_to" class="form-control">
+                                                <option value="2000">$2000</option>
+                                                <option value="4000">$4000</option>
+                                                <option value="6000">$6000</option>
+                                                <option value="8000">$8000</option>
+                                                <option value="10000">$10000</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+      
+      <section class="ftco-gallery">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-md-8 heading-section text-center mb-4 ftco-animate">
+          <h2 class="mb-4">Follow Us On Instagram</h2>
+          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
+        </div>
+          </div>
+      </div>
+      <!-- <div class="container-fluid px-0">
+          <div class="row no-gutters">
+                  <div class="col-md-4 col-lg-2 ftco-animate">
+                      <a href="/images/product-4.png" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-1.jpg);">
+                          <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                          <span class="icon-instagram"></span>
+                      </div>
+                      </a>
+                  </div>
+                  <div class="col-md-4 col-lg-2 ftco-animate">
+                      <a href="/images/gallery-2.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-2.jpg);">
+                          <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                          <span class="icon-instagram"></span>
+                      </div>
+                      </a>
+                  </div>
+                  <div class="col-md-4 col-lg-2 ftco-animate">
+                      <a href="/images/gallery-3.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-3.jpg);">
+                          <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                          <span class="icon-instagram"></span>
+                      </div>
+                      </a>
+                  </div>
+                  <div class="col-md-4 col-lg-2 ftco-animate">
+                      <a href="/images/gallery-4.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-4.jpg);">
+                          <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                          <span class="icon-instagram"></span>
+                      </div>
+                      </a>
+                  </div>
+                  <div class="col-md-4 col-lg-2 ftco-animate">
+                      <a href="/images/gallery-5.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-5.jpg);">
+                          <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                          <span class="icon-instagram"></span>
+                      </div>
+                      </a>
+                  </div>
+                  <div class="col-md-4 col-lg-2 ftco-animate">
+                      <a href="/images/gallery-6.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-6.jpg);">
+                          <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                          <span class="icon-instagram"></span>
+                      </div>
+                      </a>
+                  </div>
+      </div>
+      </div> -->
+  </section>
+
+  <footer class="ftco-footer ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="mouse">
+                      <a href="#" class="mouse-icon">
+                          <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+                      </a>
+                  </div>
+        </div>
+      <div class="row mb-5">
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Minishop</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4 ml-md-5">
+            <h2 class="ftco-heading-2">Menu</h2>
+            <ul class="list-unstyled">
+              <li><a href="#" class="py-2 d-block">Shop</a></li>
+              <li><a href="#" class="py-2 d-block">About</a></li>
+              <li><a href="#" class="py-2 d-block">Journal</a></li>
+              <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+           <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Help</h2>
+            <div class="d-flex">
+                <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
+                  <li><a href="#" class="py-2 d-block">Shipping Information</a></li>
+                  <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
+                  <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
+                  <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
+                </ul>
+                <ul class="list-unstyled">
+                  <li><a href="#" class="py-2 d-block">FAQs</a></li>
+                  <li><a href="#" class="py-2 d-block">Contact</a></li>
+                </ul>
+              </div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Have a Questions?</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+                  <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+                  <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+                </ul>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+
+          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                      </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.stellar.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/jquery.animateNumber.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/scrollax.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+<script src="/js/google-map.js"></script>
+<script src="/js/main.js"></script>
+
+
+<%- include('../layouts/footer') %>

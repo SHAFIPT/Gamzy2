@@ -1,0 +1,277 @@
+<%- include('../layouts/userheader.ejs') %>
+
+<style>
+
+
+body {
+  margin: 0;
+  color: #4b537b;
+  background:#61557d;
+  font: 600 16px/18px 'Open Sans', sans-serif;
+}
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.group {
+    margin-bottom: 20px;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.check {
+    margin-right: 10px;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid #ccc;
+}
+
+/* .foot-lnk {
+    text-align: center;
+} */
+
+/* .google-btn {
+    background-color: #DD4B39;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.google-btn img {
+    width: 20px;
+    margin-right: 10px;
+} */
+
+.foot-lnk {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.google-btn {
+  display: inline-block;
+  color: #fff;
+  background-color: #4285f4;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-btn i {
+  margin-right: 8px;
+}
+
+.google-btn:hover {
+  background-color: #357ae8;
+}
+
+.google-btn:active {
+  background-color: #2c6bb2;
+}
+
+.google-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(66, 133, 244, 0.6);
+}
+
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+  
+  
+<div class="login-wrap">
+  <div class="login-html">
+      <label for="tab-2" class="tab">Sign in</label>
+      <div class="login-form">
+    <div class="sign-in-htm">
+      <% if (typeof logoutmsg !== 'undefined' && logoutmsg) { %>
+        <div class="alert alert-success">
+          <%= logoutmsg %>
+        </div>
+  <% } %>
+  <form action="/user/login" method="post" id="form">
+    <input type="hidden" id="userName" value="<%= name %>">
+    <div class="group">
+        <label for="email" class="label">Enter Your Email</label>
+        <input id="email" name="email" type="text" class="input">
+        <div class="error"></div>
+    </div>
+    <div class="group">
+        <label for="password" class="label">Password</label>
+        <input id="password" type="password" name="password" class="input">
+        <div class="error"></div>
+    </div>
+    <div class="group">
+        <input id="check" type="checkbox" class="check" checked>
+        <label for="check"><span class="icon"></span> Keep me Signed in</label>
+    </div>
+    <div class="group">
+        <input type="submit" class="button" value="Sign In">
+    </div>
+    
+    
+    <div class="hr"></div>
+    <div class="foot-lnk">
+      <a href="/user/signUp" style="color: rgb(241, 237, 237);">Create an account</a>
+      <a href="/user/forgotPassword" style="color: rgb(95, 108, 252);">Forgot Password?</a>
+  </div>
+    <div class="foot-lnk">
+      <a href="/user/auth/google" class="google-btn">
+        <i class="fab fa-google"></i> Continue with Google
+      </a>
+    </div>
+</form>
+
+      </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+const form = document.getElementById('form');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const userNameInput = document.getElementById('userName');  
+
+console.log(userNameInput);
+console.log('hello');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+   
+  validateInputs();
+  if (isValid()) {
+    // form.submit();
+    const formData = {
+      email: email.value.trim(),
+      password: password.value.trim(),
+      name: userNameInput.value.trim() // Get the user's name from the hidden input field
+    }
+    try { 
+      
+      const response = await fetch('/user/login',{
+        method : 'POST',
+        headers : {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      }) 
+      const result = await response.json();
+      if(response.ok){
+        localStorage.setItem('userName', formData.name);
+        Swal.fire({
+                    title:'success',
+                    text:result.message,
+                    icon:'success',
+                    confirmTextButton:'OK'
+                }).then((result) => { 
+                    window.location.href='/'
+                }).catch((err) => {
+                    
+                });
+      }else{
+          Swal.fire({
+            title : 'error',
+            text : result.message,
+            icon  : 'error',
+            confirmTextButton : 'OK'
+          })
+      }
+
+    } catch (error) {
+      console.error('Error during fetch:', error);
+      alert('An error occurred. Please try again.');
+    }
+
+}
+});
+
+const isValid = ()=>{
+return email.parentElement.classList.contains('success')&&
+password.parentElement.classList.contains('success');
+}
+const setError = (element, message) => {
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success')
+}
+const setSuccess = element => {
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error');
+};
+const isValidEmail = email => {
+const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+return re.test(String(email).toLowerCase());
+}
+const validateInputs = () => {
+const emailvalue = email.value.trim();
+const passwordvalue = password.value.trim();
+if(emailvalue === '') { 
+    setError(email, 'Email is required');
+} else if (!isValidEmail(emailvalue)) {
+    setError(email, 'Provide a valid email address');
+} else {
+    setSuccess(email);
+}
+if (passwordvalue === '') {
+  setError(password, 'The password is required');
+}
+else{
+  setSuccess(password);
+} 
+}
+
+
+</script>
+
+  <%- include('../layouts/footer.ejs') %>

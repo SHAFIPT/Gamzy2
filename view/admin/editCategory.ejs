@@ -1,0 +1,86 @@
+<%- include('../layouts/adminheader') %>
+  </head>
+  <style>
+    .form-group textarea.form-control {
+      /* background-color: #444; */
+      border: none;
+      color: #fff;
+      /* Adjust height and font size as needed */
+      height: 150px;
+      /* Example height */
+      font-size: 14px;
+      /* Example font size */
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .tm-footer {
+      padding: 1rem;
+    }
+
+    .tm-footer a {
+      color: #007bff;
+    }
+  </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-xl">
+      <div class="container h-100">
+        <a class="navbar-brand" href="index.html">
+          <h1 class="tm-site-title mb-0">Product Admin</h1>
+        </a>
+      </div>
+    </nav>
+    <div class="container tm-mt-big tm-mb-big">
+      <div class="row">
+        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="tm-block-title d-inline-block">Edit Category</h2>
+              </div>
+            </div>
+            <div class="row tm-edit-product-row">
+              <div class="col-xl-12 col-lg-12 col-md-12">
+                <form action="/admin/editCategory" class="tm-edit-product-form" id="form" method="post">
+                  <div class="form-group mb-3">
+                    <label for="name">Category Name</label>
+                    <input id="name" name="name" type="text" value="<%= category.name %>" class="form-control validate"
+                      required />
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control validate" rows="3"
+                      required><%= category.description %></textarea>
+                  </div>
+                  <div class="form-group mb-3">
+                    <input id="id" name="id" type="hidden" value="<%=category._id%>" />
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <button type="submit" class="btn btn-primary btn-block text-uppercase">Submit</button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-primary btn-block text-uppercase"
+                        onclick="window.history.back();">Back</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+    <%- include('../layouts/footer') %>

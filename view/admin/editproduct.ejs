@@ -1,0 +1,490 @@
+<%- include('../layouts/adminheader') %>
+
+  <!-- Bootstrap CSS -->
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+  <!-- Cropper.js CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Cropper.js JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+  </head>
+
+  <style>
+    .tm-product-img-dummy {
+      width: 100%;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .tm-upload-icon {
+      font-size: 2rem;
+      color: #6c757d;
+    }
+
+    .custom-file {
+      margin-top: 15px;
+    }
+
+    .col-md-6 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form-group textarea.form-control {
+      border: none;
+      color: #fff;
+      height: 150px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.875em;
+      margin-top: 5px;
+    }
+
+    .success input {
+      border-color: green;
+    }
+
+    .error input {
+      border-color: red;
+    }
+  </style>
+
+  <body>
+    <nav class="navbar navbar-expand-xl">
+      <div class="container h-100">
+        <a class="navbar-brand" href="index.html">
+          <h1 class="tm-site-title mb-0">Product Admin</h1>
+        </a>
+        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <i class="fas fa-bars tm-nav-icon"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        </div>
+      </div>
+    </nav>   
+    
+    <form id="editProductForm" action="/admin/updateProduct" class="tm-edit-product-form" method="post"
+      enctype="multipart/form-data">
+      <div class="container tm-mt-big tm-mb-big">
+        <div class="row">
+          <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+              <div class="row">
+                <div class="col-12">
+                  <h2 class="tm-block-title d-inline-block">Edit Product</h2>
+                </div>
+              </div>
+              <div class="row tm-edit-product-row">
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                  <div class="form-group mb-3">
+                    <label for="name">Product Name</label>
+                    <input id="name" name="name" type="text" value="<%= product.productname %>"
+                      class="form-control validate" required />
+                    <div class="error"></div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control validate" rows="3"
+                      required><%= product.productDescription %></textarea>
+                    <div class="error"></div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="category">Category</label>
+                    <select class="custom-select tm-select-accounts" id="category" name="category" required>
+                      <option selected>Select category</option>
+                      <% categories.forEach(category=> { %>
+                        <option value="<%= category.name %>" <%=(product.productCategory &&
+                          product.productCategory.name===category.name) ? 'selected' : '' %>><%= category.name %>
+                        </option>
+                        <% }); %>
+                    </select>
+                    <div class="error"></div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group mb-3 col-xs-12 col-sm-6">
+                      <label for="price">Price</label>
+                      <input id="price" name="price" type="text" value="<%= product.price %>"
+                        class="form-control validate" data-large-mode="true" required />
+                      <div class="error"></div>
+                    </div>
+                    <!-- <div class="form-group mb-3 col-xs-12 col-sm-6">
+                      <label for="stock">Stock</label>
+                      <input id="stock" name="stock" type="text" value="<%= product.stock %>"
+                        class="form-control validate" required />
+                      <div class="error"></div>
+                    </div> -->
+                    
+                  <div class="form-group mb-3 col-xs-12 col-sm-6">
+                    <label for="quantity">quantity</label>
+                    <input id="quantity" name="quantity" type="number" value="<%= product.variants[0].quantity %>"
+                      class="form-control validate" required />
+                    <input type="hidden" id="productId" name="productId" value="<%= product._id %>">
+                    <div class="error"></div>
+                  </div>
+              
+                  </div>
+
+               
+
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block text-uppercase">Edit Product Now</button>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                  <div class="row">
+
+
+                    <!-- Display existing images -->
+                    <% for (let i=0; i < 4; i++) { %>
+                      <div class="col-md-6 mb-4">
+                        <div class="tm-product-img-dummy mx-auto">
+                          <% if (product.variants[0].images[i]) { %>
+                            <img src="/static/<%= path.basename(product.variants[0].images[i]) %>" class="img-fluid"
+                              alt="Product Image" id="productImage<%= i %>">
+
+                            <!-- Hidden input to store original image path for updating -->
+                            <input type="hidden" name="originalImage<%= i %>" value="<%= product.variants[0].images[i] %>">
+                            <% } else { %>
+                              <div id="croppedImageDisplay<%= i %>" style="display: none;">
+                                <!-- Your cropped image will be displayed here -->
+                              </div>
+                              <% } %>
+                        </div>
+                        <div class="custom-file mt-3">
+                          <input id="fileInput<%= i %>" name="image1<%= i %>" type="file" style="display: none;"
+                            onchange="handleImageUpload(this, <%= i %>);" />
+                          <button id="uploadButton<%= i %>" class="btn btn-primary margin-top12px"
+                            onclick="document.getElementById('fileInput<%= i %>').click(); return false;">
+                            <%= product.variants[0].images[i] ? 'Replace Image' : 'Upload Image' %>
+                          </button>
+                        </div>
+                        <div id="previewImage<%= i %>" class="mt-3"></div>
+                      </div>
+                      <% } %>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      </div>
+    </form>
+
+    <div id="cropModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img id="imageToCrop" src="" alt="Image to Crop" style="max-width: 100%;">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="cropAndSave" type="button" class="btn btn-primary">Crop & Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Display Cropped Image -->
+    <div id="croppedImageDisplay" style="display: none; margin-top: 20px;">
+      <!-- Cropped image previews will be appended here -->
+    </div>
+    </div>
+
+    <!-- Include necessary JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+      function previewImage(input, previewElementId) {
+        var previewElement = document.getElementById(previewElementId);
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          previewElement.innerHTML = '<img src="' + e.target.result + '" alt="Preview Image" style="max-width: 100%; height: auto;">';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+      // Define global variables
+      let cropper;
+      let currentImageIndex;
+      const croppedImages = []; // Array to store cropped images
+
+      // Function to initialize Cropper.js
+      const initializeCropper = () => {
+        const image = document.getElementById('imageToCrop');
+        cropper = new Cropper(image, {
+          aspectRatio: 1,
+          viewMode: 1,
+        });
+      };
+
+      // Triggering file input click on upload button click
+      function handleImageUpload(input, index) {
+        currentImageIndex = index;
+        const files = input.files;
+
+        if (files && files.length > 0) {
+          const file = files[0];
+          const reader = new FileReader();
+          reader.onload = () => {
+            $('#imageToCrop').attr('src', reader.result); // Display image in modal
+            $('#cropModal').modal('show'); // Show cropping modal
+          };
+          reader.readAsDataURL(file); // Read file as Data URL
+        }
+      }
+
+      // Initializing Cropper.js when modal is shown
+      $('#cropModal').on('shown.bs.modal', function () {
+        initializeCropper();
+      }).on('hidden.bs.modal', function () {
+        if (cropper) {
+          cropper.destroy();
+          cropper = null;
+        }
+      });
+
+      // Handling crop and save button click
+      document.getElementById('cropAndSave').addEventListener('click', function () {
+        if (cropper) {
+          const canvas = cropper.getCroppedCanvas({
+            width: 500,
+            height: 500,
+          });
+
+          canvas.toBlob((blob) => {
+            $('#cropModal').modal('hide');
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Image cropped successfully!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+
+            const url = URL.createObjectURL(blob);
+            const imagePreview = document.createElement('img');
+            imagePreview.src = url;
+            imagePreview.style.maxWidth = '100%';
+            imagePreview.style.maxHeight = '100%';
+            imagePreview.style.objectFit = 'cover';
+
+            // Replace existing image preview with cropped image
+            const productImage = document.getElementById(`productImage${currentImageIndex}`);
+            productImage.src = url;
+
+            // Store the blob in the array
+            croppedImages[currentImageIndex] = blob;
+          });
+        }
+      });
+
+      //   const addProductForm = document.getElementById('addProductForm');
+      const productName = document.getElementById('name');
+      const description = document.getElementById('description');
+      const category = document.getElementById('category');
+      const price = document.getElementById('price');
+      const quantity = document.getElementById('quantity');
+
+
+      // Submit form function
+      const editProductForm = document.getElementById('editProductForm');
+
+      editProductForm.addEventListener('submit', async (e) => {
+        console.log('submit')
+        e.preventDefault();
+
+        validateInputs();
+        if (isValid()) {
+          const formData = new FormData();
+
+          // Manually append each field to ensure they're included
+          formData.append('name', productName.value.trim());
+          formData.append('description', description.value.trim());
+          formData.append('category', category.value);
+          formData.append('price', price.value.trim());
+          formData.append('quantity', quantity.value.trim());
+
+          const productId = document.getElementById('productId').value;
+          formData.append('productId', productId);
+
+          // Append cropped images to the form data
+          croppedImages.forEach((blob, index) => {
+            formData.append(`image${index+1}`, blob, `croppedImage${index+1}.png`);
+          });
+
+
+
+          try {
+            console.log('before fetch')
+            console.log(formData)
+            const response = await fetch('/admin/updateProduct', {
+              method: 'POST',
+              body: formData,
+            });
+
+            const result = await response.json();
+            console.log(result.message)
+            if (response.ok) {
+              Swal.fire({
+                title: 'Success',
+                text: result.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then((result) => {
+                window.location.href = '/admin/Products';
+              }).catch((err) => {
+                console.error('Error during Swal handling:', err);
+              });
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: result.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+              });
+              console.error('Add product failed:', result);
+            }
+          } catch (error) {
+            console.error('Error during fetch:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'An error occurred. Please try again.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        }
+      });
+
+      const isValid = () => {
+        return productName.parentElement.classList.contains('success') &&
+          description.parentElement.classList.contains('success') &&
+          category.parentElement.classList.contains('success') &&
+          price.parentElement.classList.contains('success') &&
+          quantity.parentElement.classList.contains('success')
+      };
+
+      const setError = (element, message) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.error');
+
+        errorDisplay.innerText = message;
+        inputControl.classList.add('error');
+        inputControl.classList.remove('success');
+      };
+
+      const setSuccess = element => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.error');
+
+        errorDisplay.innerText = '';
+        inputControl.classList.add('success');
+        inputControl.classList.remove('error');
+      };
+
+      const isValidPrice = (price) => {
+        return /^[0-9]+(\.[0-9]{1,2})?$/.test(price);
+      };
+
+      const isValidUsername = (productName) => {
+        const re = /^[a-zA-Z0-9-+()]*$/;
+        return re.test(productName);
+        const hasAlphanumeric = re.test(name);
+    // Check if the trimmed name has non-zero length
+    const isValid = name.trim().length > 0 && hasAlphanumeric;
+    return isValid;
+      };
+
+      const isValidQuantityOrStock = (value) => {
+        return /^[1-9][0-9]*$/.test(value);
+      };
+
+      const validateInputs = () => {
+        // const addProductForm = document.getElementById('addProductForm');
+
+        console.log(quantity.value)
+        const productNameValue = productName.value.trim();
+        const descriptionValue = description.value.trim();
+        const categoryValue = category.value;
+        const priceValue = price.value.trim();
+        const quantityValue = quantity.value.trim();
+
+        if (productNameValue === '') {
+          setError(productName, 'Product name is required');
+        } else if (!isValidUsername(productNameValue)) {
+          setError(productName, 'The name does not contain special characters');
+        } else {
+          setSuccess(productName);
+        }
+
+        if (descriptionValue === '') {
+          setError(description, 'Description is required');
+        } else {
+          setSuccess(description);
+        }
+
+        if (categoryValue === '' || categoryValue === 'Select category') {
+          setError(category, 'Category is required');
+        } else {
+          setSuccess(category);
+        }
+
+        if (priceValue === '') {
+          setError(price, 'Price is required');
+        } else if (!isValidPrice(priceValue)) {
+          setError(price, 'Price must be a valid number');
+        } else {
+          setSuccess(price);
+        }
+
+        if (quantityValue === '') {
+          setError(quantity, 'Quantity is required');
+        } else if (!isValidQuantityOrStock(quantityValue)) {
+          setError(quantity, 'Quantity must be a valid number');
+        } else {
+          setSuccess(quantity);
+        }
+      };
+    </script>
+
+
+    <%- include('../layouts/footer') %>

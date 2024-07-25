@@ -1,0 +1,217 @@
+<%- include('../layouts/adminheader') %>
+    <style>
+        
+
+        .tm-product-table .btn {
+            margin: 0 2px; /* Adjust the margin to reduce gaps */
+            padding: 4px 10px; /* Adjust the padding for a more compact layout */
+        }
+
+
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            /* Adjust font size as needed */
+            color: #777;
+            /* Adjust color as needed */
+        }
+
+        .tm-product-table th,
+        .tm-product-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .tm-product-table th {
+            width: auto;
+        }
+
+        .tm-product-table .btn {
+            margin: 0 5px;
+        }
+
+        .variant-button {
+            margin-left: 5px;
+        }
+        .btn-variant {
+            background-color: blue;
+            color: white;
+        }
+
+        .btn-variant:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        @media (max-width: 768px) {
+            .tm-product-table .btn {
+                margin: 2px 0;
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body id="reportsPage">
+    <nav class="navbar navbar-expand-xl">
+        <div class="container h-100">
+            <a class="navbar-brand" href="index.html">
+                <h1 class="tm-site-title mb-0">Product Admin</h1>
+            </a>
+            <ul class="breadcrumb mt-2">
+                <li class="breadcrumb-item"><a href="/admin/home">Admin &gt;&gt;</a>Dashboard</li>
+            </ul>
+            <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars tm-nav-icon"></i>
+            </button>
+            <div class="col-lg-3 col-md-6 ms-auto">
+                <form action="">
+                    <input type="text" placeholder="Search..." class="form-control" id="searchInput" name="search" />
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-products">
+            <div class="tm-product-table-container">
+                <table class="table table-hover tm-table-small tm-product-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Variant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let idCounter = 1; %>
+                        <% products.forEach(function(product) { %>
+                            <tr>
+                                <td><%= idCounter++ %></td>
+                                <td>
+                                    <% if (product.variants[0].images.length > 0) { %>
+                                        <img src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image" style="max-width: 50px; display: inline-block; margin: 2px;">
+                                    <% } %>
+                                </td>
+                                <td class="tm-product-name"><%= product.productname %></td>
+                                <td><%= product.productCategory ? product.productCategory.name : 'N/A' %></td>
+                                <td><%= product.variants[0].quantity %></td>
+                                <td>$<%= product.price %></td>
+                                <td><a href="/admin/edit-product/<%= product._id %>" class="btn btn-sm btn-primary">Edit</a></td>
+                                <td>
+                                    <button class="btn btn-sm <%= product.is_Listed ? 'btn-outline-danger' : 'btn-outline-success' %> list-button" data-id="<%= product._id %>">
+                                        <%= product.is_Listed ? 'Unlist' : 'List' %>
+                                    </button>
+                                </td>
+                                <td>
+                                    <a href="/admin/VarientList/<%= product._id %>">
+                                        <button class="btn btn-sm btn-variant variant-button" data-id="">Variant</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+                <!-- table container -->
+                <a href="/admin/addProduct" class="btn btn-primary btn-block text-uppercase mb-3">Add new product</a>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <footer class="tm-footer row tm-mt-small">
+            <div class="col-12 font-weight-light">
+                <p class="text-center text-white mb-0 px-4 small">
+                    Copyright &copy; <b>2018</b> All rights reserved.
+
+                    Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template
+                        Mo</a>
+                </p>
+            </div>
+
+            <script src="js/jquery-3.3.1.min.js"></script>
+            <!-- https://jquery.com/download/ -->
+            <script src="js/bootstrap.min.js"></script>
+            <!-- https://getbootstrap.com/ -->
+            <script>
+                $(function () {
+                    $(".tm-product-name").on("click", function () {
+                        window.location.href = "edit-product.html";
+                    });
+                });
+
+            </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.list-button').forEach(button => {
+    button.addEventListener('click', function () {
+      const productId = this.getAttribute('data-id');
+      const isListed = this.classList.contains('btn-outline-danger');
+
+      fetch('/admin/listUnlistProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: productId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          if (isListed) {
+            this.classList.remove('btn-outline-danger');
+            this.classList.add('btn-success');
+            this.textContent = 'List';
+          } else {
+            this.classList.remove('btn-success');
+            this.classList.add('btn-outline-danger');
+            this.textContent = 'Unlist';
+          }
+        } else {
+          alert('Error updating product status');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+});
+  </script>
+
+
+
+            <%- include('../layouts/footer') %>
