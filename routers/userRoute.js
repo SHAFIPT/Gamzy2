@@ -12,7 +12,8 @@ require('../passport'); // Ensure passport configuration is loaded
 // Import userController and userListController
 const userController = require('../Controllers/userController');
 const userListcontroller = require('../Controllers/Userlistcontroller');
-const cheakoutController = require('../Controllers/cheakoutController')
+const cheakoutController = require('../Controllers/cheakoutController');
+const myaccountController = require('../Controllers/myAccountcontroller')
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 
@@ -80,5 +81,11 @@ router.post('/productCart/remove',userListcontroller.removeCart)
 
 //CheakOut page
 router.get('/cheakOut',cheakoutController.loadCheakoutPage)
+
+
+
+//userAccount
+router.get('/myaccount',myaccountController.loadMyAccount);
+router.get('/address',myaccountController.loadaddress)
 
 module.exports = router;

@@ -11,10 +11,10 @@ const passport=require('./passport')
 connectDB();
 // Set up EJS view engine 
 app.set('view engine', 'ejs'); 
-
+ 
 app.set('views', path.join(__dirname, 'view', 'user'));
      
-                
+                 
 // Middleware for parsing JSON and urlencoded data 
 app.use(express.json());    
 app.use(express.urlencoded({ extended: true }));   
@@ -26,7 +26,7 @@ app.use(express.static('public'));
 // Use the user Route router for handling route s 
 app.get('/', (req,res)=>{res.redirect('/user')});  
 
-// app.get('/GoogleAuth',  
+// app.get('/GoogleAuth',   
 //     passport.authenticate('google',{  
 //         failureRedirect : '/failure'
 //     }

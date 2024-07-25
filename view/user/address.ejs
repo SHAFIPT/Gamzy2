@@ -1,0 +1,342 @@
+<%- include('../layouts/userheader') %>
+
+
+<style>
+    /* Breadcrumbs adjustment */
+   .breadcrumbs {
+       font-size: 50px;
+       margin-bottom: 15px;
+       text-align: center; /* Align text to the left */
+         /* padding-left: 20px; Adjust padding to move the text to the left */
+   }
+   
+   .breadcrumbs a {
+       color: #ffffff;
+       text-decoration: none;
+   }
+   
+   .breadcrumbs a:hover {
+       text-decoration: underline;
+   }
+   
+   .breadcrumbs span {
+       color: #ffc107;
+   }
+   
+   /* Navbar styling */
+   .navbar {
+       background-color: #343a40;
+   }
+   
+   .navbar-brand h1 {
+       font-family: 'Arial', sans-serif;
+       font-size: 24px;
+       color: #ffffff;
+   }
+   
+   .navbar-toggler {
+       border: none;
+   }
+   
+   .navbar-toggler .oi-menu {
+       color: #ffffff;
+   }
+   
+   .navbar-nav .nav-item .nav-link {
+       color: #ffffff;
+       font-size: 16px;
+       margin-right: 20px;
+       transition: color 0.2s ease-in-out;
+   }
+   
+   .navbar-nav .nav-item .nav-link:hover {
+       color: #ffc107;
+   }
+   
+   .navbar-nav .nav-item.dropdown.active .nav-link {
+       color: #ffc107;
+   }
+   
+   .navbar-nav .nav-item.cta a {
+       color: #ffffff;
+       font-size: 18px;
+   }
+   
+   .navbar-nav .nav-item.cta a .fas.fa-shopping-cart {
+       margin-right: 5px;
+   }
+   
+   .bg-black {
+       background-color: #000000;
+   }
+   
+   .topper {
+       color: #ffffff;
+   }
+   
+   .topper .icon {
+       font-size: 18px;
+       color: #ffffff;
+   }
+   
+   .topper .text {
+       color: #ffffff;
+   }
+   
+   .hero-wrap {
+       padding: 60px 0;
+       color: #ffffff;
+       text-align: center;
+   }
+   
+   .bread {
+       font-size: 36px;
+       margin-bottom: 0;
+   }
+   .left-sidebar {
+     background: #f8f9fa;
+     padding: 20px;
+     border-radius: 5px;
+     margin-bottom: 30px;
+   }
+   
+   .sidebar-options {
+     list-style: none;
+     padding: 0;
+     margin: 0;
+   }
+   
+   .sidebar-options li {
+     margin-bottom: 15px;
+   }
+   
+   .sidebar-options li a {
+     text-decoration: none;
+     color: #333;
+     font-size: 16px;
+     display: block;
+     padding: 10px 15px;
+     border-radius: 5px;
+     transition: background 0.3s, color 0.3s;
+   }
+   
+   .sidebar-options li.active a,
+   .sidebar-options li a:hover {
+     background: #007bff;
+     color: #fff;
+   }
+   </style>
+     <!-- Navbar section -->
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+       <div class="container">
+           <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="oi oi-menu"></span> Menu
+           </button>
+   
+           <div class="collapse navbar-collapse" id="ftco-nav">
+               <ul class="navbar-nav ml-auto">
+                   <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                   <li class="nav-item dropdown active">
+                       <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                       <!-- Add dropdown content if needed -->
+                   </li>
+                   <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                   <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                   <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
+               </ul>
+           </div>
+       </div>
+   </nav>
+   <!-- End Navbar section -->
+   
+   <div class="hero-wrap hero-bread" style="background-image: url('images/bg_6.jpg');">
+       <div class="container">
+           <div class="row no-gutters slider-text align-items-center justify-content-center">
+               <div class="col-md-9 ftco-animate text-center">
+                   <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>My Account</span></p>
+                   <h1 class="mb-0 bread">Checkout</h1>
+               </div>
+           </div>
+       </div>
+   </div>
+   
+   <section class="ftco-section">
+       <div class="container">
+         <div class="row justify-content-center">
+           <div class="col-md-3">
+             <div class="left-sidebar">
+               <ul class="sidebar-options">
+                 <li class="active"><a href="/user/myaccount">My Profile</a></li>
+                 <li><a href="/user/address">Orders</a></li>
+                 <li><a href="">Address</a></li>
+                 <li><a href="">Signout</a></li>
+               </ul>
+             </div>
+           </div>
+           <div class="col-md-9 ftco-animate">
+            <form action="#" class="billing-form">
+                <!-- <h3 class="mb-4 billing-heading">Billing Details</h3> -->
+                <div class="row align-items-end">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="firstname">First Name</label>
+                            <input type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="country">State / Country</label>
+                            <div class="select-wrap">
+                                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                <select name="" id="" class="form-control">
+                                    <option value="">France</option>
+                                    <option value="">Italy</option>
+                                    <option value="">Philippines</option>
+                                    <option value="">South Korea</option>
+                                    <option value="">Hongkong</option>
+                                    <option value="">Japan</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="streetaddress">Street Address</label>
+                            <input type="text" class="form-control" placeholder="House number and street name">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Apartment, suite, unit etc: (optional)">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="towncity">Town / City</label>
+                            <input type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="postcodezip">Postcode / ZIP *</label>
+                            <input type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="emailaddress">Email Address</label>
+                            <input type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-md-12">
+                        <div class="form-group mt-4">
+                            <div class="radio">
+                                <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
+                                <label><input type="radio" name="optradio"> Ship to different address</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+           </div> <!-- .col-md-9 -->
+         </div>
+       </div>
+     </section> <!-- .section -->   
+   
+   
+   
+   
+   
+   
+   
+   <script src="/js/jquery.min.js"></script>
+   <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+   <script src="/js/popper.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+   <script src="/js/jquery.easing.1.3.js"></script>
+   <script src="/js/jquery.waypoints.min.js"></script>
+   <script src="/js/jquery.stellar.min.js"></script>
+   <script src="/js/owl.carousel.min.js"></script>
+   <script src="/js/jquery.magnific-popup.min.js"></script>
+   <script src="/js/aos.js"></script>
+   <script src="/js/jquery.animateNumber.min.js"></script>
+   <script src="/js/bootstrap-datepicker.js"></script>
+   <script src="/js/scrollax.min.js"></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+   <script src="/js/google-map.js"></script>
+   <script src="/js/main.js"></script>
+   
+   <script>
+       $(document).ready(function(){
+   
+       var quantitiy=0;
+          $('.quantity-right-plus').click(function(e){
+               
+               // Stop acting like a button
+               e.preventDefault();
+               // Get the field name
+               var quantity = parseInt($('#quantity').val());
+               
+               // If is not undefined
+                   
+                   $('#quantity').val(quantity + 1);
+   
+                 
+                   // Increment
+               
+           });
+   
+            $('.quantity-left-minus').click(function(e){
+               // Stop acting like a button
+               e.preventDefault();
+               // Get the field name
+               var quantity = parseInt($('#quantity').val());
+               
+               // If is not undefined
+             
+                   // Increment
+                   if(quantity>0){
+                   $('#quantity').val(quantity - 1);
+                   }
+           });
+           
+       });
+       document.addEventListener("DOMContentLoaded", function() {
+       var currentLocation = window.location.href;
+       var menuItem = document.querySelectorAll(".sidebar-options li a");
+   
+       // Loop through all sidebar items
+       menuItem.forEach(function(item) {
+           // Check if the href attribute of the link matches the current URL
+           if (item.href === currentLocation) {
+               // Add 'active' class to the parent <li> element
+               item.parentElement.classList.add("active");
+           } else {
+               // Remove 'active' class if it's not the current URL
+               item.parentElement.classList.remove("active");
+           }
+       });
+   });
+   </script>
+   
+
+<%- include('../layouts/footer') %>
