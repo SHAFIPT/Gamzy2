@@ -2,69 +2,71 @@
 
 
 <style>
-    /* Breadcrumbs adjustment */
-   .breadcrumbs {
-       font-size: 50px;
-       margin-bottom: 15px;
-       text-align: center; /* Align text to the left */
-         /* padding-left: 20px; Adjust padding to move the text to the left */
-   }
-   
-   .breadcrumbs a {
-       color: #ffffff;
-       text-decoration: none;
-   }
-   
-   .breadcrumbs a:hover {
-       text-decoration: underline;
-   }
-   
-   .breadcrumbs span {
-       color: #ffc107;
-   }
-   
-   /* Navbar styling */
-   .navbar {
-       background-color: #343a40;
-   }
-   
-   .navbar-brand h1 {
-       font-family: 'Arial', sans-serif;
-       font-size: 24px;
-       color: #ffffff;
-   }
-   
-   .navbar-toggler {
-       border: none;
-   }
-   
-   .navbar-toggler .oi-menu {
-       color: #ffffff;
-   }
-   
-   .navbar-nav .nav-item .nav-link {
-       color: #ffffff;
-       font-size: 16px;
-       margin-right: 20px;
-       transition: color 0.2s ease-in-out;
-   }
-   
-   .navbar-nav .nav-item .nav-link:hover {
-       color: #ffc107;
-   }
-   
-   .navbar-nav .nav-item.dropdown.active .nav-link {
-       color: #ffc107;
-   }
-   
-   .navbar-nav .nav-item.cta a {
-       color: #ffffff;
-       font-size: 18px;
-   }
-   
-   .navbar-nav .nav-item.cta a .fas.fa-shopping-cart {
-       margin-right: 5px;
-   }
+       /* Navbar Styles */
+       .navbar {
+        background-color: #343a40; /* Dark background */
+        padding: 1rem 1rem; /* Padding */
+    }
+
+    .navbar-brand h1 {
+        color: #ffffff; /* White text for the brand name */
+        font-size: 2rem; /* Adjust as needed */
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        color: #ffffff; /* White text for nav links */
+        margin-right: 1rem; /* Spacing between links */
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #ffc107; /* Yellow text on hover */
+    }
+
+    .navbar-nav .nav-item.active .nav-link {
+        color: #ffc107; /* Yellow text for the active link */
+    }
+
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+    }
+
+    .navbar-toggler .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;...");
+    }
+
+    /* Breadcrumb Section Styles */
+    .breadcrumb-option {
+        background: #f8f9fa; /* Light background */
+        padding: 3.5rem 0; /* Padding */
+        margin-bottom: 70px; /* Adjust the margin as needed */
+    }
+
+    .breadcrumb__text h4 {
+        text-align: center; /* Center the text */
+        margin: 0; /* Remove margin */
+        font-size: 40px; /* Adjust as needed */
+        color: #333333; /* Dark text color */
+    }
+
+    .breadcrumb__links {
+        text-align: center; /* Center the breadcrumb links */
+        font-size: 1rem; /* Adjust as needed */
+        color: #777777; /* Light grey color */
+    }
+
+    /* Ensure breadcrumb links have some margin and are styled correctly */
+    .breadcrumb__links a {
+        color: #007bff; /* Primary color for links */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .breadcrumb__links a:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .breadcrumb__links span {
+        color: #333; /* Dark color for current page */
+    }
    
    .bg-black {
        background-color: #000000;
@@ -257,6 +259,162 @@
 .container {
     padding: 15px;
 }
+
+.error {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+  }
+
+  .success input {
+    border-color: green;
+  }
+
+  .error input {
+    border-color: red;
+  }
+
+
+  .hero-wrap {
+    position: relative;
+    padding: 1rem 0; /* Reduced padding */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero-bread .text-center {
+    position: relative;
+}
+
+.add-product-btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.3s;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    margin-right: 15px; /* Adjust the margin as needed */
+}
+
+.add-product-btn:hover {
+    background: #0056b3;
+}
+
+
+.ftco-section {
+    padding: 3rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* .left-sidebar {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-options li {
+    margin-bottom: 1rem;
+}
+
+.sidebar-options li a {
+    text-decoration: none;
+    color: #343a40;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.sidebar-options li a:hover,
+.sidebar-options li.active a {
+    color: #007bff;
+} */
+
+.ftco-animate {
+    animation: fadeInUp 0.5s both;
+}
+
+.addresses-list {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.address-item {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.address-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.address-item h5 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.address-item p {
+    margin: 0.25rem 0;
+    color: #6c757d;
+}
+
+.button-group {
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.edit-btn {
+    background: #ffc107;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background: #e0a800;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: #fff;
+    margin-left: 0.5rem;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
    </style>
      <!-- Navbar section -->
      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -281,20 +439,25 @@
            </div>
        </div>
    </nav>
-   <!-- End Navbar section -->
-   
-   <div class="hero-wrap hero-bread" style="background-image: url('images/bg_6.jpg');">
-       <div class="container">
-           <div class="row no-gutters slider-text align-items-center justify-content-center">
-               <div class="col-md-9 ftco-animate text-center">
-                   <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>My Account</span></p>
-                   <h1 class="mb-0 bread">Checkout</h1>
-               </div>
-           </div>
-       </div>
-   </div>
-   
-   
+  
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>My Address</h4>
+                    <!-- <div class="breadcrumb__links">
+                        <a href="./index.html">Home</a>
+                        <a href="./shop.html">Shop</a>
+                        <span>Check Out</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
@@ -302,104 +465,39 @@
                 <div class="left-sidebar">
                     <ul class="sidebar-options">
                         <li class="active"><a href="/user/myaccount">My Profile</a></li>
-                        <li><a href="/user/address">Orders</a></li>
-                        <li><a href="">Address</a></li>
-                        <li><a href="">Signout</a></li>
+                        <li><a href="/user/orders">Orders</a></li>
+                        <li><a href="/user/address">Address</a></li>
+                        <li><a href="/user/signout">Signout</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-md-9 ftco-animate">
-                <div class="form-header">
-                    <button class="btn add-product-btn" data-toggle="modal" data-target="#addProductModal">Add Address</button>
-                </div>
-                <form action="#" class="billing-form">
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="firstname">First Name</label>
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="lastname">Last Name</label>
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="country">State / Country</label>
-                                <div class="select-wrap">
-                                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                    <select name="" id="" class="form-control">
-                                        <option value="">France</option>
-                                        <option value="">Italy</option>
-                                        <option value="">Philippines</option>
-                                        <option value="">South Korea</option>
-                                        <option value="">Hongkong</option>
-                                        <option value="">Japan</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="streetaddress">Street Address</label>
-                                <input type="text" class="form-control" placeholder="House number and street name">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Apartment, suite, unit etc: (optional)">
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="towncity">Town / City</label>
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="postcodezip">Postcode / ZIP *</label>
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="emailaddress">Email Address</label>
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-md-12">
-                            <div class="form-group mt-4">
+                <div class="addresses-list">
+                    <% if (addresses && addresses.length > 0) { %>
+                        <% addresses.forEach(address => { %>
+                            <div class="address-item">
+                                <h5><%= address.Firstname %> <%= address.Lastname %></h5>
+                                <p><%= address.streetaddress %> <%= address.Landmark ? ', ' + address.Landmark : '' %></p>
+                                <p><%= address.city %>, <%= address.state %> <%= address.pincode %></p>
+                                <p>Phone: <%= address.number %></p>
+                                <p>Email: <%= address.email %></p>
                                 <div class="button-group">
-                                    <button type="button" class="btn edit-btn">Edit Address</button>
-                                    <button type="button" class="btn delete-btn">Delete</button>
+                                    <button class="edit-btn" data-id="<%= address._id %>" data-toggle="modal" data-target="#editAddressModal">Edit</button>
+                                    <button type="button" class="btn delete-btn" data-id="<%= address._id%>" >Delete</button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </form>
-            </div> <!-- .col-md-9 -->
+                        <% }) %>
+                    <% } else { %>
+                        <p>No addresses found.</p>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
-</section> <!-- .section -->
+</section>
 
 
-
-<!-- Add Product Modal -->
+<!-- Add Address Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -409,88 +507,200 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="/user/addAddress" method="post" class="billing-form" id="addressForm">
             <div class="modal-body">
+              
                 <div class="container">
-                    <form action="#" class="billing-form">
+                   
                         <div class="row align-items-end">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="firstname">First Name</label>
-                                    <input type="text" id="firstname" name="firstname" class="form-control" placeholder="">
+                                    <label for="modalFirstname">First Name</label>
+                                   
+                                    <input type="text" id="modalFirstname" name="firstname" class="form-control" placeholder="">
+                                    <div class="error"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="lastname">Last Name</label>
-                                    <input type="text" id="lastname" name="lastname" class="form-control" placeholder="">
+                                    <label for="modalLastname">Last Name</label>
+                                    <input type="text" id="modalLastname" name="lastname" class="form-control" placeholder="">
+                                    <div class="error"></div>
                                 </div>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="country">State / Country</label>
+                                    <label for="modalState">State / Country</label>
                                     <div class="select-wrap">
                                         <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                        <select name="state" id="state" class="form-control">
-                                            <option value="">France</option>
-                                            <option value="">Italy</option>
-                                            <option value="">Philippines</option>
-                                            <option value="">South Korea</option>
-                                            <option value="">Hongkong</option>
-                                            <option value="">Japan</option>
+                                        <select name="state" id="modalState" class="form-control">
+                                            <option value="">Select State / Country</option>
+                                            <option value="France">France</option>
+                                            <option value="Italy">Italy</option>
+                                            <option value="Philippines">Philippines</option>
+                                            <option value="South Korea">South Korea</option>
+                                            <option value="Hongkong">Hongkong</option>
+                                            <option value="Japan">Japan</option>
                                         </select>
                                     </div>
+                                    <div class="error"></div>
                                 </div>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="streetaddress">Street Address</label>
-                                    <input type="text" class="form-control" id="streetaddress" name="streetaddress" placeholder="House number and street name">
+                                    <label for="modalStreetaddress">Street Address</label>
+                                    <input type="text" class="form-control" id="modalStreetaddress" name="streetaddress" placeholder="House number and street name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="landmark" name="landmark" placeholder="Apartment, suite, unit etc: (optional)">
-                                </div>
-                            </div>
-                            <div class="w-100"></div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="towncity">Town / City</label>
-                                    <input type="text" id="city" name="city" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="postcodezip">Postcode / ZIP *</label>
-                                    <input type="text" id="pincode" name="pincode" class="form-control" placeholder="">
+                                    <input type="text" class="form-control" id="modalLandmark" name="landmark" placeholder="Apartment, suite, unit etc: (optional)">
                                 </div>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input type="text" id="number" name="number" class="form-control" placeholder="">
+                                    <label for="modalCity">Town / City</label>
+                                    <input type="text" id="modalCity" name="city" class="form-control" placeholder="">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="emailaddress">Email Address</label>
-                                    <input type="text" id="email" name="email" class="form-control" placeholder="">
+                                    <label for="modalPincode">Postcode / ZIP *</label>
+                                    <input type="text" id="modalPincode" name="pincode" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalNumber">Phone</label>
+                                    <input type="text" id="modalNumber" name="number" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalEmail">Email Address</label>
+                                    <input type="text" id="modalEmail" name="email" class="form-control" placeholder="">
                                 </div>
                             </div>
                         </div>
-                    </form>
+                 
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
+
+
+<!-- Edit Address Modal -->
+<div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/user/editAddress" method="post" class="billing-form" id="editAddressForm">
+                <div class="modal-body">
+                    <input type="hidden" id="editAddressId" name="addressId">
+                    <div class="container">
+                        <div class="row align-items-end">
+                            <!-- Similar form structure as the add address modal -->
+                            <!-- Populate these fields with JavaScript when the Edit button is clicked -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalFirstname">First Name</label>
+                                    <input type="text" id="editModalFirstname" name="firstname" class="form-control" placeholder="">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalLastname">Last Name</label>
+                                    <input type="text" id="editModalLastname" name="lastname" class="form-control" placeholder="">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="editModalState">State / Country</label>
+                                    <div class="select-wrap">
+                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                        <select name="state" id="editModalState" class="form-control">
+                                            <option value="">Select State / Country</option>
+                                            <option value="France">France</option>
+                                            <option value="Italy">Italy</option>
+                                            <option value="Philippines">Philippines</option>
+                                            <option value="South Korea">South Korea</option>
+                                            <option value="Hongkong">Hongkong</option>
+                                            <option value="Japan">Japan</option>
+                                        </select>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalStreetaddress">Street Address</label>
+                                    <input type="text" class="form-control" id="editModalStreetaddress" name="streetaddress" placeholder="House number and street name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="editModalLandmark" name="landmark" placeholder="Apartment, suite, unit etc: (optional)">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalCity">Town / City</label>
+                                    <input type="text" id="editModalCity" name="city" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalPincode">Postcode / ZIP *</label>
+                                    <input type="text" id="editModalPincode" name="pincode" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalNumber">Phone</label>
+                                    <input type="text" id="editModalNumber" name="number" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalEmail">Email Address</label>
+                                    <input type="text" id="editModalEmail" name="email" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="updateAddress">Update Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -516,7 +726,25 @@
    <script src="/js/google-map.js"></script>
    <script src="/js/main.js"></script>
    
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
    <script>
+
+var currentLocation = window.location.href;
+       var menuItem = document.querySelectorAll(".sidebar-options li a");
+   
+       // Loop through all sidebar items
+       menuItem.forEach(function(item) {
+           // Check if the href attribute of the link matches the current URL
+           if (item.href === currentLocation) {
+               // Add 'active' class to the parent <li> element
+               item.parentElement.classList.add("active");
+           } else {
+               // Remove 'active' class if it's not the current URL
+               item.parentElement.classList.remove("active");
+           }
+       });
+
        $(document).ready(function(){
    
        var quantitiy=0;
@@ -551,36 +779,485 @@
            });
            
        });
-       document.addEventListener("DOMContentLoaded", function() {
-       var currentLocation = window.location.href;
-       var menuItem = document.querySelectorAll(".sidebar-options li a");
-   
-       // Loop through all sidebar items
-       menuItem.forEach(function(item) {
-           // Check if the href attribute of the link matches the current URL
-           if (item.href === currentLocation) {
-               // Add 'active' class to the parent <li> element
-               item.parentElement.classList.add("active");
-           } else {
-               // Remove 'active' class if it's not the current URL
-               item.parentElement.classList.remove("active");
-           }
-       });
 
-      const firstname = document.getElementById('firstname').;
-      const lastname = document.getElementById('lastname');
-      const state = document.getElementById('state');
-      const streetaddress = document.getElementById('streetaddress');
-      const landmark = document.getElementById('landmark');
-      const city = document.getElementById('city');
-      const pincode = document.getElementById('pincode');
-      const number = document.getElementById('number');
-      const email = document.getElementById('email')
+       document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
 
 
+    // Add address form variables
+    const addressForm = document.getElementById('addressForm');
+    const firstname = document.getElementById('modalFirstname');
+    const lastname = document.getElementById('modalLastname');
+    const state = document.getElementById('modalState');
+    const streetaddress = document.getElementById('modalStreetaddress');
+    const landmark = document.getElementById('modalLandmark');
+    const city = document.getElementById('modalCity');
+    const pincode = document.getElementById('modalPincode');
+    const number = document.getElementById('modalNumber');
+    const email = document.getElementById('modalEmail');
+    
+    console.log(firstname);
 
 
-   });
+    
+    // New edit address form variables
+    const editAddressForm = document.getElementById('editAddressForm');
+    const editFirstname = document.getElementById('editModalFirstname');
+    const editLastname = document.getElementById('editModalLastname');
+    const editState = document.getElementById('editModalState');
+    const editStreetaddress = document.getElementById('editModalStreetaddress');
+    const editLandmark = document.getElementById('editModalLandmark');
+    const editCity = document.getElementById('editModalCity');
+    const editPincode = document.getElementById('editModalPincode');
+    const editNumber = document.getElementById('editModalNumber');
+    const editEmail = document.getElementById('editModalEmail');
+    const editAddressId = document.getElementById('editAddressId');
+
+    console.log('This is my editAddressForm',editAddressForm);
+
+
+
+    //Address fetch to backend
+    if (addressForm) {
+        addressForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Form submitted');
+            validateInputs();
+
+            if (isValid()) {
+                console.log('Form is valid');
+                const formData = {
+                    firstname: firstname.value.trim(),
+                    lastname: lastname.value.trim(),
+                    state: state.value.trim(),
+                    streetaddress: streetaddress.value.trim(),
+                    landmark: landmark.value.trim(),
+                    city: city.value.trim(),
+                    pincode: pincode.value.trim(),
+                    number: number.value.trim(),
+                    email: email.value.trim(),
+                };
+                console.log('FormData:', formData);
+
+                try {
+                    const response = await fetch('/user/addAddress', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                        window.location.href = '/user/address';
+                    });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+
+
+    //edit address to backend
+    if (editAddressForm) {
+        editAddressForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Edit form submitted');
+            validateEditInputs();
+
+            if (isEditValid()) {
+                console.log('Edit form is valid');
+                const editFormData = {
+                    id: editAddressId.value.trim(),
+                    firstname: editFirstname.value.trim(),
+                    lastname: editLastname.value.trim(),
+                    state: editState.value.trim(),
+                    streetaddress: editStreetaddress.value.trim(),
+                    landmark: editLandmark.value.trim(),
+                    city: editCity.value.trim(),
+                    pincode: editPincode.value.trim(),
+                    number: editNumber.value.trim(),
+                    email: editEmail.value.trim(),
+                };
+                console.log('EditFormData:', editFormData);
+
+                try {
+                    const response = await fetch('/user/editAddress', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(editFormData),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = '/user/address';
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+    const isValid = () => {
+        const valid = (
+            firstname.parentElement.classList.contains('success') &&
+            lastname.parentElement.classList.contains('success') &&
+            state.closest('.form-group').classList.contains('success') &&
+            streetaddress.parentElement.classList.contains('success') &&
+            city.parentElement.classList.contains('success') &&
+            pincode.parentElement.classList.contains('success') &&
+            number.parentElement.classList.contains('success') &&
+            email.parentElement.classList.contains('success')
+        );
+
+        console.log('Form is valid:', valid);
+        return valid;
+    };
+
+
+
+    //editAddress is valid
+
+    const isEditValid = () => {
+        const valid = (
+            editFirstname.parentElement.classList.contains('success') &&
+            editLastname.parentElement.classList.contains('success') &&
+            editState.closest('.form-group').classList.contains('success') &&
+            editStreetaddress.parentElement.classList.contains('success') &&
+            editCity.parentElement.classList.contains('success') &&
+            editPincode.parentElement.classList.contains('success') &&
+            editNumber.parentElement.classList.contains('success') &&
+            editEmail.parentElement.classList.contains('success')
+        );
+
+        console.log('Edit form is valid:', valid);
+        return valid;
+    };
+
+
+
+    const setError = (element, message) => {
+        const inputControl = element.closest('.form-group');
+        let errorDisplay = inputControl.querySelector('.error');
+
+        if (!errorDisplay) {
+            errorDisplay = document.createElement('span');
+            errorDisplay.className = 'error';
+            inputControl.appendChild(errorDisplay);
+        }
+        errorDisplay.innerText = message;
+        inputControl.classList.add('error');
+        inputControl.classList.remove('success');
+        console.log('Error set for:', element.id);
+    };
+
+    const setSuccess = (element) => {
+        const inputControl = element.closest('.form-group');
+        const errorDisplay = inputControl.querySelector('.error');
+
+        if (errorDisplay) {
+            errorDisplay.remove();
+        }
+        inputControl.classList.add('success');
+        inputControl.classList.remove('error');
+        console.log('Success set for:', element.id);
+    };
+
+    const isValidEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    };
+
+    const isValidPhoneNumber = (phone) => {
+        const numericPhone = phone.replace(/\D/g, '');
+        return /^[1-9]\d{9}$/.test(numericPhone);
+    };
+
+    const isValidName = (name) => {
+        const re = /^[a-zA-Z\s]+$/;
+        return re.test(name);
+    };
+
+    const validateInputs = () => {
+        const firstnameValue = firstname.value.trim();
+        const lastnameValue = lastname.value.trim();
+        const stateValue = state.value.trim();
+        const streetaddressValue = streetaddress.value.trim();
+        const cityValue = city.value.trim();
+        const pincodeValue = pincode.value.trim();
+        const numberValue = number.value.trim();
+        const emailValue = email.value.trim();
+
+        console.log('Validating inputs');
+
+        if (firstnameValue === '') {
+            setError(firstname, 'First name is required');
+        } else if (!isValidName(firstnameValue)) {
+            setError(firstname, 'First name cannot contain numbers or special characters');
+        } else {
+            setSuccess(firstname);
+        }
+
+        if (lastnameValue === '') {
+            setError(lastname, 'Last name is required');
+        } else if (!isValidName(lastnameValue)) {
+            setError(lastname, 'Last name cannot contain numbers or special characters');
+        } else {
+            setSuccess(lastname);
+        }
+
+        if (stateValue === '') {
+            setError(state, 'State / Country is required');
+        } else {
+            setSuccess(state);
+        }
+
+        if (streetaddressValue === '') {
+            setError(streetaddress, 'Street address is required');
+        } else {
+            setSuccess(streetaddress);
+        }
+
+        if (cityValue === '') {
+            setError(city, 'Town / City is required');
+        } else {
+            setSuccess(city);
+        }
+
+        if (pincodeValue === '') {
+            setError(pincode, 'Postcode / ZIP is required');
+        } else {
+            setSuccess(pincode);
+        }
+
+        if (numberValue === '') {
+            setError(number, 'Phone number is required');
+        } else if (!isValidPhoneNumber(numberValue)) {
+            setError(number, 'Provide a valid phone number');
+        } else {
+            setSuccess(number);
+        }
+
+        if (emailValue === '') {
+            setError(email, 'Email address is required');
+        } else if (!isValidEmail(emailValue)) {
+            setError(email, 'Provide a valid email address');
+        } else {
+            setSuccess(email);
+        }
+
+        // Log the status of each field
+        // console.log('First name valid:', firstname.parentElement.classList.contains('success'));
+        // console.log('Last name valid:', lastname.parentElement.classList.contains('success'));
+        // console.log('State valid:', state.closest('.form-group').classList.contains('success'));
+        // console.log('Street address valid:', streetaddress.parentElement.classList.contains('success'));
+        // console.log('City valid:', city.parentElement.classList.contains('success'));
+        // console.log('Pincode valid:', pincode.parentElement.classList.contains('success'));
+        // console.log('Number valid:', number.parentElement.classList.contains('success'));
+        // console.log('Email valid:', email.parentElement.classList.contains('success'));
+    };
+
+
+
+    //edit validateInputs
+    const validateEditInputs = () => {
+        const firstnameValue = editFirstname.value.trim();
+        const lastnameValue = editLastname.value.trim();
+        const stateValue = editState.value.trim();
+        const streetaddressValue = editStreetaddress.value.trim();
+        const cityValue = editCity.value.trim();
+        const pincodeValue = editPincode.value.trim();
+        const numberValue = editNumber.value.trim();
+        const emailValue = editEmail.value.trim();
+
+        console.log('Validating edit inputs');
+
+        if (firstnameValue === '') {
+            setError(editFirstname, 'First name is required');
+        } else if (!isValidName(firstnameValue)) {
+            setError(editFirstname, 'First name cannot contain numbers or special characters');
+        } else {
+            setSuccess(editFirstname);
+        }
+
+        if (lastnameValue === '') {
+            setError(editLastname, 'Last name is required');
+        } else if (!isValidName(lastnameValue)) {
+            setError(editLastname, 'Last name cannot contain numbers or special characters');
+        } else {
+            setSuccess(editLastname);
+        }
+
+        if (stateValue === '') {
+            setError(editState, 'State / Country is required');
+        } else {
+            setSuccess(editState);
+        }
+
+        if (streetaddressValue === '') {
+            setError(editStreetaddress, 'Street address is required');
+        } else {
+            setSuccess(editStreetaddress);
+        }
+
+        if (cityValue === '') {
+            setError(editCity, 'Town / City is required');
+        } else {
+            setSuccess(editCity);
+        }
+
+        if (pincodeValue === '') {
+            setError(editPincode, 'Postcode / ZIP is required');
+        } else {
+            setSuccess(editPincode);
+        }
+
+        if (numberValue === '') {
+            setError(editNumber, 'Phone number is required');
+        } else if (!isValidPhoneNumber(numberValue)) {
+            setError(editNumber, 'Provide a valid phone number');
+        } else {
+            setSuccess(editNumber);
+        }
+
+        if (emailValue === '') {
+            setError(editEmail, 'Email address is required');
+        } else if (!isValidEmail(emailValue)) {
+            setError(editEmail, 'Provide a valid email address');
+        } else {
+            setSuccess(editEmail);
+        }
+    };
+
+
+
+
+});
+
+   </script>
+   <script>
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressId = button.getAttribute('data-id');
+
+            console.log('This is fornt end addressId :' , addressId);
+            try {
+                const response = await fetch(`/user/myaddress/${addressId}`);
+                const data = await response.json();
+                if (data.success) {
+                    populateEditForm(data.address);
+                    $('#editAddressModal').modal('show');
+                } else {
+                    console.error('Failed to fetch address details');
+                }
+            } catch (error) {
+                console.error('Error fetching address:', error);
+            }
+        });
+    });
+});
+
+    const populateEditForm = (address) => {
+    console.log('Populating form with address:', address);  // Add this line
+    document.getElementById('editAddressId').value = address._id;
+    document.getElementById('editModalFirstname').value = address.Firstname;
+    document.getElementById('editModalLastname').value = address.Lastname;
+    document.getElementById('editModalState').value = address.state;
+    document.getElementById('editModalStreetaddress').value = address.streetaddress;
+    document.getElementById('editModalLandmark').value = address.Landmark;
+    document.getElementById('editModalCity').value = address.city;
+    document.getElementById('editModalPincode').value = address.pincode;
+    document.getElementById('editModalNumber').value = address.number;
+    document.getElementById('editModalEmail').value = address.email;
+};
+   </script>
+
+   <script>
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click' , async() =>{
+                const addressId = button.getAttribute('data-id');
+
+                console.log('This is my addressId to delete',addressId);
+
+                try {
+                    const response = await fetch(`/user/removeaddress/${addressId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        // alert('Address deleted successfully');
+                        // Optionally, remove the address from the DOM or refresh the page
+                        location.reload();  // Simple way to refresh the page
+                    } else {
+                        alert('Failed to delete address');
+                    }
+                } catch (error) {
+                    console.error('Error deleting address:', error);
+                    alert('Error deleting address');
+                }
+        });
+    });
+});
+
    </script>
    
 

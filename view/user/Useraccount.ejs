@@ -1,70 +1,71 @@
 <%- include('../layouts/userheader') %>
 
 <style>
- /* Breadcrumbs adjustment */
-.breadcrumbs {
-    font-size: 50px;
-    margin-bottom: 15px;
-    text-align: center; /* Align text to the left */
-      /* padding-left: 20px; Adjust padding to move the text to the left */
-}
-
-.breadcrumbs a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.breadcrumbs a:hover {
-    text-decoration: underline;
-}
-
-.breadcrumbs span {
-    color: #ffc107;
-}
-
-/* Navbar styling */
+ /* Navbar Styles */
 .navbar {
-    background-color: #343a40;
+    background-color: #343a40; /* Dark background */
+    padding: 1rem 1rem; /* Padding */
 }
 
 .navbar-brand h1 {
-    font-family: 'Arial', sans-serif;
-    font-size: 24px;
-    color: #ffffff;
-}
-
-.navbar-toggler {
-    border: none;
-}
-
-.navbar-toggler .oi-menu {
-    color: #ffffff;
+    color: #ffffff; /* White text for the brand name */
+    font-size: 2rem; /* Adjust as needed */
 }
 
 .navbar-nav .nav-item .nav-link {
-    color: #ffffff;
-    font-size: 16px;
-    margin-right: 20px;
-    transition: color 0.2s ease-in-out;
+    color: #ffffff; /* White text for nav links */
+    margin-right: 1rem; /* Spacing between links */
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    color: #ffc107;
+    color: #ffc107; /* Yellow text on hover */
 }
 
-.navbar-nav .nav-item.dropdown.active .nav-link {
-    color: #ffc107;
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffc107; /* Yellow text for the active link */
 }
 
-.navbar-nav .nav-item.cta a {
-    color: #ffffff;
-    font-size: 18px;
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
 }
 
-.navbar-nav .nav-item.cta a .fas.fa-shopping-cart {
-    margin-right: 5px;
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
 }
 
+/* Breadcrumb Section Styles */
+.breadcrumb-option {
+    background: #f8f9fa; /* Light background */
+    padding: 3.5rem 0; /* Padding */
+    margin-bottom: 140px; /* Adjust the margin as needed */
+}
+
+.breadcrumb__text h4 {
+    text-align: center; /* Center the text */
+    margin: 0; /* Remove margin */
+    font-size: 40px; /* Adjust as needed */
+    color: #333333; /* Dark text color */
+}
+
+.breadcrumb__links {
+    text-align: center; /* Center the breadcrumb links */
+    font-size: 1rem; /* Adjust as needed */
+    color: #777777; /* Light grey color */
+}
+
+/* Ensure breadcrumb links have some margin and are styled correctly */
+.breadcrumb__links a {
+    color: #007bff; /* Primary color for links */
+    text-decoration: none; /* Remove underline */
+}
+
+.breadcrumb__links a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.breadcrumb__links span {
+    color: #333; /* Dark color for current page */
+}
 .bg-black {
     background-color: #000000;
 }
@@ -124,6 +125,100 @@
   background: #007bff;
   color: #fff;
 }
+
+
+
+
+.ftco-animate {
+    animation: fadeInUp 0.5s both;
+}
+
+.addresses-list {
+    margin-top: 20px;
+}
+
+.address-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    position: relative;
+    padding-left: 50px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.address-item:hover {
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.address-item input[type="radio"] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.address-item label {
+    display: block;
+    cursor: pointer;
+}
+
+.address-item h5 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.address-item p {
+    margin: 0 0 5px;
+    font-size: 17px;
+    color: #666;
+}
+.button-group {
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.edit-btn {
+    background: #ffc107;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background: #e0a800;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: #fff;
+    margin-left: 0.5rem;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 </style>
   <!-- Navbar section -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -150,6 +245,24 @@
 </nav>
 <!-- End Navbar section -->
 
+ <!-- Breadcrumb Section Begin -->
+ <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>My Profile</h4>
+                    <!-- <div class="breadcrumb__links">
+                        <a href="./index.html">Home</a>
+                        <a href="./shop.html">Shop</a>
+                        <span>Check Out</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 
 <div class="hero-wrap hero-bread" style="background-image: url('images/bg_6.jpg');">
     <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
@@ -159,106 +272,38 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <section class="ftco-section">
-    <div class="container">
+  <div class="container">
       <div class="row justify-content-center">
-        <div class="col-md-3">
-          <div class="left-sidebar">
-            <ul class="sidebar-options">
-              <li class="active"><a href="#">My Profile</a></li>
-              <li><a href="">Orders</a></li>
-              <li><a href="/user/address">Address</a></li>
-              <li><a href="">Signout</a></li>
-            </ul>
+          <div class="col-md-3">
+              <div class="left-sidebar">
+                  <ul class="sidebar-options">
+                      <li class="active"><a href="/user/myaccount">My Profile</a></li>
+                      <li><a href="/user/orders">Orders</a></li>
+                      <li><a href="/user/address">Address</a></li>
+                      <li><a href="/user/signout">Signout</a></li>
+                  </ul>
+              </div>
           </div>
-        </div>
-        <div class="col-md-9 ftco-animate">
-          <form action="#" class="billing-form">
-            <div class="row align-items-end">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="firstname">First Name</label>
-                  <input type="text" class="form-control" placeholder="">
-                </div>
+          <div class="col-md-9 ftco-animate">
+              <div class="addresses-list">
+                  
+                          <div class="address-item">
+                              <h5><%= users.name %></h5>
+                              <p>Email: <%= users.email %></p>
+                              <p>Phone: <%= users.number %></p>
+                          </div>
+                   
+                 
+                      <!-- <p>No user found.</p> -->
+                 
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="lastname">Last Name</label>
-                  <input type="text" class="form-control" placeholder="">
-                </div>
-              </div>
-              <div class="w-100"></div>
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="country">State / Country</label>
-                  <div class="select-wrap">
-                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                    <select name="" id="" class="form-control">
-                      <option value="">France</option>
-                      <option value="">Italy</option>
-                      <option value="">Philippines</option>
-                      <option value="">South Korea</option>
-                      <option value="">Hongkong</option>
-                      <option value="">Japan</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="w-100"></div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="streetaddress">Street Address</label>
-                  <input type="text" class="form-control" placeholder="House number and street name">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Apartment, suite, unit etc: (optional)">
-                </div>
-              </div>
-              <div class="w-100"></div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="towncity">Town / City</label>
-                  <input type="text" class="form-control" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="postcodezip">Postcode / ZIP *</label>
-                  <input type="text" class="form-control" placeholder="">
-                </div>
-              </div>
-              <div class="w-100"></div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="phone">Phone</label>
-                  <input type="text" class="form-control" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="emailaddress">Email Address</label>
-                  <input type="text" class="form-control" placeholder="">
-                </div>
-              </div>
-              <div class="w-100"></div>
-              <div class="col-md-12">
-                <div class="form-group mt-4">
-                  <div class="radio">
-                    <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
-                    <label><input type="radio" name="optradio"> Ship to different address</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form><!-- END -->
-        </div> <!-- .col-md-9 -->
+          </div>
       </div>
-    </div>
-  </section> <!-- .section -->   
+  </div>
+</section>
 
 
 

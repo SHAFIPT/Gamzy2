@@ -85,7 +85,15 @@ router.get('/cheakOut',cheakoutController.loadCheakoutPage)
 
 
 //userAccount
-router.get('/myaccount',myaccountController.loadMyAccount);
-router.get('/address',myaccountController.loadaddress)
+router.get('/myaccount',userMiddleware.isLogin,myaccountController.loadMyAccount);
+router.get('/address',userMiddleware.isLogin,myaccountController.loadaddress);
+router.post('/addAddress',myaccountController.addAddress)
+
+//editaddress
+router.get('/myaddress/:id', myaccountController.getAddressById);
+router.post('/editAddress', myaccountController.editAddress);
+
+//deleteaddress
+router.delete('/removeaddress/:id', myaccountController.removeAddress)
 
 module.exports = router;

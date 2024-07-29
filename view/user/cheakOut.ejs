@@ -22,6 +22,7 @@ rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/collections/icon/icon.min.css">
 
 
     <!-- Bootstrap CSS -->
@@ -38,111 +39,455 @@ rel="stylesheet">
     
 
 </head>
+<style>
 
+    /* Override modal form control text color */
+.modal-body .form-control {
+    color: black !important; /* Ensure text color is black */
+    background: white !important; /* Ensure background is white if needed */
+    border: 1px solid #ced4da !important; /* Ensure border is standard */
+    box-shadow: none !important; /* Remove any shadow effects */
+}
+    /* Navbar Styles */
+.navbar {
+    background-color: #343a40; /* Dark background */
+    padding: 1rem 1rem; /* Padding */
+}
+
+.navbar-brand h1 {
+    color: #ffffff; /* White text for the brand name */
+    font-size: 2rem; /* Adjust as needed */
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* White text for nav links */
+    margin-right: 1rem; /* Spacing between links */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow text on hover */
+}
+
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffc107; /* Yellow text for the active link */
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
+}
+
+/* Center the breadcrumb text */
+.breadcrumb__text h4 {
+    text-align: center; /* Center the text */
+    margin: 0 auto; /* Center the element */
+    font-size: 2rem; /* Adjust as needed */
+    color: #333333; /* Adjust color as needed */
+}
+
+.breadcrumb__links {
+    text-align: center; /* Center the breadcrumb links */
+    font-size: 1rem; /* Adjust as needed */
+    color: #777777; /* Adjust color as needed */
+}
+
+.navbar .nav-link {
+    color: #fff !important;
+}
+
+.navbar .nav-item.cta a {
+    background-color: #82ae46;
+    border-radius: 30px;
+    padding: 5px 15px;
+}
+
+/* .addresses-list {
+    margin-top: 20px;
+}
+
+.address-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    position: relative;
+    padding-left: 40px;
+}
+
+.address-item input[type="radio"] {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.address-item label {
+    display: block;
+    cursor: pointer;
+}
+
+.address-item h5 {
+    margin: 0 0 5px;
+}
+
+.address-item p {
+    margin: 0;
+} */
+
+.addresses-list {
+    margin-top: 20px;
+}
+
+.address-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    position: relative;
+    padding-left: 50px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.address-item:hover {
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.address-item input[type="radio"] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.address-item label {
+    display: block;
+    cursor: pointer;
+}
+
+.address-item h5 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.address-item p {
+    margin: 0 0 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+.button-group {
+    margin-top: 10px;
+}
+
+.button-group .edit-btn,
+.button-group .delete-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.button-group .edit-btn {
+    background: #5cb85c;
+    color: white;
+}
+
+.button-group .edit-btn:hover {
+    background: #4cae4c;
+}
+
+.button-group .delete-btn {
+    background: #d9534f;
+    color: white;
+}
+
+.button-group .delete-btn:hover {
+    background: #c9302c;
+}
+
+.cart__discount {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.cart__discount h6 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.cart__discount form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust spacing between elements */
+}
+
+.cart__discount input[type="text"] {
+    flex: 1; /* Allows the input to take up remaining space */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.cart__discount button {
+    padding: 10px 20px; /* Added padding to make the button more visible */
+    background: #5cb85c;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.cart__discount button:hover {
+    background: #4cae4c;
+}
+.checkout__input__checkbox {
+    margin-top: 10px;
+}
+
+.site-btn {
+    background: #5cb85c;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.site-btn:hover {
+    background: #4cae4c;
+}
+
+.btn-edit-address {
+    background-color: #007bff; /* Blue color for Edit Address */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit-address:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.btn-add-address {
+    background-color: #dc3545; /* Red color for Add Address */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add-address:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.address-item {
+    position: relative;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding-left: 60px; /* Adjusted to make room for the edit button */
+}
+
+.address-item .btn-edit-address {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.address-item {
+    position: relative;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding-left: 60px; /* Adjusted to make room for the edit button */
+}
+
+.address-item .btn-edit-address {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+
+/* Modal Background */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5); /* Dark background for modal overlay */
+}
+
+/* Modal Container */
+
+/* Modal Content */
+.modal-content {
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Header */
+.modal-header {
+    background-color: #007bff;
+    color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    position: relative;
+}
+
+/* Modal Title */
+.modal-title {
+    font-size: 1.25rem;
+    margin: 0;
+    color: black; /* Ensure modal title color is black */
+}
+
+/* Close Button */
+.modal-header .close {
+    color: #fff;
+    text-shadow: 0 1px 0 #000;
+    opacity: 0.5;
+}
+
+/* Close Button Hover */
+.modal-header .close:hover {
+    opacity: 1;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 15px;
+    font-size: 1rem;
+    color: black; /* Change text color inside the modal body */
+}
+
+/* Modal Footer */
+.modal-footer {
+    background-color: #f1f1f1;
+    border-top: 1px solid #ddd;
+    padding: 15px;
+}
+
+/* Button Styles */
+.modal-footer .btn {
+    margin: 0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    color: black; /* Ensure text color of buttons is black */
+}
+
+.modal-footer .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.modal-footer .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Form Elements */
+.modal-body .form-group {
+    margin-bottom: 1rem;
+}
+
+.modal-body .form-control {
+    border-radius: 4px;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #ced4da;
+    color: black; /* Ensure input text color is black */
+}
+
+/* Modal Scroll */
+.modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Error and Success Styling */
+.error {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+
+.success input {
+    border-color: green;
+}
+
+.error input {
+    border-color: red;
+}
+
+</style>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+    <!-- Navbar section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
 
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__option">
-            <div class="offcanvas__links">
-                <a href="#">Sign in</a>
-                <a href="#">FAQs</a>
-            </div>
-            <div class="offcanvas__top__hover">
-                <span>Usd <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>USD</li>
-                    <li>EUR</li>
-                    <li>USD</li>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                    </li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
                 </ul>
             </div>
         </div>
-        <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-            <a href="#"><img src="img/icon/heart.png" alt=""></a>
-            <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__text">
-            <p>Free shipping, 30-day return or refund guarantee.</p>
-        </div>
-    </div>
-    <!-- Offcanvas Menu End -->
-
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-7">
-                        <div class="header__top__left">
-                            <p>Free shipping, 30-day return or refund guarantee.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-5">
-                        <div class="header__top__right">
-                            <div class="header__top__links">
-                                <a href="#">Sign in</a>
-                                <a href="#">FAQs</a>
-                            </div>
-                            <div class="header__top__hover">
-                                <span>Usd <i class="arrow_carrot-down"></i></span>
-                                <ul>
-                                    <li>USD</li>
-                                    <li>EUR</li>
-                                    <li>USD</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-3">
-                    <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li class="active"><a href="./shop.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contacts</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="header__nav__option">
-                        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                        <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                        <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
-                        <div class="price">$0.00</div>
-                    </div>
-                </div>
-            </div>
-            <div class="canvas__open"><i class="fa fa-bars"></i></div>
-        </div>
-    </header>
+    </nav>
+    <!-- End Navbar section -->
     <!-- Header Section End -->
 
     <!-- Breadcrumb Section Begin -->
@@ -152,11 +497,11 @@ rel="stylesheet">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
                         <h4>Check Out</h4>
-                        <div class="breadcrumb__links">
+                        <!-- <div class="breadcrumb__links">
                             <a href="./index.html">Home</a>
                             <a href="./shop.html">Shop</a>
                             <span>Check Out</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -164,114 +509,71 @@ rel="stylesheet">
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Checkout Section Begin -->
+
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="#">
+                <!-- <form action="/order/confirm" method="POST"> -->
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
-                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
-                            here</a> to enter your code</h6>
                             <h6 class="checkout__title">Billing Details</h6>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Fist Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
+                            <div class="addresses-list">
+                                <% if (addresses && addresses.length > 0) { %>
+                                    <% addresses.forEach((address, index) => { %>
+                                        <div class="address-item">
+                                            <input type="radio" id="address<%= index %>" name="selectedAddress" value="<%= address._id %>" <%= index === 0 ? 'checked' : '' %> />
+                                            <label for="address<%= index %>">
+                                                <h5><%= address.Firstname %> <%= address.Lastname %></h5>
+                                                <p><%= address.streetaddress %> <%= address.Landmark ? ', ' + address.Landmark : '' %></p>
+                                                <p><%= address.city %>, <%= address.state %> <%= address.pincode %></p>
+                                                <p>Phone: <%= address.number %></p>
+                                                <p>Email: <%= address.email %></p>
+                                            </label>
+                                            <button class="btn-edit-address" data-id="<%= address._id %>" data-toggle="modal" data-target="#editAddressModal">Edit Address</button>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p>No addresses found.</p>
+                                <% } %>
                             </div>
-                            <div class="checkout__input">
-                                <p>Country<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add">
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country/State<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc">
-                                    Create an account?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <p>Create an account by entering the information below. If you are a returning customer
-                                please login at the top of the page</p>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Account Password<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="diff-acc">
-                                    Note about your order, e.g, special noe for delivery
-                                    <input type="checkbox" id="diff-acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input type="text"
-                                placeholder="Notes about your order, e.g. special notes for delivery.">
-                            </div>
+                            <button class="btn-add-address" data-toggle="modal" data-target="#addProductModal">Add Address</button>
                         </div>
+                        
                         <div class="col-lg-4 col-md-6">
                             <div class="checkout__order">
                                 <h4 class="order__title">Your order</h4>
                                 <div class="checkout__order__products">Product <span>Total</span></div>
                                 <ul class="checkout__total__products">
-                                    <li>01. Vanilla salted caramel <span>$ 300.0</span></li>
-                                    <li>02. German chocolate <span>$ 170.0</span></li>
-                                    <li>03. Sweet autumn <span>$ 170.0</span></li>
-                                    <li>04. Cluten free mini dozen <span>$ 110.0</span></li>
+                                    <% if (cart && cart.products.length > 0) { %>
+                                        <% cart.products.forEach(product => { %>
+                                            <li><%= product.productId.productname %> x <%= product.quantity %> <span>₹<%= (product.productId.price * product.quantity).toFixed(2) %></span></li>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <li>Your cart is empty.</li>
+                                    <% } %>
                                 </ul>
+                                <div class="cart__discount">
+                                    <h6>Discount codes</h6>
+                                    <form id="discount-form" action="#">
+                                        <input type="text" id="coupon-code" placeholder="Coupon code">
+                                        <button type="button" id="apply-discount">Apply</button>
+                                    </form>
+                                </div>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span>$750.99</span></li>
-                                    <li>Total <span>$750.99</span></li>
+                                    <li>Subtotal <span>₹<span id="subtotal">
+                                        <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => sum + product.productId.price * product.quantity, 0).toFixed(2) : 0 %>
+                                    </span></span></li>
+                                    <li>Total <span>₹<span id="total">
+                                        <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => sum + product.productId.price * product.quantity, 0).toFixed(2) : 0 %>
+                                    </span></span></li>
                                 </ul>
                                 <div class="checkout__input__checkbox">
-                                    <label for="acc-or">
-                                        Create an account?
-                                        <input type="checkbox" id="acc-or">
+                                    <label for="Cash on delivary">
+                                        Cash on delivary
+                                        <input type="checkbox" id="Cash on delivary">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                                ut labore et dolore magna aliqua.</p>
                                 <div class="checkout__input__checkbox">
                                     <label for="payment">
                                         Check Payment
@@ -289,12 +591,12 @@ rel="stylesheet">
                                 <button type="submit" class="site-btn">PLACE ORDER</button>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            <!-- </form> -->
         </div>
-    </section>
-    <!-- Checkout Section End -->
+    </div>
+</section>
+    
 
     <!-- Footer Section Begin -->
     <footer class="footer">
@@ -344,21 +646,7 @@ rel="stylesheet">
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="footer__copyright__text">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright ©
-                            <script>
-                                document.write(new Date().getFullYear());
-                            </script>2020
-                            All rights reserved | This template is made with <i class="fa fa-heart-o"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </footer>
     <!-- Footer Section End -->
@@ -372,6 +660,224 @@ rel="stylesheet">
             </form>
         </div>
     </div>
+
+
+
+
+
+    
+<!-- Add Address Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/user/addAddress" method="post" class="billing-form" id="addressForm">
+            <div class="modal-body">
+              
+                <div class="container">
+                   
+                        <div class="row align-items-end">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalFirstname">First Name</label>
+                                   
+                                    <input type="text" id="modalFirstname" name="firstname" class="form-control" placeholder="">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalLastname">Last Name</label>
+                                    <input type="text" id="modalLastname" name="lastname" class="form-control" placeholder="">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="modalState">State / Country</label>
+                                    <div class="select-wrap">
+                                        <!-- <div class="icon"><span class="ion-ios-arrow-down"></span></div> -->
+                                        <select name="state" id="modalState" class="form-control">
+                                            <option value="">Select State / Country</option>
+                                            <option value="France">France</option>
+                                            <option value="Italy">Italy</option>
+                                            <option value="Philippines">Philippines</option>
+                                            <option value="South Korea">South Korea</option>
+                                            <option value="Hongkong">Hongkong</option>
+                                            <option value="Japan">Japan</option>
+                                        </select>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalStreetaddress">Street Address</label>
+                                    <input type="text" class="form-control" id="modalStreetaddress" name="streetaddress" placeholder="House number and street name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="modalLandmark" name="landmark" placeholder="Apartment, suite, unit etc: (optional)">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalCity">Town / City</label>
+                                    <input type="text" id="modalCity" name="city" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalPincode">Postcode / ZIP *</label>
+                                    <input type="text" id="modalPincode" name="pincode" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalNumber">Phone</label>
+                                    <input type="text" id="modalNumber" name="number" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="modalEmail">Email Address</label>
+                                    <input type="text" id="modalEmail" name="email" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Address Modal -->
+<div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/user/editAddress" method="post" class="billing-form" id="editAddressForm">
+                <div class="modal-body">
+                    <input type="hidden" id="editAddressId" name="addressId">
+                    <div class="container">
+                        <div class="row align-items-end">
+                            <!-- Similar form structure as the add address modal -->
+                            <!-- Populate these fields with JavaScript when the Edit button is clicked -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalFirstname">First Name</label>
+                                    <input type="text" id="editModalFirstname" name="firstname" class="form-control" placeholder="">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalLastname">Last Name</label>
+                                    <input type="text" id="editModalLastname" name="lastname" class="form-control" placeholder="">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="editModalState">State / Country</label>
+                                    <div class="select-wrap">
+                                        <!-- <div class="icon"><span class="ion-ios-arrow-down"></span></div> -->
+                                        <select name="state" id="editModalState" class="form-control">
+                                            <option value="">Select State / Country</option>
+                                            <option value="France">France</option>
+                                            <option value="Italy">Italy</option>
+                                            <option value="Philippines">Philippines</option>
+                                            <option value="South Korea">South Korea</option>
+                                            <option value="Hongkong">Hongkong</option>
+                                            <option value="Japan">Japan</option>
+                                        </select>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalStreetaddress">Street Address</label>
+                                    <input type="text" class="form-control" id="editModalStreetaddress" name="streetaddress" placeholder="House number and street name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="editModalLandmark" name="landmark" placeholder="Apartment, suite, unit etc: (optional)">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalCity">Town / City</label>
+                                    <input type="text" id="editModalCity" name="city" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalPincode">Postcode / ZIP *</label>
+                                    <input type="text" id="editModalPincode" name="pincode" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalNumber">Phone</label>
+                                    <input type="text" id="editModalNumber" name="number" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="editModalEmail">Email Address</label>
+                                    <input type="text" id="editModalEmail" name="email" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="updateAddress">Update Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
     
    <!-- Search End -->
@@ -392,5 +898,495 @@ rel="stylesheet">
 
  <!-- Your custom JavaScript file (if any) -->
  <script src="/js/custom-scripts.js"></script>
+
+
+<script>
+ 
+ document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
+
+
+    // Add address form variables
+    const addressForm = document.getElementById('addressForm');
+    const firstname = document.getElementById('modalFirstname');
+    const lastname = document.getElementById('modalLastname');
+    const state = document.getElementById('modalState');
+    const streetaddress = document.getElementById('modalStreetaddress');
+    const landmark = document.getElementById('modalLandmark');
+    const city = document.getElementById('modalCity');
+    const pincode = document.getElementById('modalPincode');
+    const number = document.getElementById('modalNumber');
+    const email = document.getElementById('modalEmail');
+    
+    console.log(firstname);
+
+
+    
+    // New edit address form variables
+    const editAddressForm = document.getElementById('editAddressForm');
+    const editFirstname = document.getElementById('editModalFirstname');
+    const editLastname = document.getElementById('editModalLastname');
+    const editState = document.getElementById('editModalState');
+    const editStreetaddress = document.getElementById('editModalStreetaddress');
+    const editLandmark = document.getElementById('editModalLandmark');
+    const editCity = document.getElementById('editModalCity');
+    const editPincode = document.getElementById('editModalPincode');
+    const editNumber = document.getElementById('editModalNumber');
+    const editEmail = document.getElementById('editModalEmail');
+    const editAddressId = document.getElementById('editAddressId');
+
+
+
+    console.log('This is my editAddressForm',editAddressForm);
+
+
+
+    //Address fetch to backend
+    if (addressForm) {
+        addressForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Form submitted');
+            validateInputs();
+
+            if (isValid()) {
+                console.log('Form is valid');
+                const formData = {
+                    firstname: firstname.value.trim(),
+                    lastname: lastname.value.trim(),
+                    state: state.value.trim(),
+                    streetaddress: streetaddress.value.trim(),
+                    landmark: landmark.value.trim(),
+                    city: city.value.trim(),
+                    pincode: pincode.value.trim(),
+                    number: number.value.trim(),
+                    email: email.value.trim(),
+                };
+                console.log('FormData:', formData);
+
+                try {
+                    const response = await fetch('/user/addAddress', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                        window.location.href = '/user/cheakOut';
+                    });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+
+
+    //edit address to backend
+    if (editAddressForm) {
+        editAddressForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Edit form submitted');
+            validateEditInputs();
+
+            if (isEditValid()) {
+                console.log('Edit form is valid');
+                const editFormData = {
+                    id: editAddressId.value.trim(),
+                    firstname: editFirstname.value.trim(),
+                    lastname: editLastname.value.trim(),
+                    state: editState.value.trim(),
+                    streetaddress: editStreetaddress.value.trim(),
+                    landmark: editLandmark.value.trim(),
+                    city: editCity.value.trim(),
+                    pincode: editPincode.value.trim(),
+                    number: editNumber.value.trim(),
+                    email: editEmail.value.trim(),
+                };
+
+                
+                console.log('my edit Address ID:', editAddressId.value.trim());
+
+                console.log('EditFormData:', editFormData);
+
+                try {
+                    const response = await fetch('/user/editAddress', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(editFormData),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = '/user/cheakOut';
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+    const isValid = () => {
+        const valid = (
+            firstname.parentElement.classList.contains('success') &&
+            lastname.parentElement.classList.contains('success') &&
+            state.closest('.form-group').classList.contains('success') &&
+            streetaddress.parentElement.classList.contains('success') &&
+            city.parentElement.classList.contains('success') &&
+            pincode.parentElement.classList.contains('success') &&
+            number.parentElement.classList.contains('success') &&
+            email.parentElement.classList.contains('success')
+        );
+
+        console.log('Form is valid:', valid);
+        return valid;
+    };
+
+
+
+    //editAddress is valid
+
+    const isEditValid = () => {
+        const valid = (
+            editFirstname.parentElement.classList.contains('success') &&
+            editLastname.parentElement.classList.contains('success') &&
+            editState.closest('.form-group').classList.contains('success') &&
+            editStreetaddress.parentElement.classList.contains('success') &&
+            editCity.parentElement.classList.contains('success') &&
+            editPincode.parentElement.classList.contains('success') &&
+            editNumber.parentElement.classList.contains('success') &&
+            editEmail.parentElement.classList.contains('success')
+        );
+
+        console.log('Edit form is valid:', valid);
+        return valid;
+    };
+
+
+
+    const setError = (element, message) => {
+        const inputControl = element.closest('.form-group');
+        let errorDisplay = inputControl.querySelector('.error');
+
+        if (!errorDisplay) {
+            errorDisplay = document.createElement('span');
+            errorDisplay.className = 'error';
+            inputControl.appendChild(errorDisplay);
+        }
+        errorDisplay.innerText = message;
+        inputControl.classList.add('error');
+        inputControl.classList.remove('success');
+        console.log('Error set for:', element.id);
+    };
+
+    const setSuccess = (element) => {
+        const inputControl = element.closest('.form-group');
+        const errorDisplay = inputControl.querySelector('.error');
+
+        if (errorDisplay) {
+            errorDisplay.remove();
+        }
+        inputControl.classList.add('success');
+        inputControl.classList.remove('error');
+        console.log('Success set for:', element.id);
+    };
+
+    const isValidEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    };
+
+    const isValidPhoneNumber = (phone) => {
+        const numericPhone = phone.replace(/\D/g, '');
+        return /^[1-9]\d{9}$/.test(numericPhone);
+    };
+
+    const isValidName = (name) => {
+        const re = /^[a-zA-Z\s]+$/;
+        return re.test(name);
+    };
+
+    const validateInputs = () => {
+        const firstnameValue = firstname.value.trim();
+        const lastnameValue = lastname.value.trim();
+        const stateValue = state.value.trim();
+        const streetaddressValue = streetaddress.value.trim();
+        const cityValue = city.value.trim();
+        const pincodeValue = pincode.value.trim();
+        const numberValue = number.value.trim();
+        const emailValue = email.value.trim();
+
+        console.log('Validating inputs');
+
+        if (firstnameValue === '') {
+            setError(firstname, 'First name is required');
+        } else if (!isValidName(firstnameValue)) {
+            setError(firstname, 'First name cannot contain numbers or special characters');
+        } else {
+            setSuccess(firstname);
+        }
+
+        if (lastnameValue === '') {
+            setError(lastname, 'Last name is required');
+        } else if (!isValidName(lastnameValue)) {
+            setError(lastname, 'Last name cannot contain numbers or special characters');
+        } else {
+            setSuccess(lastname);
+        }
+
+        if (stateValue === '') {
+            setError(state, 'State / Country is required');
+        } else {
+            setSuccess(state);
+        }
+
+        if (streetaddressValue === '') {
+            setError(streetaddress, 'Street address is required');
+        } else {
+            setSuccess(streetaddress);
+        }
+
+        if (cityValue === '') {
+            setError(city, 'Town / City is required');
+        } else {
+            setSuccess(city);
+        }
+
+        if (pincodeValue === '') {
+            setError(pincode, 'Postcode / ZIP is required');
+        } else {
+            setSuccess(pincode);
+        }
+
+        if (numberValue === '') {
+            setError(number, 'Phone number is required');
+        } else if (!isValidPhoneNumber(numberValue)) {
+            setError(number, 'Provide a valid phone number');
+        } else {
+            setSuccess(number);
+        }
+
+        if (emailValue === '') {
+            setError(email, 'Email address is required');
+        } else if (!isValidEmail(emailValue)) {
+            setError(email, 'Provide a valid email address');
+        } else {
+            setSuccess(email);
+        }
+
+        // Log the status of each field
+        // console.log('First name valid:', firstname.parentElement.classList.contains('success'));
+        // console.log('Last name valid:', lastname.parentElement.classList.contains('success'));
+        // console.log('State valid:', state.closest('.form-group').classList.contains('success'));
+        // console.log('Street address valid:', streetaddress.parentElement.classList.contains('success'));
+        // console.log('City valid:', city.parentElement.classList.contains('success'));
+        // console.log('Pincode valid:', pincode.parentElement.classList.contains('success'));
+        // console.log('Number valid:', number.parentElement.classList.contains('success'));
+        // console.log('Email valid:', email.parentElement.classList.contains('success'));
+    };
+
+
+
+    //edit validateInputs
+    const validateEditInputs = () => {
+        const firstnameValue = editFirstname.value.trim();
+        const lastnameValue = editLastname.value.trim();
+        const stateValue = editState.value.trim();
+        const streetaddressValue = editStreetaddress.value.trim();
+        const cityValue = editCity.value.trim();
+        const pincodeValue = editPincode.value.trim();
+        const numberValue = editNumber.value.trim();
+        const emailValue = editEmail.value.trim();
+
+        console.log('Validating edit inputs');
+
+        if (firstnameValue === '') {
+            setError(editFirstname, 'First name is required');
+        } else if (!isValidName(firstnameValue)) {
+            setError(editFirstname, 'First name cannot contain numbers or special characters');
+        } else {
+            setSuccess(editFirstname);
+        }
+
+        if (lastnameValue === '') {
+            setError(editLastname, 'Last name is required');
+        } else if (!isValidName(lastnameValue)) {
+            setError(editLastname, 'Last name cannot contain numbers or special characters');
+        } else {
+            setSuccess(editLastname);
+        }
+
+        if (stateValue === '') {
+            setError(editState, 'State / Country is required');
+        } else {
+            setSuccess(editState);
+        }
+
+        if (streetaddressValue === '') {
+            setError(editStreetaddress, 'Street address is required');
+        } else {
+            setSuccess(editStreetaddress);
+        }
+
+        if (cityValue === '') {
+            setError(editCity, 'Town / City is required');
+        } else {
+            setSuccess(editCity);
+        }
+
+        if (pincodeValue === '') {
+            setError(editPincode, 'Postcode / ZIP is required');
+        } else {
+            setSuccess(editPincode);
+        }
+
+        if (numberValue === '') {
+            setError(editNumber, 'Phone number is required');
+        } else if (!isValidPhoneNumber(numberValue)) {
+            setError(editNumber, 'Provide a valid phone number');
+        } else {
+            setSuccess(editNumber);
+        }
+
+        if (emailValue === '') {
+            setError(editEmail, 'Email address is required');
+        } else if (!isValidEmail(emailValue)) {
+            setError(editEmail, 'Provide a valid email address');
+        } else {
+            setSuccess(editEmail);
+        }
+    };
+
+
+
+
+});
+
+   </script>
+   <script>
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-edit-address').forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressId = button.getAttribute('data-id');
+
+            console.log('This is fornt end addressId :' , addressId);
+            try {
+                const response = await fetch(`/user/myaddress/${addressId}`);
+                const data = await response.json();
+                if (data.success) {
+                    populateEditForm(data.address);
+                    $('#editAddressModal').modal('show');
+                } else {
+                    console.error('Failed to fetch address details');
+                }
+            } catch (error) {
+                console.error('Error fetching address:', error);
+            }
+        });
+    });
+});
+
+    const populateEditForm = (address) => {
+    console.log('Populating form with address:', address);  // Add this line
+    document.getElementById('editAddressId').value = address._id;
+    document.getElementById('editModalFirstname').value = address.Firstname;
+    document.getElementById('editModalLastname').value = address.Lastname;
+    document.getElementById('editModalState').value = address.state;
+    document.getElementById('editModalStreetaddress').value = address.streetaddress;
+    document.getElementById('editModalLandmark').value = address.Landmark;
+    document.getElementById('editModalCity').value = address.city;
+    document.getElementById('editModalPincode').value = address.pincode;
+    document.getElementById('editModalNumber').value = address.number;
+    document.getElementById('editModalEmail').value = address.email;
+};
+   </script>
+
+   <script>
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click' , async() =>{
+                const addressId = button.getAttribute('data-id');
+
+                console.log('This is my addressId to delete',addressId);
+
+                try {
+                    const response = await fetch(`/user/removeaddress/${addressId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        // alert('Address deleted successfully');
+                        // Optionally, remove the address from the DOM or refresh the page
+                        location.reload();  // Simple way to refresh the page
+                    } else {
+                        alert('Failed to delete address');
+                    }
+                } catch (error) {
+                    console.error('Error deleting address:', error);
+                    alert('Error deleting address');
+                }
+        });
+    });
+});
+
+   </script>
+   
 
     <%- include('../layouts/footer') %>

@@ -72,7 +72,7 @@ admin_route.post('/add-Variant/:id',upload.any(),Productcontroller.AddVarient)
 
 //EditVarient
 admin_route.get('/edit-Varient/:id',auth.isLogin,Productcontroller.loadEditVarinet);
-admin_route.post('/updateVariant/:id',upload.any(),Productcontroller.editVarient)
+admin_route.post('/updateVariant/:id',upload.any(),Productcontroller.editVarient);
 
 admin_route.post('/logout',auth.isLogin,Admincontroller.logout)
 admin_route.post('/block-user', Admincontroller.blockuser);

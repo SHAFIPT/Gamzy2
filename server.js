@@ -14,34 +14,34 @@ app.set('view engine', 'ejs');
  
 app.set('views', path.join(__dirname, 'view', 'user'));
      
-                 
+                     
 // Middleware for parsing JSON and urlencoded data 
 app.use(express.json());    
-app.use(express.urlencoded({ extended: true }));   
-                    
+app.use(express.urlencoded({ extended: true }));    
+                     
 // Serve static files from the 'public' directory
 app.use('/static', express.static(path.join(__dirname, 'public', 'uploads')));
 app.use(express.static('public'));  
-                    
+                      
 // Use the user Route router for handling route s 
 app.get('/', (req,res)=>{res.redirect('/user')});  
-
+    
 // app.get('/GoogleAuth',   
 //     passport.authenticate('google',{  
 //         failureRedirect : '/failure'
-//     }
-// ));     
- 
-
-app.use('/user',userRoute) 
-                 
-//admin Route                       
+//     } 
+// ));       
+   
+  
+app.use('/user',userRoute)   
+                  
+//admin Route                        
+                              
+app.use('/admin',adminRoute);             
                            
-app.use('/admin',adminRoute);           
-                        
-// Start the server                
-const PORT = process.env.PORT;  
+// Start the server                 
+const PORT = process.env.PORT;    
 app.listen(PORT, () => { 
     console.log(`Server is running on http://localhost:${PORT}`);
-});             
-                                                  
+});                 
+                                                         
