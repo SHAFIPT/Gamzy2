@@ -100,10 +100,10 @@
       background-color: #f2f2f2;
   }
   .variant-image {
-      width: 120px;
-      height: 150px;
-      object-fit: cover;
-  }
+    width: 100px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 100%; /* Ensure the image does not overflow its container */
+}
   .order-details {
       display: flex;
       justify-content: space-between;
@@ -120,6 +120,15 @@
   }
   .order-summary-footer .row {
       margin-bottom: 10px;
+}
+
+
+.order-summary-label {
+    color: rgb(69, 57, 57); /* Color for the 'strong' elements */
+}
+
+.order-summary-text {
+    color: black; /* Color for the text after the 'strong' elements */
 }
 
 </style>
@@ -160,61 +169,70 @@
 </section>
 
 <div class="container order-summary-container">
-<!-- <h1 class="text-center mb-4">Order Summary</h1> -->
-<div class="order-summary">
-    <div class="order-details">
-        <div class="order-info">
-            <!-- <h2 class="mb-3">Order Details</h2> -->
-            <p><strong>Order ID:</strong> #12345</p>
-            <p><strong>Total Amount:</strong> ₹ 2500.00</p>
-            <p><strong>Ordered Date:</strong> July 29, 2024, 2:30 PM</p>
-        </div>
-        <div class="address-details">
-            <p><strong>Ship to:</strong> John Doe</p>
-            <p><strong>Delivery Address:</strong><br>
-                1234 Elm Street, Apt 56<br>
-                Springfield, IL 62704<br>
-                +1 234 567 8901
-            </p>
-        </div>
-    </div>
-    <h3 class="mt-4 mb-3">Products</h3>
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th></th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><img src="/images/banner-image.png" alt="" class="variant-image"></td>
-                <td>Sample Product <br> Red <br> M</td>
-                <td>1</td>
-                <td>₹500.00</td>
-                <td>₹500.00</td>
-            </tr>
-            <!-- Repeat for other products -->
-        </tbody>
-    </table>
-    <div class="order-summary-footer">
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <h6>Subtotal: <span>₹500.00</span></h6>
-                <h6>Shipping Charge: <span>₹100.00</span></h6>
-                <h3 class="mt-4">Grand Total: <span>₹600.00</span></h3>
+    <div class="order-summary">
+        <div class="order-details">
+            <div class="order-info">
+                <p><strong class="order-summary-label">Order ID:</strong> <span class="order-summary-text">#<%= order.orderId %></span></p>
+                <p><strong class="order-summary-label">Total Amount:</strong> <span class="order-summary-text">₹<%= order.totalAmount.toFixed(2) %></span></p>
+                <p><strong class="order-summary-label">Ordered Date:</strong> <span class="order-summary-text"><%= new Date(order.orderDate).toLocaleString() %></span></p>
+            </div>
+            <div class="address-details">
+                <p><strong class="order-summary-label">Ship to:</strong> <span class="order-summary-text"><%= order.address.name %></span></p>
+                <p><strong class="order-summary-label">Delivery Address:</strong><br>
+                    <span class="order-summary-text">
+                    <%= order.address.address %>, <br>
+                    <%= order.address.Landmark %> <%= order.address.Landmark ? ', ' : '' %><%= order.address.street %><br>
+                    <%= order.address.city %>, <%= order.address.state %> <%= order.address.pincode %><br>
+                    +<%= order.address.number %>
+                </span>
+                </p>
             </div>
         </div>
-    </div>
-
-    <div class="text-center mt-4">
-        <a href="/" class="btn btn-primary btn-lg mr-2">Continue Shopping</a>
-        <a href="/download-invoice/12345" class="btn btn-secondary btn-lg">Download Invoice</a>
-    </div>
-</div>
+        <h3 class="mt-4 mb-3">Products</h3>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% order.products.forEach(product => { %>
+                    <tr>
+                        <% const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString()); %>
+                        <% if (variant && variant.images && variant.images.length > 0) { %>
+                            <td><img src="/uploads/<%= variant.images[0] %>" alt="Product image" class="variant-image"></td>
+                        <% } else { %>
+                            <td><img src="/path/to/default/image.jpg" alt="Default Image" class="variant-image"></td>
+                        <% } %>
+                        <td>
+                            <%= product.productId.productname %> <br>
+                            <%= variant.color %> <br>
+                          
+                        </td>
+                        <td><%= product.quantity %></td>
+                        <td>₹<%= product.price.toFixed(2) %></td>
+                        <td>₹<%= (product.price * product.quantity).toFixed(2) %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <div class="order-summary-footer">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-left">
+                    <a href="/" class="btn btn-primary btn-lg mr-2 custom-btn">Continue Shopping</a>
+                    <a href="/download-invoice/<%= order.orderId %>" class="btn btn-secondary btn-lg custom-btn">Download Invoice</a>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h6>Subtotal: <span>₹<%= order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0).toFixed(2) %></span></h6>
+                    <h6>Shipping Charge: <span>₹<%= order.shippingCharge.toFixed(2) %></span></h6>
+                    <h3 class="mt-4">Grand Total: <span>₹<%= order.totalAmount.toFixed(2) %></span></h3>
+                </div>
+            </div>
+        </div>
 </div>
 
 

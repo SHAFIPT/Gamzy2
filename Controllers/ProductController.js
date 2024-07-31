@@ -74,7 +74,7 @@ const LoadEditproduct = async (req,res)=>{
         // Render the editproduct view with product details and categories
         res.render('editproduct', { product: product, categories: categories ,  path: path });
 
-vv
+
     } catch (error) {
         console.error('Error Edit product:', error);
         res.status(500).json({ message: 'Error Edit product', error });

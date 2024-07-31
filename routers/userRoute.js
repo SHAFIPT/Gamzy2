@@ -13,7 +13,8 @@ require('../passport'); // Ensure passport configuration is loaded
 const userController = require('../Controllers/userController');
 const userListcontroller = require('../Controllers/Userlistcontroller');
 const cheakoutController = require('../Controllers/cheakoutController');
-const myaccountController = require('../Controllers/myAccountcontroller')
+const myaccountController = require('../Controllers/myAccountcontroller');
+const orderController     = require('../Controllers/OrderController')
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 
@@ -95,5 +96,11 @@ router.post('/editAddress', myaccountController.editAddress);
 
 //deleteaddress
 router.delete('/removeaddress/:id', myaccountController.removeAddress)
+
+
+//order page
+router.get("/order",userMiddleware.isLogin,orderController.loadOrderPage);
+router.post("/place-order",userMiddleware.isLogin,orderController.orderSummory);
+
 
 module.exports = router;

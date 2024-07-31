@@ -2,19 +2,66 @@ const Product = require('../model/productModel')
 const Category = require('../model/catogoriesModel');
 const Cart = require('../model/cartShema')
 
+
+const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+        return description.substring(0, maxLength) + '...';
+    }
+    return description;
+};
+
+
 const LoadShopage = async (req, res) => {
     try {
+
+        // Extract price range from query parameters
+        const { price_from, price_to ,category ,sort} = req.query;
+
+        console.log("Query parameters:", req.query);
+
+        console.log("Price from:", price_from);
+        console.log("Price to:", price_to);
+        console.log("Category:", category);
+        console.log("Sort:", sort);
+
+
+        // Build the query object for filtering products
+        let query = { is_Listed: true };
+
+        if (price_from && price_to) {
+            query['price'] = { $gte: parseFloat(price_from), $lte: parseFloat(price_to) };
+        }
+
+        //category filtering
+        if (category) {
+            query.productCategory = category;
+        }
+
+         // Build sorting object
+        let sortOption = {};
+        if (sort === 'asc') {
+            sortOption['productname'] = 1; // A to Z
+        } else if (sort === 'desc') {
+            sortOption['productname'] = -1; // Z to A
+        } else {
+            sortOption['productname'] = 1; // Default sorting
+        }
+
+         console.log("this is sort option",sortOption);
+ 
+
         // Fetch only the listed products
-        const products = await Product.find({ is_Listed: true })
+        const products = await Product.find(query)
             .populate('variants')
-            .populate('productCategory');
+            .populate('productCategory')
+            .sort(sortOption)
 
         // Fetch all categories to populate the dropdown
         const categories = await Category.find({ is_listed: true });
 
         console.log('This is my categories:', categories);
 
-        res.render('Shopage', { products: products, categories: categories });
+        res.render('Shopage', { products: products, categories: categories ,price_from, price_to, sort, category ,truncateDescription});
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');

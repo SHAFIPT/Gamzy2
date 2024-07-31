@@ -568,27 +568,20 @@ rel="stylesheet">
                                     </span></span></li>
                                 </ul>
                                 <div class="checkout__input__checkbox">
-                                    <label for="Cash on delivary">
+                                    <label for="Cashondelivary">
                                         Cash on delivary
-                                        <input type="checkbox" id="Cash on delivary">
+                                        <input type="checkbox" id="Cashondelivary" class="payment-method">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Check Payment
-                                        <input type="checkbox" id="payment">
+                                    <label for="razerpay">
+                                        Razer Pay
+                                        <input type="checkbox" id="razerpay" class="payment-method">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                <button type="submit" id="placeOrderButton" class="site-btn">PLACE ORDER</button>
                             </div>
                         </div>
                 </div>
@@ -1387,6 +1380,83 @@ rel="stylesheet">
 });
 
    </script>
-   
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const placeOrderButton = document.getElementById("placeOrderButton");
+    const paymentMethods = document.querySelectorAll(".payment-method");
+    const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
+
+    console.log("this in my ordre domcontents :",placeOrderButton);
+    console.log("this in my ordre domcontents :",paymentMethods);
+    console.log("this in my ordre domcontents :",addressRadios);
+
+    paymentMethods.forEach(method => {
+        method.addEventListener("change", function() {
+            placeOrderButton.disabled = !Array.from(paymentMethods).some(method => method.checked);
+        });
+    });
+
+    placeOrderButton.addEventListener("click", function() {
+        const selectedAddress = Array.from(addressRadios).find(radio => radio.checked)?.value;
+        const selectedPaymentMethod = Array.from(paymentMethods).find(method => method.checked)?.id;
+
+        if (!selectedAddress || !selectedPaymentMethod) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Information',
+                text: 'Please select both an address and a payment method.'
+            });
+            return;
+        }
+
+        const orderData = {
+            // userId: "USER_ID_HERE",  // Replace with actual user ID
+            // orderId: "ORDER_ID_HERE",  // Replace with actual order ID
+            PaymentMethod: selectedPaymentMethod,
+            addressId: selectedAddress,
+            // Other order data fields here
+        };
+        console.log("this is my passing addressId", orderData);
+
+        fetch("/user/place-order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order Placed',
+                    text: 'Your order has been placed successfully!'
+                }).then((data)=>{
+                    window.location.href = "/user/order"
+                })
+                // Redirect or update the page as needed
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Order Failed',
+                    text: 'Failed to place order. Please try again.'
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred. Please try again.'
+            });
+        });
+    });
+});
+</script>
 
     <%- include('../layouts/footer') %>

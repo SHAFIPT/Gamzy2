@@ -2,7 +2,8 @@ const express = require('express')
 const admin_route = express();
 const path = require('path')
 const Admincontroller = require('../Controllers/Admincontroller')
-const Productcontroller = require('../Controllers/ProductController')
+const Productcontroller = require('../Controllers/ProductController');
+const adminOrderController = require('../Controllers/AdminOrderController')
 const nocache = require('nocache') 
 const upload = require('../middlewares/multer')
 const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
@@ -13,6 +14,7 @@ admin_route.use(nocache());
 const session = require("express-session");
 const config = require("../config/confisg");
 const multer = require('multer');
+
 admin_route.use(session({ secret: config.sessionSecret,resave: false, saveUninitialized: false  }));
 
 admin_route.use(checkBlockedStatus)
@@ -76,6 +78,11 @@ admin_route.post('/updateVariant/:id',upload.any(),Productcontroller.editVarient
 
 admin_route.post('/logout',auth.isLogin,Admincontroller.logout)
 admin_route.post('/block-user', Admincontroller.blockuser);
+
+//orderslist
+admin_route.get('/OrderList',auth.isLogin,adminOrderController.loadOrderPage);
+admin_route.get('/viewOrder/:OrderId',auth.isLogin,adminOrderController.loadViewPage);
+admin_route.post('/update-status',adminOrderController.updateStatus)
  
 
 module.exports = admin_route;

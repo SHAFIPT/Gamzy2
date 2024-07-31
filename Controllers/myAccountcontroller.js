@@ -6,10 +6,10 @@ const loadMyAccount = async (req,res) =>{
     try {
 
         const userId = req.session.user;
-        console.log(userId)
+        // console.log(userId)
         const users = await User.findById( userId);
 
-        console.log('This in my account userId :', users);
+        // console.log('This in my account userId :', users);
         
         res.render('Useraccount', {users})
 
@@ -24,12 +24,12 @@ const loadaddress = async (req,res)=>{
 
         if (req.session.user) {
             const userId = req.session.user;
-            console.log('This address open page userId:', userId);
+            // console.log('This address open page userId:', userId);
 
             // Find addresses by user ID
             const addresses = await Address.find({ user: userId });
 
-            console.log('This address open page addresses for userId:', addresses);
+            // console.log('This address open page addresses for userId:', addresses);
 
             res.render('address', { addresses });
 
@@ -80,13 +80,13 @@ const addAddress = async (req,res)=>{
 
 const getAddressById = async (req, res) => {
     try {
-        console.log('helowww');
+        // console.log('helowww');
 
         const addressId = req.params.id;
 
         const address = await Address.findById(addressId);
 
-        console.log('This is my address id : ',addressId);
+        // console.log('This is my address id : ',addressId);
 
         if (address) {
             res.json({ success: true, address });
@@ -131,7 +131,7 @@ const removeAddress = async (req,res)=>{
 
         const addressId = req.params.id;
 
-        console.log('This is Backend address id :',addressId);
+        // console.log('This is Backend address id :',addressId);
 
         const result = await Address.findByIdAndDelete(addressId);
 

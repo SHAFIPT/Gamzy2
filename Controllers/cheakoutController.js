@@ -8,7 +8,7 @@ const loadCheakoutPage = async (req,res)=>{
 
         if (req.session.user) {
             const userId = req.session.user;
-            console.log('This address open page userId:', userId);
+            // console.log('This address open page userId:', userId);
 
             // Find addresses by user ID
             const addresses = await Address.find({ user: userId });
@@ -16,12 +16,13 @@ const loadCheakoutPage = async (req,res)=>{
             const cart = await Cart.findOne({userId}).populate("products.productId")
 
 
-            console.log('This is my cart id :', cart);
+            // console.log('This is my cart id :', cart);
 
-            console.log('This address open page addresses for userId:', addresses);
+            // console.log('This address open page addresses for userId:', addresses);
             res.render('cheakOut',{ addresses , cart})
 
     }
+    
         
     } catch (error) {
         console.log(error);
