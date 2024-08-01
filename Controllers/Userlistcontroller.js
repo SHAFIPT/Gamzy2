@@ -10,20 +10,12 @@ const truncateDescription = (description, maxLength) => {
     return description;
 };
 
-
 const LoadShopage = async (req, res) => {
     try {
-
-        // Extract price range from query parameters
-        const { price_from, price_to ,category ,sort} = req.query;
-
-        console.log("Query parameters:", req.query);
-
-        console.log("Price from:", price_from);
-        console.log("Price to:", price_to);
-        console.log("Category:", category);
-        console.log("Sort:", sort);
-
+        // Extract query parameters
+        const { price_from, price_to, category, subcategory, sort , page = 1, limit = 6 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
 
         // Build the query object for filtering products
         let query = { is_Listed: true };
@@ -32,12 +24,15 @@ const LoadShopage = async (req, res) => {
             query['price'] = { $gte: parseFloat(price_from), $lte: parseFloat(price_to) };
         }
 
-        //category filtering
         if (category) {
             query.productCategory = category;
         }
 
-         // Build sorting object
+        if (subcategory) {
+            query.subCategory = subcategory;
+        }
+
+        // Build sorting object
         let sortOption = {};
         if (sort === 'asc') {
             sortOption['productname'] = 1; // A to Z
@@ -47,27 +42,41 @@ const LoadShopage = async (req, res) => {
             sortOption['productname'] = 1; // Default sorting
         }
 
-         console.log("this is sort option",sortOption);
- 
-
-        // Fetch only the listed products
+        // Fetch products based on the query
         const products = await Product.find(query)
-            .populate('variants')
-            .populate('productCategory')
-            .sort(sortOption)
+        .sort(sortOption)
+        .skip((pageNumber - 1) * limitNumber)
+        .limit(limitNumber)
+        .populate('variants')
+        .populate('productCategory');
 
-        // Fetch all categories to populate the dropdown
+         // Count total products for pagination
+         const totalProducts = await Product.countDocuments(query);
+         const totalPages = Math.ceil(totalProducts / limitNumber);
+
+        // Fetch all categories and subcategories
         const categories = await Category.find({ is_listed: true });
+        const subcategories = await Product.distinct('subCategory'); // Get unique subcategories from products
 
-        console.log('This is my categories:', categories);
+        res.render('Shopage', {
+            products,
+            categories,
+            subcategories,
+            price_from,
+            price_to,
+            sort,
+            category,
+            subcategory,
+            currentPage: pageNumber,
+            totalPages,
+            truncateDescription
+        });
 
-        res.render('Shopage', { products: products, categories: categories ,price_from, price_to, sort, category ,truncateDescription});
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 }
-
 const loadProductDetails = async(req,res) =>{
     try {
 

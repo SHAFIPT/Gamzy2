@@ -39,7 +39,10 @@ const productSchema = new Schema({
     price: {
         type: Number,
         required: true
-    }
+    },
+    subCategory : {
+        type : String
+    },
 });
 
 module.exports = mongoose.model('Product', productSchema);

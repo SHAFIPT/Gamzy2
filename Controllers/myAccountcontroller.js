@@ -147,7 +147,16 @@ const removeAddress = async (req,res)=>{
     }
 }
 
+const loadOrderDetails = async (req,res) =>{
+    try {
 
+        res.render('OrderInUserAcc')
+        
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
 
 module.exports = {
     loadMyAccount,
@@ -155,5 +164,6 @@ module.exports = {
     addAddress,
     getAddressById,
     editAddress,
-    removeAddress
+    removeAddress,
+    loadOrderDetails
 }

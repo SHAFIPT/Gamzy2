@@ -35,7 +35,6 @@ const loadOrderPage = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
 const orderSummory = async (req, res) => {
     try {
         const userId = req.session.user;
@@ -55,11 +54,9 @@ const orderSummory = async (req, res) => {
         console.log('This is my PaymentMethod', PaymentMethod);
         console.log("This is my addressId", addressId);
 
-          // Generate the order ID
-         const orderId = generateOrderId();
-
-         console.log("Generated Order ID:", orderId); 
-
+        // Generate the order ID
+        const orderId = generateOrderId();
+        console.log("Generated Order ID:", orderId);
 
         const address = await Address.findById(addressId);
 
@@ -74,6 +71,23 @@ const orderSummory = async (req, res) => {
             price: cartItem.productId.price,  // Assuming the price is in the product model
             status: "Pending",
         }));
+
+        // Check stock availability and update variant quantities
+        for (const cartItem of cart.products) {
+            const product = await Product.findOne({ 
+                _id: cartItem.productId._id, 
+                'variants._id': cartItem.variantId 
+            });
+
+            const variant = product.variants.id(cartItem.variantId);
+
+            if (variant.quantity < cartItem.quantity) {
+                return res.status(400).json({ success: false, message: "Insufficient stock for some products." });
+            }
+
+            variant.quantity -= cartItem.quantity;
+            await product.save();
+        }
 
         const totalAmount = products.reduce((total, item) => total + (item.price * item.quantity), 0);
 
@@ -108,6 +122,7 @@ const orderSummory = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
 
 const loadViewPage = async (req,res) =>{
     try {

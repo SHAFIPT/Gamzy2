@@ -1,0 +1,616 @@
+<%- include('../layouts/userheader') %>
+
+
+<style>
+       /* Navbar Styles */
+       .navbar {
+        background-color: #343a40; /* Dark background */
+        padding: 1rem 1rem; /* Padding */
+    }
+
+    .navbar-brand h1 {
+        color: #ffffff; /* White text for the brand name */
+        font-size: 2rem; /* Adjust as needed */
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        color: #ffffff; /* White text for nav links */
+        margin-right: 1rem; /* Spacing between links */
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #ffc107; /* Yellow text on hover */
+    }
+
+    .navbar-nav .nav-item.active .nav-link {
+        color: #ffc107; /* Yellow text for the active link */
+    }
+
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+    }
+
+    .navbar-toggler .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;...");
+    }
+
+    /* Breadcrumb Section Styles */
+    .breadcrumb-option {
+        background: #f8f9fa; /* Light background */
+        padding: 3.5rem 0; /* Padding */
+        margin-bottom: 70px; /* Adjust the margin as needed */
+    }
+
+    .breadcrumb__text h4 {
+        text-align: center; /* Center the text */
+        margin: 0; /* Remove margin */
+        font-size: 40px; /* Adjust as needed */
+        color: #333333; /* Dark text color */
+    }
+
+    .breadcrumb__links {
+        text-align: center; /* Center the breadcrumb links */
+        font-size: 1rem; /* Adjust as needed */
+        color: #777777; /* Light grey color */
+    }
+
+    /* Ensure breadcrumb links have some margin and are styled correctly */
+    .breadcrumb__links a {
+        color: #007bff; /* Primary color for links */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .breadcrumb__links a:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .breadcrumb__links span {
+        color: #333; /* Dark color for current page */
+    }
+   
+   .bg-black {
+       background-color: #000000;
+   }
+   
+   .topper {
+       color: #ffffff;
+   }
+   
+   .topper .icon {
+       font-size: 18px;
+       color: #ffffff;
+   }
+   
+   .topper .text {
+       color: #ffffff;
+   }
+   
+   .hero-wrap {
+       padding: 60px 0;
+       color: #ffffff;
+       text-align: center;
+   }
+   
+   .bread {
+       font-size: 36px;
+       margin-bottom: 0;
+   }
+   .left-sidebar {
+     background: #f8f9fa;
+     padding: 20px;
+     border-radius: 5px;
+     margin-bottom: 30px;
+   }
+   
+   .sidebar-options {
+     list-style: none;
+     padding: 0;
+     margin: 0;
+   }
+   
+   .sidebar-options li {
+     margin-bottom: 15px;
+   }
+   
+   .sidebar-options li a {
+     text-decoration: none;
+     color: #333;
+     font-size: 16px;
+     display: block;
+     padding: 10px 15px;
+     border-radius: 5px;
+     transition: background 0.3s, color 0.3s;
+   }
+   
+   .sidebar-options li.active a,
+   .sidebar-options li a:hover {
+     background: #007bff;
+     color: #fff;
+   }
+
+   /* Sidebar Styling */
+.left-sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.sidebar-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-options li {
+    margin-bottom: 10px;
+}
+
+.sidebar-options li a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-options li a:hover,
+.sidebar-options li.active a {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Form Header */
+.form-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.add-product-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-product-btn:hover {
+    background-color: #218838;
+}
+
+/* Button Group Styling */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Form Styling */
+.billing-form .form-group {
+    margin-bottom: 20px;
+}
+
+.billing-form .form-control {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.select-wrap {
+    position: relative;
+}
+
+.select-wrap .icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.select-wrap select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 30px;
+}
+
+
+
+.modal-dialog.modal-lg {
+    /* max-width: 90%; */
+}
+
+.modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.container {
+    padding: 15px;
+}
+
+.error {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+  }
+
+  .success input {
+    border-color: green;
+  }
+
+  .error input {
+    border-color: red;
+  }
+
+
+  .hero-wrap {
+    position: relative;
+    padding: 1rem 0; /* Reduced padding */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero-bread .text-center {
+    position: relative;
+}
+
+.add-product-btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.3s;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    margin-right: 15px; /* Adjust the margin as needed */
+}
+
+.add-product-btn:hover {
+    background: #0056b3;
+}
+
+
+.ftco-section {
+    padding: 3rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* .left-sidebar {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-options li {
+    margin-bottom: 1rem;
+}
+
+.sidebar-options li a {
+    text-decoration: none;
+    color: #343a40;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.sidebar-options li a:hover,
+.sidebar-options li.active a {
+    color: #007bff;
+} */
+
+.ftco-animate {
+    animation: fadeInUp 0.5s both;
+}
+
+.addresses-list {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.address-item {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.address-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.address-item h5 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.address-item p {
+    margin: 0.25rem 0;
+    color: #6c757d;
+}
+
+.button-group {
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.edit-btn {
+    background: #ffc107;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background: #e0a800;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: #fff;
+    margin-left: 0.5rem;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+   </style>
+     <!-- Navbar section -->
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+       <div class="container">
+           <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="oi oi-menu"></span> Menu
+           </button>
+   
+           <div class="collapse navbar-collapse" id="ftco-nav">
+               <ul class="navbar-nav ml-auto">
+                   <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                   <li class="nav-item dropdown active">
+                       <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                       <!-- Add dropdown content if needed -->
+                   </li>
+                   <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                   <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                   <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
+               </ul>
+           </div>
+       </div>
+   </nav>
+  
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>My Address</h4>
+                    <!-- <div class="breadcrumb__links">
+                        <a href="./index.html">Home</a>
+                        <a href="./shop.html">Shop</a>
+                        <span>Check Out</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="left-sidebar">
+                    <ul class="sidebar-options">
+                        <li class="active"><a href="/user/myaccount">My Profile</a></li>
+                        <li><a href="/user/Userorders">Orders</a></li>
+                        <li><a href="/user/address">Address</a></li>
+                        <li><a href="/user/signout">Signout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9 ftco-animate">
+                <div class="order-summary">
+                    <div class="order-details">
+                        <div class="order-info">
+                            <p><strong class="order-summary-label">Order ID:</strong> <span class="order-summary-text">#123456</span></p>
+                            <p><strong class="order-summary-label">Total Amount:</strong> <span class="order-summary-text">₹1234.56</span></p>
+                            <p><strong class="order-summary-label">Ordered Date:</strong> <span class="order-summary-text">01/01/2024, 12:00 PM</span></p>
+                        </div>
+                        <div class="address-details">
+                            <p><strong class="order-summary-label">Ship to:</strong> <span class="order-summary-text">John Doe</span></p>
+                            <p><strong class="order-summary-label">Delivery Address:</strong><br>
+                                <span class="order-summary-text">
+                                    123 Main Street, <br>
+                                    Landmark Area, Street Name<br>
+                                    City, State 123456<br>
+                                    +1234567890
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <h3 class="mt-4 mb-3">Products</h3>
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="/uploads/product-image.jpg" alt="Product image" class="variant-image"></td>
+                                <td>Product Name <br> Color Name</td>
+                                <td>1</td>
+                                <td>₹1234.56</td>
+                                <td>₹1234.56</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="order-summary-footer">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-left">
+                                <a href="/" class="btn btn-primary btn-lg mr-2 custom-btn">Continue Shopping</a>
+                                <a href="/download-invoice/123456" class="btn btn-secondary btn-lg custom-btn">Download Invoice</a>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <h6>Subtotal: <span>₹1234.56</span></h6>
+                                <h6>Shipping Charge: <span>₹50.00</span></h6>
+                                <h3 class="mt-4">Grand Total: <span>₹1284.56</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+   
+   <script src="/js/jquery.min.js"></script>
+   <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+   <script src="/js/popper.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+   <script src="/js/jquery.easing.1.3.js"></script>
+   <script src="/js/jquery.waypoints.min.js"></script>
+   <script src="/js/jquery.stellar.min.js"></script>
+   <script src="/js/owl.carousel.min.js"></script>
+   <script src="/js/jquery.magnific-popup.min.js"></script>
+   <script src="/js/aos.js"></script>
+   <script src="/js/jquery.animateNumber.min.js"></script>
+   <script src="/js/bootstrap-datepicker.js"></script>
+   <script src="/js/scrollax.min.js"></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+   <script src="/js/google-map.js"></script>
+   <script src="/js/main.js"></script>
+   
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+   <script>
+    $(document).ready(function(){
+
+    var quantitiy=0;
+       $('.quantity-right-plus').click(function(e){
+            
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
+            
+            // If is not undefined
+                
+                $('#quantity').val(quantity + 1);
+
+              
+                // Increment
+            
+        });
+
+         $('.quantity-left-minus').click(function(e){
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
+            
+            // If is not undefined
+          
+                // Increment
+                if(quantity>0){
+                $('#quantity').val(quantity - 1);
+                }
+        });
+        
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+    var currentLocation = window.location.href;
+    var menuItem = document.querySelectorAll(".sidebar-options li a");
+
+    // Loop through all sidebar items
+    menuItem.forEach(function(item) {
+        // Check if the href attribute of the link matches the current URL
+        if (item.href === currentLocation) {
+            // Add 'active' class to the parent <li> element
+            item.parentElement.classList.add("active");
+        } else {
+            // Remove 'active' class if it's not the current URL
+            item.parentElement.classList.remove("active");
+        }
+    });
+});
+</script>
+   
+
+<%- include('../layouts/footer') %>

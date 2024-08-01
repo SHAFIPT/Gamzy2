@@ -14,7 +14,8 @@ const userController = require('../Controllers/userController');
 const userListcontroller = require('../Controllers/Userlistcontroller');
 const cheakoutController = require('../Controllers/cheakoutController');
 const myaccountController = require('../Controllers/myAccountcontroller');
-const orderController     = require('../Controllers/OrderController')
+const orderController     = require('../Controllers/OrderController');
+const productsController = require('../Controllers/userproductShowcontroller')
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 
@@ -81,7 +82,7 @@ router.post('/cartUpdate',userListcontroller.updateCart );
 router.post('/productCart/remove',userListcontroller.removeCart)
 
 //CheakOut page
-router.get('/cheakOut',cheakoutController.loadCheakoutPage)
+router.get('/cheakOut',cheakoutController.loadCheakoutPage);
 
 
 
@@ -97,10 +98,22 @@ router.post('/editAddress', myaccountController.editAddress);
 //deleteaddress
 router.delete('/removeaddress/:id', myaccountController.removeAddress)
 
+//userOrderAccout
+router.get('/Userorders',myaccountController.loadOrderDetails)
+
 
 //order page
 router.get("/order",userMiddleware.isLogin,orderController.loadOrderPage);
 router.post("/place-order",userMiddleware.isLogin,orderController.orderSummory);
+
+
+//keybord page
+router.get('/keyboard',productsController.loadKeyboardPage);
+router.get('/headSet',productsController.loadHeadsetPage);
+router.get('/mouse',productsController.loadMousePage);
+router.get('/controller',productsController.loadControllerPage)
+
+
 
 
 module.exports = router;

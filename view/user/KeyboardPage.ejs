@@ -1,5 +1,8 @@
 <%- include('../layouts/Shopheader') %>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
 <style>
     .image-container {
   height: 300px; /* Adjust height as needed */
@@ -116,6 +119,98 @@
   padding: 0.75rem 1.25rem;
 }
 
+
+
+.subcategory-btn {
+    background-color: #dbcc8f;
+    color: white;
+    border: 2px solid transparent;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.subcategory-btn:hover {
+    background-color: white;
+    color: #dbcc8f;
+    border: 2px solid #dbcc8f;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for Home Link */
+.home-link {
+  padding: 10px 20px; /* Increase padding for length */
+  font-size: 18px; /* Adjust font size */
+  color: black; /* Text color */
+  text-transform: uppercase; /* Uppercase text */
+  font-weight: bold; /* Bold text */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
+}
+
+.home-link:hover {
+  background-color: #f0f0f0; /* Background color on hover */
+  color: #333; /* Text color on hover */
+}
+
+/* Style for Shop Link */
+.shop-link {
+  padding: 10px 20px; /* Increase padding for length */
+  font-size: 18px; /* Adjust font size */
+  color: black; /* Text color */
+  text-transform: uppercase; /* Uppercase text */
+  font-weight: bold; /* Bold text */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
+}
+
+.shop-link:hover {
+  background-color: #f0f0f0; /* Background color on hover */
+  color: #333; /* Text color on hover */
+}
+
+/* Optional: Style for the Cart Icon */
+.cart-link {
+  padding: 10px 20px; /* Increase padding */
+}
+
+.cart-link:hover {
+  background-color: #f0f0f0; /* Background color on hover */
+  color: #333; /* Text color on hover */
+}
+
+
+
+/* Pagination container */
+.pagination-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    background-color: #fff;
+}
+
+.pagination-link.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination-link:hover {
+    background-color: #f8f9fa;
+}
+
 </style>
 
 </head>
@@ -130,15 +225,17 @@
 
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-              <li class="nav-item" ><a href="/" class="nav-link">Home</a></li>
-              <li class="nav-item dropdown active">
-                  <a class="nav-link " href=""  aria-haspopup="true" aria-expanded="false">Shop</a>
-        
-              </li>
-              <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-              <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-              <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-              <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+            <li class="nav-item">
+              <a href="/" class="nav-link home-link">Home</a>
+            </li>
+            <li class="nav-item dropdown active">
+              <a class="nav-link shop-link" href="/user/ShopPage" aria-haspopup="true" aria-expanded="false">Shop</a>
+            </li>
+            <li class="nav-item cta cta-colored">
+              <a href="cart.html" class="nav-link cart-link">
+                <span class="icon fas fa-shopping-cart cart-icon"></span>
+              </a>
+            </li>
           </ul>
       </div>
       </div>
@@ -156,12 +253,12 @@
     </div>
   </div> -->
 
-  <div class="hero-wrap hero-bread" style="background-image: url('/img/Gaming.jpg'); background-size: 100% auto; background-position: center; background-repeat: no-repeat;">
+  <div class="hero-wrap hero-bread" style="background-image: url('/img/key1.jpg'); background-size: 100% auto; background-position: center; background-repeat: no-repeat;">
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 ftco-animate text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
-          <h1 class="mb-0 bread">Shop</h1>
+          <!-- <p class="breadcrumbs"><span class="mr-2"><a href=""></a></span> <span>GAMING KEYBOARDS</span></p> -->
+          <h1 class="mb-0 bread">GAMING KEYBOARDS</h1>
         </div>
       </div>
     </div>
@@ -169,75 +266,87 @@
 
   <section class="ftco-section bg-light">
     <div class="container">
-        <div class="row">
-          <div class="col-md-8 col-lg-10 order-md-last">
-            <div class="row">
-                <!-- Products -->
-                <% products.forEach(product => { %>
-                    <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
-                        <div class="product d-flex flex-column">
-                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
-                                <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
-                                <div class="overlay"></div>
-                            </a>
-                            <div class="text py-3 pb-4 px-3">
-                                <div class="d-flex">
-                                    <div class="cat">
-                                        <span><%= product.category %></span>
-                                    </div>
-                                    
-                                </div>
-                                <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.name %></a></h3>
-                                <div class="pricing">
-                                  <p class="price"><span><%= product.productname%></span></p>
-                                    <p class="price"><span>₹<%= product.price %></span></p>
-                                    <p class="price"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
-                                </div>
-                                <p class="bottom-area d-flex px-3">
-                                  <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart</i></span></a>
-                                  <% if (product.variants[0].quantity < 1) { %>
-                                    <a href="#" class=" out-of-stock-btn " style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
-                                  <% } else { %>
-                                      <a href="#" class="buy-now text-center py-2">Buy now<span></i></span></a>
-                                  <% } %>
-                              </p>
-                            </div>
-                        </div>
+      <div class="row">
+        <div class="col-md-8 col-lg-10 order-md-last">
+          <div class="row">
+            <!-- Products -->
+            <% products.forEach(product => { %>
+              <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
+                <div class="product d-flex flex-column">
+                  <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
+                    <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
+                    <div class="overlay"></div>
+                  </a>
+                  <div class="text py-3 pb-4 px-3">
+                    <div class="d-flex">
+                      <div class="cat">
+                        <span><%= product.productCategory.name %></span>
+                      </div>
                     </div>
-                <% }) %>
-            </div>
+                    <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.productname %></a></h3>
+                    <div class="pricing">
+                      <p class="price"><span>₹<%= product.price %></span></p>
+                      <p class="price"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
+                    </div>
+                    <p class="bottom-area d-flex px-3">
+                      <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart</span></a>
+                      <% if (product.variants[0].quantity < 1) { %>
+                        <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock</a>
+                      <% } else { %>
+                        <a href="#" class="buy-now text-center py-2">Buy now</a>
+                      <% } %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+
+          <div class="pagination-container">
+            <% if (currentPage > 1) { %>
+              <a href="/user/keyboard?page=<%= currentPage - 1 %>&subcategory=<%= subcategory || '' %>&price_from=<%= price_from || '' %>&price_to=<%= price_to || '' %>&sort=<%= sort || '' %>" class="pagination-link">Previous</a>
+            <% } %>
+          
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a href="/user/keyboard?page=<%= i %>&subcategory=<%= subcategory || '' %>&price_from=<%= price_from || '' %>&price_to=<%= price_to || '' %>&sort=<%= sort || '' %>" class="pagination-link <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+          
+            <% if (currentPage < totalPages) { %>
+              <a href="/user/keyboard?page=<%= currentPage + 1 %>&subcategory=<%= subcategory || '' %>&price_from=<%= price_from || '' %>&price_to=<%= price_to || '' %>&sort=<%= sort || '' %>" class="pagination-link">Next</a>
+            <% } %>
+          </div>
+
+
         </div>
 
         <div class="col-md-4 col-lg-2">
-          <form method="get" action="/user/ShopPage" class="colorlib-form-2">
+          <form method="get" action="/user/keyboard" class="colorlib-form-2">
             <div class="sidebar">
-              
+              <!-- Subcategories -->
+              <div class="sidebar-box-2">
+                <h2 class="heading">Subcategories</h2>
+                <div class="form-group">
+                  <a href="/user/keyboard?subcategory=wired&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
+                    <button type="button" class="subcategory-btn" <%= subcategory === 'wired' ? 'style="background-color: grey;"' : '' %>>Wired</button>
+                  </a>
+                  <a href="/user/keyboard?subcategory=wireless&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
+                    <button type="button" class="subcategory-btn" <%= subcategory === 'wireless' ? 'style="background-color: grey;"' : '' %>>Wireless</button>
+                  </a>
+                </div>
+              </div>
+
               <!-- Sorting Options -->
               <div class="sidebar-box-2">
                 <h2 class="heading">Sort By</h2>
                 <div class="form-group">
-                  <select name="sort" id="sort" class="form-control">
+                  <select name="sort" id="sort" class="form-control" onchange="this.form.submit()">
                     <option value="">Select sorting</option>
-                    <option value="asc">A to Z</option>
-                    <option value="desc">Z to A</option>
+                    <option value="asc" <%= sort === 'asc' ? 'selected' : '' %>>A to Z</option>
+                    <option value="desc" <%= sort === 'desc' ? 'selected' : '' %>>Z to A</option>
                   </select>
                 </div>
               </div>
-              
-              <!-- Categories -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">Categories</h2>
-                <div class="widgets_inner">
-                  <ul class="list">
-                    <% categories.forEach(category => { %>
-                      <li>
-                        <a href="/user/ShopPage?category=<%= category._id %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>"><%= category.name %></a>
-                      </li>
-                    <% }); %>
-                  </ul>
-                </div>
-              </div>
-              
+
               <!-- Price Range -->
               <div class="sidebar-box-2">
                 <h2 class="heading">Price Range</h2>
@@ -247,12 +356,12 @@
                       <label for="price_from">Price from:</label>
                       <div class="form-field">
                         <i class="icon icon-arrow-down3"></i>
-                        <select name="price_from" id="price_from" class="form-control">
-                          <option value="1">$1</option>
-                          <option value="20">$20</option>
-                          <option value="30">$30</option>
-                          <option value="40">$40</option>
-                          <option value="300">$300</option>
+                        <select name="price_from" id="price_from" class="form-control" >
+                          <option value="1" <%= price_from == '1' ? 'selected' : '' %>>$1</option>
+                          <option value="20" <%= price_from == '20' ? 'selected' : '' %>>$20</option>
+                          <option value="30" <%= price_from == '30' ? 'selected' : '' %>>$30</option>
+                          <option value="40" <%= price_from == '40' ? 'selected' : '' %>>$40</option>
+                          <option value="300" <%= price_from == '300' ? 'selected' : '' %>>$300</option>
                         </select>
                       </div>
                     </div>
@@ -262,12 +371,12 @@
                       <label for="price_to">Price to:</label>
                       <div class="form-field">
                         <i class="icon icon-arrow-down3"></i>
-                        <select name="price_to" id="price_to" class="form-control">
-                          <option value="200">$200</option>
-                          <option value="400">$400</option>
-                          <option value="600">$600</option>
-                          <option value="800">$800</option>
-                          <option value="1000">$1000</option>
+                        <select name="price_to" id="price_to" class="form-control" >
+                          <option value="200" <%= price_to == '200' ? 'selected' : '' %>>$200</option>
+                          <option value="400" <%= price_to == '400' ? 'selected' : '' %>>$400</option>
+                          <option value="600" <%= price_to == '600' ? 'selected' : '' %>>$600</option>
+                          <option value="800" <%= price_to == '800' ? 'selected' : '' %>>$800</option>
+                          <option value="1000" <%= price_to == '1000' ? 'selected' : '' %>>$1000</option>
                         </select>
                       </div>
                     </div>
@@ -277,37 +386,20 @@
                   </div>
                 </div>
               </div>
-              
             </div>
           </form>
         </div>
-
-
-        </div>
+      </div>
     </div>
-</section>
+  </section>
 
       
-      <section class="ftco-gallery">
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-md-8 heading-section text-center mb-4 ftco-animate">
-          <h2 class="mb-4">Follow Us On Instagram</h2>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
-        </div>
-          </div>
-      </div>
-  </section>
+    
 
   <footer class="ftco-footer ftco-section">
     <div class="container">
         <div class="row">
-            <div class="mouse">
-                      <a href="#" class="mouse-icon">
-                          <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-                      </a>
-                  </div>
-        </div>
+          -->
       <div class="row mb-5">
         <div class="col-md">
           <div class="ftco-footer-widget mb-4">
@@ -375,8 +467,7 @@
   
 
 
-<!-- loader -->
-<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
 
 
 <script src="/js/jquery.min.js"></script>

@@ -20,7 +20,10 @@ const LoadProduct = async (req,res)=>{
 async function addProduct(req, res) {
     try {
 
-        const { name, description, category, price, quantity , color} = req.body;
+        const { name, description, category, price, quantity , color , subCategory} = req.body;
+
+
+        // console.log("this is my subcategory",subCategory);
 
         let images = []
         req.files.forEach((file)=>{
@@ -38,6 +41,7 @@ async function addProduct(req, res) {
             productDescription: description,
             productCategory: getCategory._id,
             price,
+            subCategory,
             is_Listed: true,
             variants : [{
                 color,
@@ -86,9 +90,11 @@ const UpdateProduct = async (req, res) => {
         const productId = req.body.productId;
         // console.log(productId);
         // console.log('hellow');
-        const { name, description, category, price, quantity } = req.body;
+        const { name, description, category, price, quantity ,subCategory} = req.body;
 
         // console.log(req.files)
+
+          console.log("this is my subcategory",subCategory);
 
 
         const getCategory = await Category.findOne({ name: category });
@@ -104,6 +110,7 @@ const UpdateProduct = async (req, res) => {
         product.productDescription = description
         product.productCategory = getCategory._id
         product.price = price
+        product.subCategory = subCategory
         // product.variants.quantity = quantity
 
             // Ensure variants array and update quantity

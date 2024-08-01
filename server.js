@@ -14,14 +14,14 @@ app.set('view engine', 'ejs');
  
 app.set('views', path.join(__dirname, 'view', 'user'));
      
-                      
+                       
 // Middleware for parsing JSON and urlencoded data  
 app.use(express.json());    
 app.use(express.urlencoded({ extended: true }));       
-                       
+                        
 // Serve static files from the 'public' directory
 app.use('/static', express.static(path.join(__dirname, 'public', 'uploads'))); 
-app.use(express.static('public'));   
+app.use(express.static('public'));    
                        
 // Use the user Route router for handling route s 
 app.get('/', (req,res)=>{res.redirect('/user')});  
