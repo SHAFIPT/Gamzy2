@@ -127,6 +127,8 @@ const orderSummory = async (req, res) => {
 const loadViewPage = async (req,res) =>{
     try {
 
+        
+
         res.render('OrderdView')
         
     } catch (error) {

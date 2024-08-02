@@ -21,12 +21,43 @@ body {
   font: 600 16px/18px 'Open Sans', sans-serif;
 }
 
+/* styles.css */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* Make room for the eye icon */
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #000; /* Change this to white if needed */
+}
+
+.toggle-password .fa-eye,
+.toggle-password .fa-eye-slash {
+    color: #000; /* Change this to white if needed */
+}
+
+
 </style>
 
 </head>
 <div class="login-wrap">
     <div class="login-html">
+        <a href="/user/login"><label for="tab-2" class="tab">Sign In</label></a>
         <label for="tab-2" class="tab">Sign Up</label>
+     
         <div class="login-form">
             <div class="sign-up-htm">
                 <form action="/user/signUp" method="post" id="form">
@@ -47,9 +78,11 @@ body {
                     <div class="group">
                         <label for="pass" class="label">Password</label>
                         <div class="input-wrapper">
-                            <input id="password" name="password"  class="input" >
-                            <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                            <input id="password" name="password" type="password"  class="input" >
                             <div class="error"></div>
+                            <span id="toggle-password" class="toggle-password">
+                                <i class="fas fa-eye"></i>
+                           
                         </div>
                     </div>
                     <div class="group">
@@ -62,10 +95,10 @@ body {
                     <div class="group">
                         <input type="submit" class="button" value="GET OTP">
                     </div>
-                    <div class="hr"></div>
+                    <!-- <div class="hr"></div>
                     <div class="foot-lnk">
-                        <label><a href="/user/login" style="color: rgb(247, 235, 235);">Sign in</a></label>
-                    </div>
+                        <label><a href="" style="color: rgb(247, 235, 235);">Sign in</a></label>
+                    </div> -->
                 </form>
             </div>
         </div>
@@ -216,15 +249,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const togglePassword = document.querySelector('#togglePassword');
-    const password = document.querySelector('#password');
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordField = document.getElementById('password');
 
-    togglePassword.addEventListener('click', function () {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
+    togglePassword.addEventListener('click', () => {
+        // Toggle the type attribute
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+
+        // Toggle the eye icon
+        const icon = togglePassword.querySelector('i');
+        if (type === 'password') {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
     });
+
 });
 </script>
 

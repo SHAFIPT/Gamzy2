@@ -84,7 +84,8 @@ router.post('/productCart/remove',userListcontroller.removeCart)
 //CheakOut page
 router.get('/cheakOut',cheakoutController.loadCheakoutPage);
 
-
+//cartPage breadcubs
+router.get('/cartPage',cheakoutController.breadCrumbCart)
 
 //userAccount
 router.get('/myaccount',userMiddleware.isLogin,myaccountController.loadMyAccount);
@@ -99,7 +100,9 @@ router.post('/editAddress', myaccountController.editAddress);
 router.delete('/removeaddress/:id', myaccountController.removeAddress)
 
 //userOrderAccout
-router.get('/Userorders',myaccountController.loadOrderDetails)
+router.get('/Userorders',userMiddleware.isLogin,myaccountController.loadOrderDetails);
+//userOrderAccout cancel
+router.post('/cancel-order/:orderId', myaccountController.orderCancel);
 
 
 //order page

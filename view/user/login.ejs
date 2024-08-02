@@ -123,6 +123,7 @@ body {
 <div class="login-wrap">
   <div class="login-html">
       <label for="tab-2" class="tab">Sign in</label>
+      <a href="/user/signUp"><label for="tab-2" class="tab">Sign Up</label></a>
       <div class="login-form">
     <div class="sign-in-htm">
       <% if (typeof logoutmsg !== 'undefined' && logoutmsg) { %>
@@ -142,10 +143,7 @@ body {
         <input id="password" type="password" name="password" class="input">
         <div class="error"></div>
     </div>
-    <div class="group">
-        <input id="check" type="checkbox" class="check" checked>
-        <label for="check"><span class="icon"></span> Keep me Signed in</label>
-    </div>
+    <br>
     <div class="group">
         <input type="submit" class="button" value="Sign In">
     </div>

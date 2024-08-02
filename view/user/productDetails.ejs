@@ -242,6 +242,30 @@ footer a:hover {
         margin-top: 10px;
         color: red;
     }
+
+
+
+    .breadcrumbs {
+    margin: 30px 0; /* Spacing around breadcrumbs */
+    font-size: 16px; /* Font size for readability */
+    color: #555; /* Dark gray color for text */
+    font-weight: 400; /* Normal font weight */
+    text-align: left; /* Align text to the left */
+}
+
+.breadcrumbs a {
+    color: #007bff; /* Primary color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+.breadcrumbs span {
+    color: #333; /* Darker color for current item */
+    font-weight: 500; /* Slightly bolder for emphasis */
+}
     </style>
 
 
@@ -282,17 +306,14 @@ footer a:hover {
             <div class="container">
 
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="body_icon">
-                            <a href="./index.html"><i class="fas fa-home"></i> Home</a>
-                            <a href="./shop.html"><i class="fas fa-shopping-bag"></i> Shop</a>
-                            <span><i class="fas fa-info-circle"></i> Product Details</span>
-                        </div>
+                    <div class="col-12">
+                        <p class="breadcrumbs">
+                            <a href="/">Home</a> &gt; 
+                            <a href="/user/ShopPage">Shop</a> &gt;
+                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= variant._id %>">Product Details</a>
+                        </p>
                     </div>
                 </div>
-
-                
-              
                 <div class="row">
                     <div class="col-lg-3 col-md-3">
                         <ul class="nav nav-tabs" role="tablist">

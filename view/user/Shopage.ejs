@@ -186,6 +186,31 @@
 .pagination-link:hover {
     background-color: #f8f9fa;
 }
+
+
+
+.breadcrumbs {
+  
+    font-size: 16px; /* Increase font size for better readability */
+    color: #555; /* Dark gray color for text */
+    font-weight: 400; /* Regular weight for text */
+}
+
+.breadcrumbs a {
+    color: #007bff; /* Bootstrap primary color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline; /* Add underline on hover for links */
+}
+
+.breadcrumbs span {
+    color: #333; /* Darker color for the current page */
+    font-weight: 500; /* Slightly bolder for emphasis */
+}
+
+
 </style>
 
 </head>
@@ -213,19 +238,7 @@
       </div>
       </div>
     </nav>
-  <!-- END nav -->
-
-  <!-- <div class="hero-wrap hero-bread" style="background-image: url('/img/bac.jpg');">
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-9 ftco-animate text-center">
-            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
-          <h1 class="mb-0 bread">Shop</h1>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
+    
   <div class="hero-wrap hero-bread" style="background-image: url('/img/Gaming.jpg'); background-size: 100% auto; background-position: center; background-repeat: no-repeat;">
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
@@ -236,9 +249,15 @@
       </div>
     </div>
   </div>
+  
 
   <section class="ftco-section bg-light">
+  
     <div class="container">
+      <p class="breadcrumbs">
+        <a href="/">Home</a> &gt; 
+        <a href="/user/ShopPage">Shop</a>
+      </p>
         <div class="row">
           <div class="col-md-8 col-lg-10 order-md-last">
             <div class="row">
@@ -298,6 +317,7 @@
             <div class="sidebar">
               <!-- Subcategories -->
               <div class="sidebar-box-2">
+              
                 <h2 class="heading">Subcategories</h2>
                 <div class="form-group">
                   <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">

@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 const { render } = require('../routers/adminRoute');
+const { json } = require('express');
 
 
 const loadLogin = async (req, res) => {
@@ -161,31 +162,33 @@ const ListUnlistCategory = async (req,res) => {
         res.status(500).send('Internal Server Error');
     }
 }
-
-const addCategory = async (req,res) =>{
+const addCategory = async (req, res) => {
     try {
-        
-        const {name , description} = req.body;
+        const { name, description } = req.body;
 
-        const exisist = await Category.findOne({name})
-        if(exisist){
-            res.render('addCategory',{message : 'Name is alreay exisist...!'})
-        }else{
+        // Check if the category already exists
+        const exists = await Category.findOne({ name });
+
+        if (exists) {
+            // Send a JSON response with an error message
+            return res.status(400).json({ message: 'Name already exists!' });
+        } else {
+            // Create and save the new category
             const newCategory = new Category({
-                name ,
+                name,
                 description,
-
             });
             await newCategory.save();
-        }
-        res.redirect('/admin/Category');
 
+            // Send a JSON response with a success message
+            return res.status(200).json({ message: 'Category added successfully!' });
+        }
     } catch (error) {
-        console.error('Error loading category management:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Error adding category:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
-}
- 
+};
+
 const loadEditCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;

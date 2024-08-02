@@ -1,6 +1,8 @@
 const Address = require('../model/addressShema');
 const User = require('../model/UserModel')
-const mongoose=require('mongoose')
+const mongoose=require('mongoose');
+const Order = require('../model/ordreModel');
+const Product = require('../model/productModel')
 
 const loadMyAccount = async (req,res) =>{
     try {
@@ -146,17 +148,94 @@ const removeAddress = async (req,res)=>{
         res.status(500).json({ success: false, message: 'Server error' });
     }
 }
-
-const loadOrderDetails = async (req,res) =>{
+const loadOrderDetails = async (req, res) => {
     try {
+        const userId = req.session.user;
+        const page = parseInt(req.query.page) || 1;
+        const limit =  2;
+        const skip = (page - 1) * limit;
 
-        res.render('OrderInUserAcc')
-        
+        if (!userId) {
+            return res.status(404).send("User not found...!");
+        }
+
+        const ordersCount = await Order.countDocuments({ userId });
+        const orders = await Order.find({ userId })
+            .skip(skip)
+            .limit(limit)
+            .populate({
+                path: 'products.productId',
+                populate: {
+                    path: 'variants'
+                }
+            })
+            .populate('address');
+
+        const totalPages = Math.ceil(ordersCount / limit);
+
+      
+        res.render('OrderInUserAcc', {
+            orders,
+            currentPage: page,
+            totalPages,
+            noOrders: true // Add this flag
+        });
+
     } catch (error) {
-        console.error(err);
+        console.error(error);
         res.status(500).json({ error: 'Server error' });
     }
 }
+
+const orderCancel = async (req, res) => {
+    try {
+        const { orderId } = req.params; // Get orderId from params
+        const { cancelReason } = req.body; // Get cancelReason from body
+        const userId = req.session.user;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "User not authenticated" });
+        }
+
+        const order = await Order.findOne({ _id: orderId, userId });
+
+        if (!order) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        // Restore product quantities
+        for (const orderItem of order.products) {
+            const product = await Product.findOne({ 
+                _id: orderItem.productId, 
+                'variants._id': orderItem.variantId 
+            });
+
+            if (product) {
+                const variant = product.variants.id(orderItem.variantId);
+                if (variant) {
+                    variant.quantity += orderItem.quantity;
+                    await product.save();
+                }
+            }
+        }
+
+        // Change order status to canceled
+        order.products.forEach(product => {
+            product.status = "Canceled";
+            product.cancelReason = cancelReason;
+        });
+        order.status = "Canceled"; // You might still want to update the order status too
+        await order.save();
+
+        // Calculate overall status
+        const overallStatus = order.products.some(product => product.status === 'Canceled') ? 'Canceled' : 'Pending';
+
+        res.json({ success: true, overallStatus });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 module.exports = {
     loadMyAccount,
@@ -165,5 +244,6 @@ module.exports = {
     getAddressById,
     editAddress,
     removeAddress,
-    loadOrderDetails
+    loadOrderDetails,
+    orderCancel
 }
