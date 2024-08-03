@@ -211,6 +211,139 @@
 }
 
 
+/* Search Box Styling */
+.search-box {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#search-input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    /* width: 80%; */
+}
+
+#search-button {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-left: 0;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#search-button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    #search-input {
+        width: 70%;
+    }
+    
+    #search-button {
+        width: 30%;
+    }
+}
+
+
+
+
+
+
+
+/* Styling for the toggle switch */
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.filter-toggle-checkbox {
+  display: none; /* Hide the default checkbox */
+}
+
+.filter-toggle-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+  position: relative;
+  padding-left: 3rem; /* Space for the toggle switch */
+}
+
+.filter-toggle-slider {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 1.5rem;
+  background-color: #ddd;
+  border-radius: 1rem;
+  transition: background-color 0.3s;
+}
+
+.filter-toggle-slider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0.25rem;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.filter-toggle-checkbox:checked + .filter-toggle-label .filter-toggle-slider {
+  background-color: #007bff;
+}
+
+.filter-toggle-checkbox:checked + .filter-toggle-label .filter-toggle-slider::before {
+  transform: translateY(-50%) translateX(1.5rem); /* Adjusted to align with the slider */
+}
+
+.filter-toggle-label:hover {
+  color: #007bff;
+}
+
+/* Dropdown Icon */
+.dropdown-icon {
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+  display: none;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
 </style>
 
 </head>
@@ -250,85 +383,93 @@
     </div>
   </div>
   
-
   <section class="ftco-section bg-light">
-  
     <div class="container">
-      <p class="breadcrumbs">
-        <a href="/">Home</a> &gt; 
-        <a href="/user/ShopPage">Shop</a>
-      </p>
-        <div class="row">
-          <div class="col-md-8 col-lg-10 order-md-last">
-            <div class="row">
-                <!-- Products -->
-                <% products.forEach(product => { %>
-                    <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
-                        <div class="product d-flex flex-column">
-                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
-                                <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
-                                <div class="overlay"></div>
-                            </a>
-                            <div class="text py-3 pb-4 px-3">
-                                <div class="d-flex">
-                                    <div class="cat">
-                                        <span><%= product.category %></span>
-                                    </div>
-                                    
-                                </div>
-                                <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.name %></a></h3>
-                                <div class="pricing">
-                                  <p class="price"><span><%= product.productname%></span></p>
-                                    <p class="price"><span>₹<%= product.price %></span></p>
-                                    <p class="price"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
-                                </div>
-                                <p class="bottom-area d-flex px-3">
-                                  <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart</i></span></a>
-                                  <% if (product.variants[0].quantity < 1) { %>
-                                    <a href="#" class=" out-of-stock-btn " style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
-                                  <% } else { %>
-                                      <a href="#" class="buy-now text-center py-2">Buy now<span></i></span></a>
-                                  <% } %>
-                              </p>
-                            </div>
-                        </div>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <p class="breadcrumbs">
+            <a href="/">Home</a> &gt; 
+            <a href="/user/ShopPage">Shop</a>
+          </p>
+        </div>
+        <div class="col-md-6 text-right">
+          <div class="search-box">
+            <form method="get" action="/user/ShopPage" class="search-form" id="search-form">
+              <input type="text" name="search" id="search-input" placeholder="Search..." value="<%= search || '' %>" autocomplete="off" />
+              <button type="submit" id="search-button">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-8 col-lg-10 order-md-last">
+          <div class="row">
+            <!-- Products -->
+            <% products.forEach(product => { %>
+              <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
+                <div class="product d-flex flex-column">
+                  <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
+                    <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
+                    <div class="overlay"></div>
+                  </a>
+                  <div class="text py-3 pb-4 px-3">
+                    <div class="d-flex">
+                      <div class="cat">
+                        <span><%= product.category %></span>
+                      </div>
                     </div>
-                <% }) %>
-            </div>
-
-                           <!-- Pagination -->
-                           <div class="pagination-container">
-                            <% if (currentPage > 1) { %>
-                                <a href="/user/ShopPage?page=<%= currentPage - 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link">Previous</a>
-                            <% } %>
-        
-                            <% for (let i = 1; i <= totalPages; i++) { %>
-                                <a href="/user/ShopPage?page=<%= i %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
-                            <% } %>
-        
-                            <% if (currentPage < totalPages) { %>
-                                <a href="/user/ShopPage?page=<%= currentPage + 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link">Next</a>
-                            <% } %>
-                        </div>
+                    <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.name %></a></h3>
+                    <div class="pricing">
+                      <p class="price"><span><%= product.productname %></span></p>
+                      <p class="price"><span>₹<%= product.price %></span></p>
+                      <p class="price"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
                     </div>
-    
+                    <p class="bottom-area d-flex px-3">
+                      <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart</span></a>
+                      <% if (product.variants[0].quantity < 1) { %>
+                        <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
+                      <% } else { %>
+                        <a href="#" class="buy-now text-center py-2">Buy now<span></span></a>
+                      <% } %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+  
+          <!-- Pagination -->
+          <div class="pagination-container">
+            <% if (currentPage > 1) { %>
+              <a href="/user/ShopPage?page=<%= currentPage - 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link">Previous</a>
+            <% } %>
+            
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a href="/user/ShopPage?page=<%= i %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+            
+            <% if (currentPage < totalPages) { %>
+              <a href="/user/ShopPage?page=<%= currentPage + 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link">Next</a>
+            <% } %>
+          </div>
+        </div>
+  
         <div class="col-md-4 col-lg-2">
           <form method="get" action="/user/ShopPage" class="colorlib-form-2">
             <div class="sidebar">
-              <!-- Subcategories -->
+            <!-- Subcategories -->
               <div class="sidebar-box-2">
-              
-                <h2 class="heading">Subcategories</h2>
-                <div class="form-group">
-                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
-                    <button type="button" class="subcategory-btn">Wired</button>
-                  </a>
-                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
-                    <button type="button" class="subcategory-btn">Wireless</button>
-                  </a>
+                <h2 class="heading">
+                  Subcat
+                  <span class="dropdown-icon" onclick="toggleDropdown()">&#9660;</span>
+                </h2>
+                <div id="subcategory-dropdown" class="dropdown-content">
+                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">Wired</a>
+                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">Wireless</a>
                 </div>
               </div>
-          
+  
               <!-- Sorting Options -->
               <div class="sidebar-box-2">
                 <h2 class="heading">Sort By</h2>
@@ -340,7 +481,19 @@
                   </select>
                 </div>
               </div>
-          
+
+              <!-- tommarrow task -->
+
+                <!-- Sorting Options -->
+  <div class="sidebar-box-2">
+    <h2 class="heading">Sort By</h2>
+    <div class="form-group">
+      <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc" class="<%= sort === 'asc' ? 'active' : '' %>">A to Z</a>
+      <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc" class="<%= sort === 'desc' ? 'active' : '' %>">Z to A</a>
+    </div>
+  </div>
+</div>
+  
               <!-- Categories -->
               <div class="sidebar-box-2">
                 <h2 class="heading">Categories</h2>
@@ -356,7 +509,7 @@
                   </ul>
                 </div>
               </div>
-          
+  
               <!-- Price Range -->
               <div class="sidebar-box-2">
                 <h2 class="heading">Price Range</h2>
@@ -366,7 +519,7 @@
                       <label for="price_from">Price from:</label>
                       <div class="form-field">
                         <i class="icon icon-arrow-down3"></i>
-                        <select name="price_from" id="price_from" class="form-control" >
+                        <select name="price_from" id="price_from" class="form-control">
                           <option value="1" <%= price_from == 1 ? 'selected' : '' %>>$1</option>
                           <option value="20" <%= price_from == 20 ? 'selected' : '' %>>$20</option>
                           <option value="30" <%= price_from == 30 ? 'selected' : '' %>>$30</option>
@@ -381,7 +534,7 @@
                       <label for="price_to">Price to:</label>
                       <div class="form-field">
                         <i class="icon icon-arrow-down3"></i>
-                        <select name="price_to" id="price_to" class="form-control" >
+                        <select name="price_to" id="price_to" class="form-control">
                           <option value="90" <%= price_to == 90 ? 'selected' : '' %>>$90</option>
                           <option value="100" <%= price_to == 100 ? 'selected' : '' %>>$100</option>
                           <option value="300" <%= price_to == 300 ? 'selected' : '' %>>$300</option>
@@ -398,15 +551,24 @@
                   </div>
                 </div>
               </div>
+  
+              <!-- Out of Stock Filter -->
+              <div class="sidebar-box-2">
+                <h2 class="heading">Filter</h2>
+                <div class="filter-toggle">
+                  <input type="checkbox" name="show_out_of_stock" id="show_out_of_stock" class="filter-toggle-checkbox">
+                  <label for="show_out_of_stock" class="filter-toggle-label">
+                    <span class="filter-toggle-slider"></span>
+                    Show out of stock products
+                  </label>
+                </div>
+              </div>
             </div>
           </form>
         </div>
-
-
-        </div>
+      </div>
     </div>
-</section>
-
+  </section>
       
       <section class="ftco-gallery">
      
@@ -465,12 +627,22 @@
 <script src="/js/main.js"></script>
 
 <script>
+
   function truncateDescription(description, maxLength) {
       if (description.length > maxLength) {
           return description.substring(0, maxLength) + '...';
       }
       return description;
   }
+
+  function toggleDropdown() {
+  var dropdown = document.getElementById("subcategory-dropdown");
+  if (dropdown.style.display === "block") {
+    dropdown.style.display = "none";
+  } else {
+    dropdown.style.display = "block";
+  }
+}
 </script>
 
 

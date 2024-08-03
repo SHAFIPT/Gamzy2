@@ -333,6 +333,19 @@
 .btn-secondary:hover {
     background-color: #5a6268; /* Darker color on hover */
 }
+
+/* Add this CSS to your stylesheet or inside a <style> block */
+    .text-white.customer-name {
+    font-size: 16px; /* Adjust the font size as needed */
+    font-weight: bold; /* Make the font bold */
+    color: #ffffff; /* Ensure the text is white */
+    margin: 10px 0; /* Add margin for spacing */
+}
+
+.text-white.customer-name .label {
+    font-size: 14px; /* Adjust the label font size */
+    font-weight: normal; /* Make the label text normal weight */
+}
   </style>
 
   
@@ -350,7 +363,7 @@
                 <i class="fas fa-bars tm-nav-icon"></i>
             </button>
             <div class="col-lg-3 col-md-6 ms-auto">
-              <button class="btn btn-danger" id="deleteOrderBtn">Delete Order</button>
+              
           </div>
   
         </div>
@@ -362,14 +375,14 @@
       <div class="col-12 tm-block-col">
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
               <div class="d-flex justify-content-between align-items-center">
-                  <h2 class="tm-block-title">Customer Details :</h2>
+                <p class="text-white customer-name"><span class="label"></span> <%= order.userId.name %></p>
+
                   <div class="contact-info text-white">
                       <p><strong>Contact Info :</strong></p>
                       <p>Email: <%= order.userId.email %></p>
                       <p>Mobile: <%= order.userId.mobile %></p>
                   </div>
               </div>
-              <p class="text-white customer-name"><span class="label">Name :</span> <%= order.userId.name %></p>
           </div>
       </div>
   </div>
@@ -391,9 +404,6 @@
               <% } else { %>
                   <img src="/path/to/default/image.jpg" alt="Default Image" class="tm-avatar img-fluid mb-4" />
               <% } %>
-              <a href="#" class="tm-avatar-delete-link">
-                  <i class="far fa-trash-alt tm-product-delete-icon"></i>
-              </a>
           </div>
       </div>
   </div>
@@ -447,15 +457,14 @@
             <div class="d-flex flex-column align-items-start">
                 <h2 class="tm-block-title">Shipping Address</h2>
                 <div class="address-info text-white">
-                    <p><strong>Address:</strong></p>
-                    <p>Street:</p>
-                    <p>City: </p>
-                    <p>State:</p>
-                    <p>Postal Code:</p>
-                    <p>Country: </p>
+                    <p><strong>Name:</strong>  <%= order.address.name %></p>
+                    <p><strong>Address:</strong> <%= order.address.address %></p>
+                    <p><strong>Street:</strong> <%= order.address.street %></p>
+                    <p><strong>City:</strong> <%= order.address.city %></p>
+                    <p><strong>State:</strong> <%= order.address.state %></p>
+                    <p><strong>Postal Code:</strong> <%= order.address.pincode %></p>
                 </div>
             </div>
-   
         </div>
     </div>
 </div>

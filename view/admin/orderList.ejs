@@ -135,7 +135,13 @@
                             <td><%= new Date(order.orderDate).toLocaleString() %></td>
                             <td><%= order.userId.name %></td>
                             <td></td>
-                            <td><%= order.status %></td>
+                            <td>
+                                <% order.products.forEach(product => { %>
+                                    <div>
+                                         <%= product.status %>
+                                    </div>
+                                <% }); %>
+                            </td>
                             <td><%= order.PaymentMethod %></td>
                             <td><a href="/admin/viewOrder/<%= order._id %>"><button class="btn btn-view">View</button></a></td>
                         </tr>

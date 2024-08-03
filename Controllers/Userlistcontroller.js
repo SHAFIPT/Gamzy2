@@ -13,7 +13,7 @@ const truncateDescription = (description, maxLength) => {
 const LoadShopage = async (req, res) => {
     try {
         // Extract query parameters
-        const { price_from, price_to, category, subcategory, sort , page = 1, limit = 6 } = req.query;
+        const { price_from, price_to, category, subcategory, sort , search , page = 1, limit = 6 } = req.query;
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
@@ -22,6 +22,10 @@ const LoadShopage = async (req, res) => {
 
         if (price_from && price_to) {
             query['price'] = { $gte: parseFloat(price_from), $lte: parseFloat(price_to) };
+        }
+
+        if (search) {
+            query.productname = { $regex: search, $options: 'i' }; // Case-insensitive search
         }
 
         if (category) {
@@ -69,6 +73,7 @@ const LoadShopage = async (req, res) => {
             subcategory,
             currentPage: pageNumber,
             totalPages,
+            search,
             truncateDescription
         });
 
@@ -265,11 +270,12 @@ const removeCart = async (req,res)=>{
     }
 }
 
+
 module.exports = {
     LoadShopage,
     loadProductDetails,
     loadProductCart,
     addToCart,
     updateCart,
-    removeCart
+    removeCart,
 }

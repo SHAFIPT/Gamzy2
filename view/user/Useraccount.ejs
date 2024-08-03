@@ -1,5 +1,11 @@
 <%- include('../layouts/userheader') %>
 
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+</head>
+
 <style>
  /* Navbar Styles */
 .navbar {
@@ -219,6 +225,106 @@
 }
 
 
+
+/* General button styles */
+.btn {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #4e555b;
+}
+
+/* Style the button group container */
+.button-group {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Style the modals */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.close {
+    font-size: 24px;
+    line-height: 1;
+    color: #000;
+}
+
+.input-group-text {
+    cursor: pointer;
+}
+
+.input-group-text i {
+    font-size: 1.2rem;
+}
+
+.input-group input[type="password"] {
+    padding-right: 2.5rem; /* Adjust this value as needed to accommodate the eye icon */
+}
+
+.modal-body form .form-group {
+    margin-bottom: 1rem;
+}
+
+
+
+/* user profile */
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+.success input {
+  border-color: green;
+}
+
+.error input {
+  border-color: red;
+}
+
+
+
 </style>
   <!-- Navbar section -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -273,39 +379,123 @@
         </div>
     </div>
 </div> -->
-
 <section class="ftco-section">
-  <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-md-3">
-              <div class="left-sidebar">
-                  <ul class="sidebar-options">
-                      <li class="active"><a href="/user/myaccount">My Profile</a></li>
-                      <li><a href="/user/Userorders">Orders</a></li>
-                      <li><a href="/user/address">Address</a></li>
-                      <li><a href="/user/signout">Signout</a></li>
-                  </ul>
-              </div>
-          </div>
-          <div class="col-md-9 ftco-animate">
-              <div class="addresses-list">
-                  
-                          <div class="address-item">
-                              <h5><%= users.name %></h5>
-                              <p>Email: <%= users.email %></p>
-                              <p>Phone: <%= users.number %></p>
-                          </div>
-                   
-                 
-                      <!-- <p>No user found.</p> -->
-                 
-              </div>
-          </div>
-      </div>
-  </div>
-</section>
-
-
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="left-sidebar">
+                    <ul class="sidebar-options">
+                        <li class="active"><a href="/user/myaccount">My Profile</a></li>
+                        <li><a href="/user/Userorders">Orders</a></li>
+                        <li><a href="/user/address">Address</a></li>
+                        <li><a href="/user/signout">Signout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9 ftco-animate">
+                <div class="addresses-list">
+                    <div class="address-item">
+                        <h5><%= users.name %></h5>
+                        <p>Email: <%= users.email %></p>
+                        <p>Phone: <%= users.phonenumber %></p>
+                        <div class="button-group mt-3">
+                            <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
+                            <button class="btn btn-secondary change-password-btn" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+ <!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="editName">Name</label>
+                        <input type="text" class="form-control" id="editName" placeholder="Enter your name" value="<%= users.name %>">
+                        <div class="error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhoneNumber">Phone Number</label>
+                        <input type="text" class="form-control" id="editPhoneNumber" placeholder="Enter your phone number" value="<%= users.phonenumber %>">
+                        <div class="error"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="oldPassword">Old Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="oldPassword" placeholder="Enter old password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="toggleOldPassword">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <small id="oldPasswordError" class="form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="toggleNewPassword">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <small id="newPasswordError" class="form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="toggleConfirmPassword">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <small id="confirmPasswordError" class="form-text text-danger"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="savePasswordChangesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -327,6 +517,80 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 <script src="/js/google-map.js"></script>
 <script src="/js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('savePasswordChangesBtn').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    // Get form values
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Get error message containers
+    const oldPasswordError = document.getElementById('oldPasswordError');
+    const newPasswordError = document.getElementById('newPasswordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+    // Clear previous errors
+    oldPasswordError.textContent = '';
+    newPasswordError.textContent = '';
+    confirmPasswordError.textContent = '';
+
+    // Validation
+    let isValid = true;
+
+    if (!oldPassword) {
+        oldPasswordError.textContent = 'Old password is required.';
+        isValid = false;
+    }
+
+    if (!newPassword) {
+        newPasswordError.textContent = 'New password is required.';
+        isValid = false;
+    } else if (newPassword.length < 6) {
+        newPasswordError.textContent = 'New password must be at least 6 characters long.';
+        isValid = false;
+    }
+
+    if (newPassword !== confirmPassword) {
+        confirmPasswordError.textContent = 'Passwords do not match.';
+        isValid = false;
+    }
+
+    if (isValid) {
+        // Submit form or send AJAX request here
+        Swal.fire({
+            icon: 'success',
+            title: 'Password changed successfully!',
+            text: 'Your password has been updated.',
+        }).then(() => {
+            // You can also manually close the modal here if needed
+            $('#changePasswordModal').modal('hide');
+        });
+    }
+});
+</script>
+
+<script>
+document.querySelectorAll('.input-group-text').forEach((element) => {
+    element.addEventListener('click', function() {
+        const input = this.previousElementSibling;
+        const icon = this.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+});
+</script>
 
 <script>
     $(document).ready(function(){
@@ -380,5 +644,222 @@
     });
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function for updating profile
+        document.getElementById('saveChangesBtn').addEventListener('click', async () => {
+            validateProfileEditInputs();
+            if (isProfileEditValid()) {
+                const name = document.getElementById('editName').value;
+                const phoneNumber = document.getElementById('editPhoneNumber').value;
+        
+                const data = { name, phoneNumber };
+        
+                try {
+                    const response = await fetch('/user/updateProfile', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+        
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();  // Optionally reload the page to see the changes
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Error updating profile.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    
+        // Function for toggling password visibility
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId).querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    
+        document.getElementById('toggleOldPassword').addEventListener('click', () => {
+            togglePasswordVisibility('oldPassword', 'toggleOldPassword');
+        });
+    
+        document.getElementById('toggleNewPassword').addEventListener('click', () => {
+            togglePasswordVisibility('newPassword', 'toggleNewPassword');
+        });
+    
+        document.getElementById('toggleConfirmPassword').addEventListener('click', () => {
+            togglePasswordVisibility('confirmPassword', 'toggleConfirmPassword');
+        });
+    
+        // Function for changing password
+        document.getElementById('savePasswordChangesBtn').addEventListener('click', async () => {
+            validatePasswordChangeInputs();
+                const oldPassword = document.getElementById('oldPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                console.log("this is my oldPassword ",oldPassword );
+                console.log("this is my newPassword ",newPassword );
+                console.log("this is my confirmPassword ",confirmPassword );
+                
+        
+                const data = { oldPassword, newPassword };
+        
+                try {
+                    const response = await fetch('/user/changePassword', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $('#changePasswordModal').modal('hide'); // Hide modal after successful change
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error changing password:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Error changing password.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            
+        });
+    
+        // Validation functions for profile edit
+        const validateProfileEditInputs = () => {
+            const nameValue = document.getElementById('editName').value.trim();
+            const phoneNumberValue = document.getElementById('editPhoneNumber').value.trim();
+            
+            if (nameValue === '') {
+                setError(document.getElementById('editName'), 'Name is required');
+            } else {
+                setSuccess(document.getElementById('editName'));
+            }
+            
+            if (phoneNumberValue === '') {
+                setError(document.getElementById('editPhoneNumber'), 'Phone number is required');
+            } else {
+                setSuccess(document.getElementById('editPhoneNumber'));
+            }
+        };
+    
+        const isProfileEditValid = () => {
+            return document.getElementById('editName').parentElement.classList.contains('success') &&
+                   document.getElementById('editPhoneNumber').parentElement.classList.contains('success');
+        };
+    
+        // // Validation functions for password change
+        // const validatePasswordChangeInputs = () => {
+        //     const oldPasswordValue = document.getElementById('oldPassword').value.trim();
+        //     const newPasswordValue = document.getElementById('newPassword').value.trim();
+        //     const confirmPasswordValue = document.getElementById('confirmPassword').value.trim();
+
+        //     console.log('Validating password inputs...');
+    
+    
+        //     if (oldPasswordValue === '') {
+        //         setError(document.getElementById('oldPassword'), 'Old password is required');
+        //     } else {
+        //         setSuccess(document.getElementById('oldPassword'));
+        //     }
+    
+        //     if (newPasswordValue === '') {
+        //         setError(document.getElementById('newPassword'), 'New password is required');
+        //     } else {
+        //         setSuccess(document.getElementById('newPassword'));
+        //     }
+    
+        //     if (confirmPasswordValue === '') {
+        //         setError(document.getElementById('confirmPassword'), 'Confirm password is required');
+        //     } else if (newPasswordValue !== confirmPasswordValue) {
+        //         setError(document.getElementById('confirmPassword'), 'Passwords do not match');
+        //     } else {
+        //         setSuccess(document.getElementById('confirmPassword'));
+        //     }
+        // };
+    
+    //     const isPasswordChangeValid = () => {
+    //         return document.getElementById('oldPassword').parentElement.classList.contains('success') &&
+    //                document.getElementById('newPassword').parentElement.classList.contains('success') &&
+    //                document.getElementById('confirmPassword').parentElement.classList.contains('success');
+    //     };
+    //     const setError = (element, message) => {
+    //     const inputControl = element.parentElement;
+    //     const errorDisplay = inputControl.querySelector('.error');
+        
+    //     if (errorDisplay) {
+    //         errorDisplay.innerText = message;
+    //         inputControl.classList.add('error');
+    //         inputControl.classList.remove('success');
+    //     } else {
+    //         console.error('Error display element not found for', element);
+    //     }
+    // };
+
+    //     const setSuccess = (element) => {
+    //     const inputControl = element.parentElement;
+    //     const errorDisplay = inputControl.querySelector('.error');
+        
+    //     if (errorDisplay) {
+    //         errorDisplay.innerText = '';
+    //         inputControl.classList.add('success');
+    //         inputControl.classList.remove('error');
+    //     } else {
+    //         console.error('Error display element not found for', element);
+    //     }
+    // };
+    });
+    </script>
 <%- include('../layouts/footer') %>

@@ -2,7 +2,8 @@ const Address = require('../model/addressShema');
 const User = require('../model/UserModel')
 const mongoose=require('mongoose');
 const Order = require('../model/ordreModel');
-const Product = require('../model/productModel')
+const Product = require('../model/productModel');
+const bcrypt = require('bcrypt');
 
 const loadMyAccount = async (req,res) =>{
     try {
@@ -237,6 +238,71 @@ const orderCancel = async (req, res) => {
     }
 };
 
+
+const updateProfile = async (req, res) => {
+    try {
+        const { name, phoneNumber } = req.body;
+        console.log("user name:", name);
+        console.log("user phoneNumber:", phoneNumber);
+
+        const userId = req.session.user;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "User not authenticated" });
+        }
+
+        const user = await User.findByIdAndUpdate(userId, { name, phonenumber: phoneNumber }, { new: true });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        console.log('Profile updated successfully');
+        res.json({ success: true, message: 'Profile updated successfully' });
+    } catch (error) {
+        console.error('Error updating profile:', error); // Log error details
+        console.error('Error stack trace:', error.stack); // Log stack trace
+        res.status(500).json({ success: false, message: 'Failed to update profile' });
+    }
+}
+
+
+const updatePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const userId = req.session.user;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'User not authenticated' });
+        }
+
+        // Find the user in the database
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Check if the old password is correct
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: 'Old password is incorrect' });
+        }
+
+        // Hash the new password
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the user's password
+        user.password = hashedNewPassword;
+        await user.save();
+
+        res.json({ success: true, message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        res.status(500).json({ success: false, message: 'Failed to update password' });
+    }
+};
+
 module.exports = {
     loadMyAccount,
     loadaddress,
@@ -245,5 +311,7 @@ module.exports = {
     editAddress,
     removeAddress,
     loadOrderDetails,
-    orderCancel
+    orderCancel,
+    updateProfile,
+    updatePassword
 }

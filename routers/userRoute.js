@@ -89,6 +89,11 @@ router.get('/cartPage',cheakoutController.breadCrumbCart)
 
 //userAccount
 router.get('/myaccount',userMiddleware.isLogin,myaccountController.loadMyAccount);
+//updateProfile
+router.patch("/updateProfile",userMiddleware.isLogin,myaccountController.updateProfile);
+//updatePassword
+router.patch('/changePassword',userMiddleware.isLogin,myaccountController.updatePassword)
+
 router.get('/address',userMiddleware.isLogin,myaccountController.loadaddress);
 router.post('/addAddress',myaccountController.addAddress)
 
