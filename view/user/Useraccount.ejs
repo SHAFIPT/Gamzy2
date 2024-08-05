@@ -800,66 +800,66 @@ document.querySelectorAll('.input-group-text').forEach((element) => {
                    document.getElementById('editPhoneNumber').parentElement.classList.contains('success');
         };
     
-        // // Validation functions for password change
-        // const validatePasswordChangeInputs = () => {
-        //     const oldPasswordValue = document.getElementById('oldPassword').value.trim();
-        //     const newPasswordValue = document.getElementById('newPassword').value.trim();
-        //     const confirmPasswordValue = document.getElementById('confirmPassword').value.trim();
+        // Validation functions for password change
+        const validatePasswordChangeInputs = () => {
+            const oldPasswordValue = document.getElementById('oldPassword').value.trim();
+            const newPasswordValue = document.getElementById('newPassword').value.trim();
+            const confirmPasswordValue = document.getElementById('confirmPassword').value.trim();
 
-        //     console.log('Validating password inputs...');
+            console.log('Validating password inputs...');
     
     
-        //     if (oldPasswordValue === '') {
-        //         setError(document.getElementById('oldPassword'), 'Old password is required');
-        //     } else {
-        //         setSuccess(document.getElementById('oldPassword'));
-        //     }
+            if (oldPasswordValue === '') {
+                setError(document.getElementById('oldPassword'), 'Old password is required');
+            } else {
+                setSuccess(document.getElementById('oldPassword'));
+            }
     
-        //     if (newPasswordValue === '') {
-        //         setError(document.getElementById('newPassword'), 'New password is required');
-        //     } else {
-        //         setSuccess(document.getElementById('newPassword'));
-        //     }
+            if (newPasswordValue === '') {
+                setError(document.getElementById('newPassword'), 'New password is required');
+            } else {
+                setSuccess(document.getElementById('newPassword'));
+            }
     
-        //     if (confirmPasswordValue === '') {
-        //         setError(document.getElementById('confirmPassword'), 'Confirm password is required');
-        //     } else if (newPasswordValue !== confirmPasswordValue) {
-        //         setError(document.getElementById('confirmPassword'), 'Passwords do not match');
-        //     } else {
-        //         setSuccess(document.getElementById('confirmPassword'));
-        //     }
-        // };
+            if (confirmPasswordValue === '') {
+                setError(document.getElementById('confirmPassword'), 'Confirm password is required');
+            } else if (newPasswordValue !== confirmPasswordValue) {
+                setError(document.getElementById('confirmPassword'), 'Passwords do not match');
+            } else {
+                setSuccess(document.getElementById('confirmPassword'));
+            }
+        };
     
-    //     const isPasswordChangeValid = () => {
-    //         return document.getElementById('oldPassword').parentElement.classList.contains('success') &&
-    //                document.getElementById('newPassword').parentElement.classList.contains('success') &&
-    //                document.getElementById('confirmPassword').parentElement.classList.contains('success');
-    //     };
-    //     const setError = (element, message) => {
-    //     const inputControl = element.parentElement;
-    //     const errorDisplay = inputControl.querySelector('.error');
+        const isPasswordChangeValid = () => {
+            return document.getElementById('oldPassword').parentElement.classList.contains('success') &&
+                   document.getElementById('newPassword').parentElement.classList.contains('success') &&
+                   document.getElementById('confirmPassword').parentElement.classList.contains('success');
+        };
+        const setError = (element, message) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.error');
         
-    //     if (errorDisplay) {
-    //         errorDisplay.innerText = message;
-    //         inputControl.classList.add('error');
-    //         inputControl.classList.remove('success');
-    //     } else {
-    //         console.error('Error display element not found for', element);
-    //     }
-    // };
+        if (errorDisplay) {
+            errorDisplay.innerText = message;
+            inputControl.classList.add('error');
+            inputControl.classList.remove('success');
+        } else {
+            console.error('Error display element not found for', element);
+        }
+    };
 
-    //     const setSuccess = (element) => {
-    //     const inputControl = element.parentElement;
-    //     const errorDisplay = inputControl.querySelector('.error');
+        const setSuccess = (element) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.error');
         
-    //     if (errorDisplay) {
-    //         errorDisplay.innerText = '';
-    //         inputControl.classList.add('success');
-    //         inputControl.classList.remove('error');
-    //     } else {
-    //         console.error('Error display element not found for', element);
-    //     }
-    // };
+        if (errorDisplay) {
+            errorDisplay.innerText = '';
+            inputControl.classList.add('success');
+            inputControl.classList.remove('error');
+        } else {
+            console.error('Error display element not found for', element);
+        }
+    };
     });
     </script>
 <%- include('../layouts/footer') %>

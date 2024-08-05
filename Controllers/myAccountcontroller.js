@@ -270,6 +270,11 @@ const updateProfile = async (req, res) => {
 const updatePassword = async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;
+
+        console.log("This is my oldPassword",oldPassword);
+        console.log("This is my newPassword", newPassword);
+        
+        
         const userId = req.session.user;
 
         if (!userId) {

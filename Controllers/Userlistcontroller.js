@@ -1,6 +1,7 @@
 const Product = require('../model/productModel')
 const Category = require('../model/catogoriesModel');
-const Cart = require('../model/cartShema')
+const Cart = require('../model/cartShema');
+const  Order = require("../model/ordreModel")
 
 
 const truncateDescription = (description, maxLength) => {
@@ -9,19 +10,21 @@ const truncateDescription = (description, maxLength) => {
     }
     return description;
 };
-
 const LoadShopage = async (req, res) => {
     try {
         // Extract query parameters
-        const { price_from, price_to, category, subcategory, sort , search , page = 1, limit = 6 } = req.query;
+        const { price_from, price_to, category, subcategory, sort, search,  page = 1, limit = 6 } = req.query;
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
         // Build the query object for filtering products
         let query = { is_Listed: true };
 
-        if (price_from && price_to) {
-            query['price'] = { $gte: parseFloat(price_from), $lte: parseFloat(price_to) };
+        // Validate and parse price range
+        const priceFrom = parseFloat(price_from);
+        const priceTo = parseFloat(price_to);
+        if (!isNaN(priceFrom) && !isNaN(priceTo)) {
+            query['price'] = { $gte: priceFrom, $lte: priceTo };
         }
 
         if (search) {
@@ -36,27 +39,31 @@ const LoadShopage = async (req, res) => {
             query.subCategory = subcategory;
         }
 
-        // Build sorting object
-        let sortOption = {};
-        if (sort === 'asc') {
-            sortOption['productname'] = 1; // A to Z
-        } else if (sort === 'desc') {
-            sortOption['productname'] = -1; // Z to A
-        } else {
-            sortOption['productname'] = 1; // Default sorting
-        }
+      // Build sorting object
+      let sortOption = {};
+      if (sort === 'asc') {
+          sortOption['price'] = 1; // Low to High
+      } else if (sort === 'desc') {
+          sortOption['price'] = -1; // High to Low
+      } else if (sort === 'name_asc') {
+          sortOption['productname'] = 1; // A to Z
+      } else if (sort === 'name_desc') {
+          sortOption['productname'] = -1; // Z to A
+      } else {
+          sortOption['price'] = 1; // Default to Low to High
+      }
 
         // Fetch products based on the query
         const products = await Product.find(query)
-        .sort(sortOption)
-        .skip((pageNumber - 1) * limitNumber)
-        .limit(limitNumber)
-        .populate('variants')
-        .populate('productCategory');
+            .sort(sortOption)
+            .skip((pageNumber - 1) * limitNumber)
+            .limit(limitNumber)
+            .populate('variants')
+            .populate('productCategory');
 
-         // Count total products for pagination
-         const totalProducts = await Product.countDocuments(query);
-         const totalPages = Math.ceil(totalProducts / limitNumber);
+        // Count total products for pagination
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / limitNumber);
 
         // Fetch all categories and subcategories
         const categories = await Category.find({ is_listed: true });

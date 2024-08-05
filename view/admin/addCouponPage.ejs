@@ -1,0 +1,259 @@
+<%- include('../layouts/adminheader') %>
+  </head>
+  <style>
+    .form-group textarea.form-control {
+      /* background-color: #444; */
+      border: none;
+      color: #fff;
+      /* Adjust height and font size as needed */
+      height: 150px;
+      /* Example height */
+      font-size: 14px;
+      /* Example font size */
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .tm-footer {
+      padding: 1rem;
+    }
+
+    .tm-footer a {
+      color: #007bff;
+    }
+
+
+    /* user profile */
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+.success input {
+  border-color: green;
+}
+
+.error input {
+  border-color: red;
+}
+
+
+  </style>
+  </head>
+
+  <body>
+   
+<nav class="navbar navbar-expand-xl">
+    <div class="container h-100">
+        <a class="navbar-brand" href="index.html">
+            <h1 class="tm-site-title mb-0">MANAGE COUPON</h1>
+        </a>
+        <ul class="breadcrumb mt-2">
+            <li class="breadcrumb-item"><a href="/admin/Products">Admin &gt;&gt;</a>Dashboard</li>
+        </ul>
+        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars tm-nav-icon"></i>
+        </button>
+        <div class="col-lg-3 col-md-6 ms-auto">
+            <form action="">
+                <!-- <input type="text" placeholder="Search..." class="form-control" id="searchInput" name="search" /> -->
+            </form>
+        </div>
+    </div>
+</nav>
+    <div class="container tm-mt-big tm-mb-big">
+        <div class="row">
+            <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+                <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="tm-block-title d-inline-block">Add Coupon</h2>
+                        </div>
+                    </div>
+                    <div class="row tm-edit-product-row">
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <form action="/admin/addCoupon" class="tm-edit-product-form" id="form" method="post">
+                                <div class="form-group mb-3">
+                                    <label for="name">Coupon Name</label>
+                                    <input id="name" name="name" type="text" class="form-control validate" required />
+                                    <div class="error"></div> <!-- Error display -->
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="activation-date">Activation Date</label>
+                                    <input id="activation-date" name="activation-date" type="date" class="form-control validate" required />
+                                    <div class="error"></div> <!-- Error display -->
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="expire-date">Expire Date</label>
+                                    <input id="expire-date" name="expire-date" type="date" class="form-control validate" required />
+                                    <div class="error"></div> <!-- Error display -->
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="limit-of-use">Limit of Use</label>
+                                    <input id="limit-of-use" name="limit-of-use" type="number" class="form-control validate" required />
+                                    <div class="error"></div> <!-- Error display -->
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="discount-amount">Discount Amount</label>
+                                    <input id="discount-amount" name="discount-amount" type="number" step="0.01" class="form-control validate" required />
+                                    <div class="error"></div> <!-- Error display -->
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-primary btn-block text-uppercase">Submit</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-primary btn-block text-uppercase" onclick="window.history.back();">Back</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+   
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            const form = document.getElementById('form');
+            const name = document.getElementById('name');
+            const activationDate = document.getElementById('activation-date');
+            const expireDate = document.getElementById('expire-date');
+            const limitOfUse = document.getElementById('limit-of-use');
+            const discountAmount = document.getElementById('discount-amount');
+      
+            form.addEventListener('submit', async e => {
+                e.preventDefault();
+      
+                validateInputs();
+      
+                if (isValid()) {
+                    const formData = {
+                        name: name.value.trim(),
+                        activationDate: activationDate.value,
+                        expireDate: expireDate.value,
+                        limitOfUse: limitOfUse.value,
+                        discountAmount: discountAmount.value
+                    };
+
+                    console.log(formData);
+                    
+      
+                    try {
+                        const response = await fetch('/admin/addCoupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(formData),
+                        });
+      
+                        const result = await response.json();
+      
+                        if (response.ok) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: result.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '/admin/couponManage'; // Adjust the redirect URL as needed
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: result.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error during fetch:', error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            });
+      
+            const isValid = () => {
+                return name.parentElement.classList.contains('success') &&
+                       activationDate.parentElement.classList.contains('success') &&
+                       expireDate.parentElement.classList.contains('success') &&
+                       limitOfUse.parentElement.classList.contains('success') &&
+                       discountAmount.parentElement.classList.contains('success');
+            };
+      
+            const setError = (element, message) => {
+                const inputControl = element.parentElement;
+                const errorDisplay = inputControl.querySelector('.error');
+      
+                errorDisplay.innerText = message;
+                inputControl.classList.add('error');
+                inputControl.classList.remove('success');
+            };
+      
+            const setSuccess = element => {
+                const inputControl = element.parentElement;
+                const errorDisplay = inputControl.querySelector('.error');
+      
+                errorDisplay.innerText = '';
+                inputControl.classList.add('success');
+                inputControl.classList.remove('error');
+            };
+      
+            const validateInputs = () => {
+                const nameValue = name.value.trim();
+                const activationDateValue = activationDate.value.trim();
+                const expireDateValue = expireDate.value.trim();
+                const limitOfUseValue = limitOfUse.value.trim();
+                const discountAmountValue = discountAmount.value.trim();
+      
+                if (nameValue === '') {
+                    setError(name, 'Coupon name is required');
+                } else {
+                    setSuccess(name);
+                }
+      
+                if (activationDateValue === '') {
+                    setError(activationDate, 'Activation date is required');
+                } else {
+                    setSuccess(activationDate);
+                }
+      
+                if (expireDateValue === '') {
+                    setError(expireDate, 'Expire date is required');
+                } else {
+                    setSuccess(expireDate);
+                }
+      
+                if (limitOfUseValue === '' || limitOfUseValue <= 0) {
+                    setError(limitOfUse, 'Limit of use must be a positive number');
+                } else {
+                    setSuccess(limitOfUse);
+                }
+      
+                if (discountAmountValue === '' || discountAmountValue < 0) {
+                    setError(discountAmount, 'Discount amount must be a non-negative number');
+                } else {
+                    setSuccess(discountAmount);
+                }
+            };
+        });
+      </script>
+    <%- include('../layouts/footer') %>

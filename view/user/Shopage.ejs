@@ -1,5 +1,8 @@
 <%- include('../layouts/Shopheader') %>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
 <style>
     .image-container {
   height: 300px; /* Adjust height as needed */
@@ -254,7 +257,15 @@
 }
 
 
-
+.btn {
+  /* Ensure the button styles are correct */
+  display: inline-block; /* Should be visible */
+  background-color: #007bff; /* Example color */
+  color: #fff; /* Example text color */
+  padding: 10px 20px; /* Example padding */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+}
 
 
 
@@ -344,6 +355,80 @@
 .dropdown-content a:hover {
   background-color: #f1f1f1;
 }
+
+.img-prod {
+  position: relative;
+  display: block;
+}
+
+.offer-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff0000; /* Adjust the background color as needed */
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 10; /* Ensure it appears above the image */
+}
+
+
+
+
+
+
+
+
+
+/* Container for sorting options */
+.sidebar-box-2 {
+    margin-bottom: 20px;
+}
+
+.sidebar-box-2 .heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.form-group a {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-right: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.form-group a:hover {
+    background-color: #007bff; /* Highlight color */
+    color: #fff;
+}
+
+.form-group a.active {
+    background-color: #007bff; /* Active state color */
+    color: #fff;
+    font-weight: bold;
+}
+
+.form-group span {
+    font-size: 16px;
+    color: #555;
+    margin: 0 5px;
+}
+
+/* Optional: Add a border around the entire sorting box */
+.sidebar-box-2 {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
 </style>
 
 </head>
@@ -366,7 +451,7 @@
               <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
               <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
               <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-              <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+              <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"<span class="icon-shopping_cart"><i class="fa fa-shopping-cart"></i></span>[0]</a></li>
           </ul>
       </div>
       </div>
@@ -412,13 +497,18 @@
                   <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
                     <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
                     <div class="overlay"></div>
+                    <% if (product.variants[0].quantity < 1) { %>
+                      <!-- Offer Badge -->
+                      <div class="offer-badge">Out of stock</div>
+                    <% } %>
                   </a>
+                  
                   <div class="text py-3 pb-4 px-3">
                     <div class="d-flex">
                       <div class="cat">
                         <span><%= product.category %></span>
                       </div>
-                    </div>
+                    </div> 
                     <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.name %></a></h3>
                     <div class="pricing">
                       <p class="price"><span><%= product.productname %></span></p>
@@ -426,7 +516,9 @@
                       <p class="price"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
                     </div>
                     <p class="bottom-area d-flex px-3">
-                      <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart</span></a>
+            
+                        <a  class="add-to-cart text-center py-2 mr-1 " data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>"><span>Add to cart</span></a>
+
                       <% if (product.variants[0].quantity < 1) { %>
                         <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
                       <% } else { %>
@@ -456,7 +548,7 @@
         </div>
   
         <div class="col-md-4 col-lg-2">
-          <form method="get" action="/user/ShopPage" class="colorlib-form-2">
+          <form method="get" action="/user/ShopPage" class="colorlib-form-2" id="filter-form">
             <div class="sidebar">
             <!-- Subcategories -->
               <div class="sidebar-box-2">
@@ -470,29 +562,20 @@
                 </div>
               </div>
   
-              <!-- Sorting Options -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">Sort By</h2>
-                <div class="form-group">
-                  <select name="sort" id="sort" class="form-control" onchange="this.form.submit()">
-                    <option value="">Select sorting</option>
-                    <option value="asc" <%= sort === 'asc' ? 'selected' : '' %>>A to Z</option>
-                    <option value="desc" <%= sort === 'desc' ? 'selected' : '' %>>Z to A</option>
-                  </select>
-                </div>
-              </div>
-
+   
               <!-- tommarrow task -->
 
                 <!-- Sorting Options -->
-  <div class="sidebar-box-2">
-    <h2 class="heading">Sort By</h2>
-    <div class="form-group">
-      <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc" class="<%= sort === 'asc' ? 'active' : '' %>">A to Z</a>
-      <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc" class="<%= sort === 'desc' ? 'active' : '' %>">Z to A</a>
-    </div>
-  </div>
-</div>
+              <div class="sidebar-box-2">
+                <h2 class="heading">Sort By</h2>
+                <div class="form-group">
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc" class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc" class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc" class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc" class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
+              </div>
+              </div>
+            </div>
   
               <!-- Categories -->
               <div class="sidebar-box-2">
@@ -510,59 +593,50 @@
                 </div>
               </div>
   
-              <!-- Price Range -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">Price Range</h2>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
+               <!-- Price Range -->
+        <div class="sidebar-box-2">
+          <h2 class="heading">Price Range</h2>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
                       <label for="price_from">Price from:</label>
                       <div class="form-field">
-                        <i class="icon icon-arrow-down3"></i>
-                        <select name="price_from" id="price_from" class="form-control">
-                          <option value="1" <%= price_from == 1 ? 'selected' : '' %>>$1</option>
-                          <option value="20" <%= price_from == 20 ? 'selected' : '' %>>$20</option>
-                          <option value="30" <%= price_from == 30 ? 'selected' : '' %>>$30</option>
-                          <option value="40" <%= price_from == 40 ? 'selected' : '' %>>$40</option>
-                          <option value="300" <%= price_from == 300 ? 'selected' : '' %>>$300</option>
-                        </select>
+                          <i class="icon icon-arrow-down3"></i>
+                          <select name="price_from" id="price_from" class="form-control">
+                              <option value="" <% !price_from ? 'selected' : '' %>>Any</option>
+                              <option value="1" <% price_from == '1' ? 'selected' : '' %>>$1</option>
+                              <option value="20" <% price_from == '20' ? 'selected' : '' %>>$20</option>
+                              <option value="30" <% price_from == '30' ? 'selected' : '' %>>$30</option>
+                              <option value="40" <% price_from == '40' ? 'selected' : '' %>>$40</option>
+                              <option value="300" <% price_from == '300' ? 'selected' : '' %>>$300</option>
+                          </select>
                       </div>
-                    </div>
                   </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group">
                       <label for="price_to">Price to:</label>
                       <div class="form-field">
-                        <i class="icon icon-arrow-down3"></i>
-                        <select name="price_to" id="price_to" class="form-control">
-                          <option value="90" <%= price_to == 90 ? 'selected' : '' %>>$90</option>
-                          <option value="100" <%= price_to == 100 ? 'selected' : '' %>>$100</option>
-                          <option value="300" <%= price_to == 300 ? 'selected' : '' %>>$300</option>
-                          <option value="600" <%= price_to == 600 ? 'selected' : '' %>>$600</option>
-                          <option value="1000" <%= price_to == 1000 ? 'selected' : '' %>>$1000</option>
-                          <option value="3000" <%= price_to == 3000 ? 'selected' : '' %>>$3000</option>
-                          <option value="6000" <%= price_to == 6000 ? 'selected' : '' %>>$6000</option>
-                        </select>
+                          <i class="icon icon-arrow-down3"></i>
+                          <select name="price_to" id="price_to" class="form-control">
+                              <option value="" <% !price_to ? 'selected' : '' %>>Any</option>
+                              <option value="90" <% price_to == '90' ? 'selected' : '' %>>$90</option>
+                              <option value="100" <% price_to == '100' ? 'selected' : '' %>>$100</option>
+                              <option value="300" <% price_to == '300' ? 'selected' : '' %>>$300</option>
+                              <option value="600" <% price_to == '600' ? 'selected' : '' %>>$600</option>
+                              <option value="1000" <% price_to == '1000' ? 'selected' : '' %>>$1000</option>
+                              <option value="3000" <% price_to == '3000' ? 'selected' : '' %>>$3000</option>
+                              <option value="6000" <% price_to == '6000' ? 'selected' : '' %>>$6000</option>
+                          </select>
                       </div>
-                    </div>
                   </div>
-                  <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                  </div>
-                </div>
               </div>
+              <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Filter</button>
+              </div>
+          </div>
+      </div>
   
-              <!-- Out of Stock Filter -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">Filter</h2>
-                <div class="filter-toggle">
-                  <input type="checkbox" name="show_out_of_stock" id="show_out_of_stock" class="filter-toggle-checkbox">
-                  <label for="show_out_of_stock" class="filter-toggle-label">
-                    <span class="filter-toggle-slider"></span>
-                    Show out of stock products
-                  </label>
-                </div>
-              </div>
             </div>
           </form>
         </div>
@@ -625,23 +699,98 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 <script src="/js/google-map.js"></script>
 <script src="/js/main.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+  
+  document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', async function(event) {
+      event.preventDefault(); // Prevent default link behavior
 
-  function truncateDescription(description, maxLength) {
-      if (description.length > maxLength) {
-          return description.substring(0, maxLength) + '...';
+      // Get product ID and variant ID from data attributes
+      const productId = this.getAttribute('data-product-id');
+      const variantId = this.getAttribute('data-variant-id');
+
+      console.log("product", productId);
+      console.log("variant",variantId);
+      
+      
+
+      const data = {
+        productId: productId,
+        variantId: variantId,
+        quantity: 1 // You can set a default quantity or get it from somewhere
+      };
+
+      try {
+        const response = await fetch('/user/addToCart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json(); 
+        
+        if (response.status === 401) {
+          Swal.fire({
+            title: 'Login Required',
+            text: result.error,
+            icon: 'warning',
+            confirmButtonText: 'Login'
+          }).then(() => {
+            window.location.href = '/user/login';
+          });
+        } else if (response.ok) {
+          Swal.fire({
+            title: 'Success',
+            text: result.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: result.error || 'An error occurred. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error during fetch:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'An error occurred. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       }
-      return description;
-  }
+    });
+  });
+});
 
-  function toggleDropdown() {
-  var dropdown = document.getElementById("subcategory-dropdown");
-  if (dropdown.style.display === "block") {
-    dropdown.style.display = "none";
-  } else {
-    dropdown.style.display = "block";
-  }
+
+function toggleDropdown() {
+    var dropdown = document.getElementById('subcategory-dropdown');
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+    } else {
+        dropdown.style.display = 'block';
+    }
+}
+
+// Optional: Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.dropdown-icon')) {
+        var dropdowns = document.getElementsByClassName('dropdown-content');
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === 'block') {
+                openDropdown.style.display = 'none';
+            }
+        }
+    }
 }
 </script>
 

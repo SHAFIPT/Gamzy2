@@ -3,7 +3,8 @@ const admin_route = express();
 const path = require('path')
 const Admincontroller = require('../Controllers/Admincontroller')
 const Productcontroller = require('../Controllers/ProductController');
-const adminOrderController = require('../Controllers/AdminOrderController')
+const adminOrderController = require('../Controllers/AdminOrderController');
+const adminCouponController = require("../Controllers/AdmincouponController")
 const nocache = require('nocache') 
 const upload = require('../middlewares/multer')
 const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
@@ -82,7 +83,12 @@ admin_route.post('/block-user', Admincontroller.blockuser);
 //orderslist
 admin_route.get('/OrderList',auth.isLogin,adminOrderController.loadOrderPage);
 admin_route.get('/viewOrder/:OrderId',auth.isLogin,adminOrderController.loadViewPage);
-admin_route.post('/update-status',adminOrderController.updateStatus)
+admin_route.post('/update-status',adminOrderController.updateStatus);
+
+//couponManagement
+admin_route.get('/couponManage',adminCouponController.loadCouponPage);
+admin_route.get('/addCoupon',adminCouponController.addCoupon);
+admin_route.post('/addCoupon',adminCouponController.addCouponPage)
  
 
 module.exports = admin_route;
