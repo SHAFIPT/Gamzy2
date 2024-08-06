@@ -243,13 +243,14 @@
                 }
       
                 if (limitOfUseValue === '' || limitOfUseValue <= 0) {
-                    setError(limitOfUse, 'Limit of use must be a positive number');
+                setError(limitOfUse, 'Limit of use must be a positive number');
                 } else {
                     setSuccess(limitOfUse);
                 }
-      
-                if (discountAmountValue === '' || discountAmountValue < 0) {
-                    setError(discountAmount, 'Discount amount must be a non-negative number');
+        
+                const discountAmountValueNumber = parseFloat(discountAmountValue);
+                if (discountAmountValue === '' || isNaN(discountAmountValueNumber) || discountAmountValueNumber < 0 || discountAmountValueNumber > 100) {
+                    setError(discountAmount, 'Discount amount must be a number between 0 and 100');
                 } else {
                     setSuccess(discountAmount);
                 }

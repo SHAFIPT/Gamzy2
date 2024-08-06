@@ -71,6 +71,51 @@
             display: block;
         }
     }
+
+
+    /* Style for action buttons in the table */
+.table .btn {
+    margin-right: 5px;
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+.table .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.table .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.table .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.table .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Style for the modal */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
 </style>
 </head>
 
@@ -104,28 +149,48 @@
                         <th scope="col">Coupon Code</th>
                         <th scope="col">Activation Date</th>
                         <th scope="col">Expire Date</th>
+                        <th scope="col">Limit Of Use </th>
                         <th scope="col">Discount Amount</th>
+                        <th scope="col">Actions</th> <!-- Added Actions column -->
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Example row -->
-                    <tr>
-                        <td>Summer Sale</td>
-                        <td>SUMMER2023</td>
-                        <td>09/01/2023</td>
-                        <td>12/31/2023</td>
-                        <td>$200</td>
-                    </tr>
-                    <!-- Add more rows as needed -->
-                    <!-- Example row -->
-                    <tr>
-                        <td>Winter Promo</td>
-                        <td>WINTER2023</td>
-                        <td>12/01/2023</td>
-                        <td>02/28/2024</td>
-                        <td>$150</td>
-                    </tr>
-                    <!-- Add more rows as needed -->
+                    <% coupons.forEach(coupon => { %>
+                        <tr>
+                            <td><%= coupon.couponname %></td>
+                            <td><%= coupon.couponCode %></td>
+                            <td><%= new Date(coupon.activationDate).toLocaleDateString() %></td>
+                            <td><%= new Date(coupon.expireDate).toLocaleDateString() %></td>
+                            <td>₹<%= coupon.limitOfUse %></td>
+                            <td>₹<%= coupon.discount %></td>
+                          
+                            <td>
+                                <a href="/admin/editCoupon/<%= coupon._id %>" class="btn btn-warning btn-sm">Edit</a>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal<%= coupon._id %>">Delete</button>
+                            </td>
+                        </tr>
+
+  <!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal<%= coupon._id %>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel<%= coupon._id %>" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel<%= coupon._id %>">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the coupon "<%= coupon.couponname %>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" data-coupon-id="<%= coupon._id %>" onclick="deleteCoupon(this)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+                    <% }) %>
                 </tbody>
             </table>
         </div>
@@ -133,7 +198,6 @@
         <a href="/admin/addCoupon" class="btn btn-primary btn-block text-uppercase mb-3">Add New Coupon</a>
     </div>
 </div>
-
 
 <footer class="tm-footer row tm-mt-small">
     <div class="col-12 font-weight-light">
@@ -144,8 +208,10 @@
     </div>
 </footer>
 
-<script src="path/to/jquery-3.3.1.min.js"></script>
-<script src="path/to/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
                 $(function () {
                     $(".tm-product-name").on("click", function () {
@@ -154,7 +220,50 @@
                 });
 
             </script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+<script>
+    // Function to handle coupon deletion
+    async function deleteCoupon(button) {
+        const couponId = button.getAttribute('data-coupon-id');
+        
+        try {
+            const response = await fetch(`/admin/deleteCoupon/${couponId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
+            const result = await response.json();
 
-
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Success',
+                    text: result.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Reload the page or update the UI as needed
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: result.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+</script>
             <%- include('../layouts/footer') %>
+

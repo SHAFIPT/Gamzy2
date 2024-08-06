@@ -462,6 +462,170 @@ rel="stylesheet">
     border-color: red;
 }
 
+
+
+
+
+.checkout__total__all li:last-child {
+    border-bottom: none;
+}
+
+#subtotal {
+    font-weight: normal;
+    color: #d9534f; /* Red color for discount */
+    font-weight: bold;
+}
+
+#discount {
+    color: #d9534f; /* Red color for discount */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#total {
+    font-weight: bold;
+    font-size: 18px;
+    color: #fe0b0b; /* Blue color for total */
+}
+
+#total-amount {
+    border-top: 2px solid #e90404; /* Underline for total amount */
+    padding-top: 5px;
+    font-size: 20px;
+}
+
+
+
+
+
+
+
+
+/* Discount Codes Section Styles */
+.cart__discount {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #e7ebe9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cart__discount h6 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+}
+
+.cart__discount form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Spacing between input and button */
+}
+
+.cart__discount input[type="text"] {
+    flex: 1; /* Takes up the remaining space */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cart__discount input[type="text"]::placeholder {
+    color: #888;
+}
+
+.cart__discount button {
+    padding: 12px 20px;
+    background-color: #007bff; /* Primary blue color */
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.cart__discount button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide Available Coupons Section by Default */
+.available-coupons {
+    display: none; /* Hidden by default */
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.available-coupons h6 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+}
+
+.available-coupons ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.available-coupons li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.available-coupons li span {
+    font-size: 1rem;
+    color: #333;
+}
+
+.available-coupons li button {
+    padding: 8px 15px;
+    background-color: #28a745; /* Green color for Apply button */
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.available-coupons li button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Toggle Button Styling */
+.toggle-coupons-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #007bff; /* Primary blue color */
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.toggle-coupons-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 </style>
 
 <body>
@@ -563,11 +727,24 @@ rel="stylesheet">
                                         <input type="text" id="coupon-code" placeholder="Coupon code">
                                         <button type="button" id="apply-discount">Apply</button>
                                     </form>
+                                
+                                    <!-- Toggle Button for Available Coupons -->
+                                    <button type="button" id="toggle-coupons" class="toggle-coupons-button">Show Available Coupons</button>
+                                
+                                    <!-- Available Coupons Section -->
+                                    <div class="available-coupons" id="available-coupons" style="display: none;">
+                                        <h6>Available Coupons</h6>
+                                        <ul id="coupons-list">
+                                            <!-- Coupons will be dynamically inserted here -->
+                                        </ul>
+                                    </div>
                                 </div>
                                 <ul class="checkout__total__all">
                                     <li>Subtotal <span>₹<span id="subtotal">
                                         <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => sum + product.productId.price * product.quantity, 0).toFixed(2) : 0 %>
                                     </span></span></li>
+                                    <li>Discount <span id="discount">₹0.00</span></li> <!-- Add this line -->
+                                    <input type="hidden" id="discountAmount" value="0"> <!-- Default to 0 initially -->
                                     <li>Total <span>₹<span id="total">
                                         <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => sum + product.productId.price * product.quantity, 0).toFixed(2) : 0 %>
                                     </span></span></li>
@@ -1393,6 +1570,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const placeOrderButton = document.getElementById("placeOrderButton");
     const paymentMethods = document.querySelectorAll(".payment-method");
     const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
+    const discountAmountElement = document.getElementById("discountAmount");
+    const discountAmount = parseFloat(discountAmountElement.value) || 0;
+
+    console.log("This is the discount-amount :", discountAmount);
+    
 
     console.log("this in my ordre domcontents :",placeOrderButton);
     console.log("this in my ordre domcontents :",paymentMethods);
@@ -1417,11 +1599,15 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
+                // Verify discountAmount before sending
+                console.log("Discount Amount before placing order: ", discountAmountElement.value);
+
         const orderData = {
             // userId: "USER_ID_HERE",  // Replace with actual user ID
             // orderId: "ORDER_ID_HERE",  // Replace with actual order ID
             PaymentMethod: selectedPaymentMethod,
             addressId: selectedAddress,
+            discountAmount:  discountAmountElement.value // Include discount amount
             // Other order data fields here
         };
         console.log("this is my passing addressId", orderData);
@@ -1464,4 +1650,179 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+<script>
+    // document.getElementById('apply-discount').addEventListener('click', async () => {
+    //     const couponCode = document.getElementById('coupon-code').value.trim();
+    //     const subtotalElement = document.getElementById('subtotal');
+    //     const totalElement = document.getElementById('total');
+    //     const discountAmountElement = document.getElementById('discountAmount');
+
+    //     if (!couponCode) {
+    //         alert('Please enter a coupon code.');
+    //         return;
+    //     }
+
+    //     try {
+    //         const response = await fetch('/user/applyCoupon', { // Adjust the URL to your endpoint
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ couponCode }),
+    //         });
+
+    //         const result = await response.json();
+
+    //         if (response.ok) {
+    //             const { discount, newTotal } = result;
+
+    //             // Update UI with new total
+
+    //             document.getElementById('discount').textContent = `₹${discount.toFixed(2)}`;
+
+    //             totalElement.textContent = newTotal.toFixed(2);
+
+
+    //             // Save discount amount to hidden input field
+    //             discountAmountElement.value = discount.toFixed(2);
+
+    //             // Log discountAmountElement for debugging
+    //             console.log("Discount Amount Element Value: ", discountAmountElement.value);
+                                
+
+
+    //             Swal.fire({
+    //                 title: 'Success',
+    //                 text: `Coupon applied! Discount: ₹${discount.toFixed(2)}`,
+    //                 icon: 'success',
+    //                 confirmButtonText: 'OK'
+    //             });
+    //         } else {
+    //             Swal.fire({
+    //                 title: 'Error',
+    //                 text: result.message,
+    //                 icon: 'error',
+    //                 confirmButtonText: 'OK'
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error during coupon application:', error);
+    //         Swal.fire({
+    //             title: 'Error',
+    //             text: 'An error occurred. Please try again.',
+    //             icon: 'error',
+    //             confirmButtonText: 'OK'
+    //         });
+    //     }
+    // });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+    const toggleButton = document.getElementById('toggle-coupons');
+    const couponsSection = document.getElementById('available-coupons');
+    const couponsList = document.getElementById('coupons-list');
+
+    // Toggle coupons visibility
+    toggleButton.addEventListener('click', () => {
+        if (couponsSection.style.display === 'none' || couponsSection.style.display === '') {
+            couponsSection.style.display = 'block';
+            toggleButton.textContent = 'Hide Available Coupons';
+        } else {
+            couponsSection.style.display = 'none';
+            toggleButton.textContent = 'Show Available Coupons';
+        }
+    });
+
+    // Fetch available coupons
+    try {
+        const response = await fetch('/user/getCoupons');
+
+        console.log("This is the response", response);
+        
+        const coupons = await response.json();
+
+        if (response.ok) {
+            coupons.forEach(coupon => {
+                // Convert expireDate to a Date object
+                const expireDate = new Date(coupon.expireDate);
+                
+                // Format the date to 'YYYY-MM-DD'
+                const formattedDate = expireDate.toLocaleDateString();
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>${coupon.couponCode} - ${coupon.discount}% off (Expires: ${formattedDate})</span>
+                    <button type="button" class="apply-coupon" data-code="${coupon.couponCode}">Apply</button>
+                `;
+                couponsList.appendChild(listItem);
+            });
+
+            // Add event listeners to all Apply buttons
+            document.querySelectorAll('.apply-coupon').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.getElementById('coupon-code').value = button.getAttribute('data-code');
+                });
+            });
+        } else {
+            console.error('Failed to fetch coupons:', coupons.message);
+        }
+    } catch (error) {
+        console.error('Error fetching coupons:', error);
+    }
+
+    // Apply coupon
+    document.getElementById('apply-discount').addEventListener('click', async () => {
+        const couponCode = document.getElementById('coupon-code').value.trim();
+        const subtotalElement = document.getElementById('subtotal');
+        const totalElement = document.getElementById('total');
+        const discountAmountElement = document.getElementById('discountAmount');
+
+        if (!couponCode) {
+            alert('Please enter a coupon code.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/user/applyCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ couponCode }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                const { discount, newTotal } = result;
+
+                document.getElementById('discount').textContent = `₹${discount.toFixed(2)}`;
+                totalElement.textContent = newTotal.toFixed(2);
+                discountAmountElement.value = discount.toFixed(2);
+
+                Swal.fire({
+                    title: 'Success',
+                    text: `Coupon applied! Discount: ₹${discount.toFixed(2)}`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: result.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            console.error('Error during coupon application:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+});
+</script>
     <%- include('../layouts/footer') %>

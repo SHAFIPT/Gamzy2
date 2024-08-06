@@ -9,6 +9,10 @@ const nocache = require('nocache')
 const upload = require('../middlewares/multer')
 const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
 const auth = require('../middlewares/adminmiddleware');
+const methodOverride = require('method-override');
+
+// In your Express app setup
+admin_route.use(methodOverride('_method'));
  
 admin_route.use(nocache());
 
@@ -88,7 +92,12 @@ admin_route.post('/update-status',adminOrderController.updateStatus);
 //couponManagement
 admin_route.get('/couponManage',adminCouponController.loadCouponPage);
 admin_route.get('/addCoupon',adminCouponController.addCoupon);
-admin_route.post('/addCoupon',adminCouponController.addCouponPage)
+admin_route.post('/addCoupon',adminCouponController.addCouponPage);
+//editCoupon
+admin_route.get('/editCoupon/:id',adminCouponController.loadEditPage);
+admin_route.post('/editCoupon/:id',adminCouponController.updateCoupon);
+//deleteCoupon
+admin_route.delete('/deleteCoupon/:id',adminCouponController.removeCoupon)
  
 
 module.exports = admin_route;

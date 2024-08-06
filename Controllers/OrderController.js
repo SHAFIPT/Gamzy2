@@ -35,6 +35,9 @@ const loadOrderPage = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
 const orderSummory = async (req, res) => {
     try {
         const userId = req.session.user;
@@ -49,7 +52,10 @@ const orderSummory = async (req, res) => {
             return res.status(404).json({ success: false, message: "Cart not found" });
         }
 
-        const { PaymentMethod, addressId } = req.body;
+        const { PaymentMethod, addressId, discountAmount } = req.body;
+
+        console.log("This is the discountAmount",discountAmount);
+        
 
         console.log('This is my PaymentMethod', PaymentMethod);
         console.log("This is my addressId", addressId);
@@ -89,13 +95,19 @@ const orderSummory = async (req, res) => {
             await product.save();
         }
 
-        const totalAmount = products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const orderSubtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+        // Determine shipping charge
+        const shippingCharge = orderSubtotal < 500 ? 50 : 0;
+
+        const totalAmount = orderSubtotal - discountAmount + shippingCharge;  // Adding shipping charge and subtracting discount
 
         const orderData = { 
             userId,
             orderId: orderId,  // Generating a new unique order ID
             PaymentMethod,
-            shippingCharge: 50,  // Replace with actual shipping charge
+            shippingCharge,  // Replace with actual shipping charge
+            discountAmount, // Add this line
             address: {
                 name: `${address.Firstname} ${address.Lastname}`,
                 number: address.number,
@@ -106,7 +118,7 @@ const orderSummory = async (req, res) => {
                 Landmark: address.Landmark,
             },
             products,
-            totalAmount: totalAmount + 50,  // Adding shipping charge to total amount
+            totalAmount,
             orderDate: new Date()
         };
 

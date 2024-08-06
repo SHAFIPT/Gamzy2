@@ -7,7 +7,10 @@ const orderSchema = new Schema({
         type : String,
         required : true
     },
-
+    discountAmount: {
+        type: Number,
+        default: 0
+    },
     PaymentMethod : {
         type : String,
         required : true

@@ -221,6 +221,11 @@
   background-color: #555; /* Darker background color on hover */
 }
 
+
+
+
+
+
 </style>
 
 <!-- <script>
@@ -399,7 +404,7 @@
                     <a href="about.html" class="dropdown-item">About</a>
                   </li>
                   <li>
-                    <a href="blog.html" class="dropdown-item">Blog</a>
+                    <a href="/user/home2" class="dropdown-item">Home2</a>
                   </li>
                   <li>
                     <a href="cart.html" class="dropdown-item">Cart</a>
@@ -480,111 +485,46 @@
   
   <section id="mobile-products" class="product-store position-relative padding-large no-padding-top">
     <div class="container">
-      <div class="row">
-        <div class="display-header d-flex justify-content-between pb-3">
-          <h2 class="display-7 text-dark text-uppercase">Gameing Products</h2>
-          <div class="btn-right">
-            <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
-          </div>
+        <div class="row">
+            <div class="display-header d-flex justify-content-between pb-3">
+                <h2 class="display-7 text-dark text-uppercase">Gaming Products</h2>
+                <div class="btn-right">
+                    <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
+                </div>
+            </div>
+            <div class="swiper product-swiper">
+                <div class="swiper-wrapper">
+                    <% if (products && products.length > 0) { %>
+                        <% products.forEach(product => { %>
+                            <div class="swiper-slide">
+                                <div class="product-card position-relative">
+                                    <div class="image-holder">
+                                        <img src="/uploads/<%= product.variants[0].images[0] %>" alt="product-item" class="img-fluid">
+                                    </div>
+                                    <div class="cart-concern position-absolute">
+                                        <div class="cart-button d-flex">
+                                            <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
+                                        <h3 class="card-title text-uppercase">
+                                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.productname %></a>
+                                        </h3>
+                                        <span class="item-price text-primary">$<%= product.price %></span>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No products available at the moment.</p>
+                    <% } %>
+                </div>
+            </div>
         </div>
-        <div class="swiper product-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/Ninja Dragons G9800 LED Gaming Headset - Blue.jpg" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">HeadSet</a>
-                  </h3>
-                  <span class="item-price text-primary">$980</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/Speedlink - hochwertiges, preiswertes PC-Zubehör für Gaming und Office_.png" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">Mouse</a>
-                  </h3>
-                  <span class="item-price text-primary">$1100</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/Redragon Kumara K552-RGB LED Backlit USB Mechanical Gaming Keyboard Without Numlock Keys, Bla___.png" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">KeyBoard</a>
-                  </h3>
-                  <span class="item-price text-primary">$780</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/download (4).png" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">Controller</a>
-                  </h3>
-                  <span class="item-price text-primary">$1500</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/PunnkFunnk CW902 Wired USB Gaming Mouse with RGB, 7 Programmable Buttons, Ergonomic USB Compu___.png" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">Mouse</a>
-                  </h3>
-                  <span class="item-price text-primary">$1300</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="swiper-pagination position-absolute text-center"></div>
-  </section>
+</section>
+
   <section id="smart-watches" class="product-store padding-large position-relative">
     <div class="container">
       <div class="row">

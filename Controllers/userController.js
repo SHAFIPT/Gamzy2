@@ -1,4 +1,5 @@
 const User = require('../model/UserModel');
+const Product = require("../model/productModel")
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
@@ -46,24 +47,23 @@ const generateOTP = () => {
 
 const loadhome = async (req, res) => {
     try {
-        console.log(req.session.user);
-        if (req.session.user){
-            const userId = req.session.user;
-        const user = await User.findById(userId);
-        // console.log('this is my user :',user);
-            res.render('home',{user})
-        } else {
-            res.render('home',{
-                user: null
-            })
-        }
-        
+        const userId = req.session.user;
+        let user = null;
+        let products = []; // Initialize products
 
+        if (userId) {
+            user = await User.findById(userId);
+        }
+
+        // Fetch products if user is logged in
+        products = await Product.find({ is_Listed: true }).limit(5); // Adjust the query as needed
+
+        res.render('home', { user, products });
     } catch (error) {
         console.log(error);
-    } 
-}; 
- 
+        res.status(500).send('Internal Server Error');
+    }
+};
 // const loadlogin = async (req, res) => {
 //     try {
 

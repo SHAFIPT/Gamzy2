@@ -224,11 +224,13 @@
             <div class="row align-items-center">
                 <div class="col-md-6 text-left">
                     <a href="/user/ShopPage" class="btn btn-primary btn-lg mr-2 custom-btn">Continue Shopping</a>
-                    <a href="/download-invoice/<%= order.orderId %>" class="btn btn-secondary btn-lg custom-btn">Download Invoice</a>
+                    <a href="/user/Userorders" class="btn btn-secondary btn-lg custom-btn">Order Details</a>
                 </div>
                 <div class="col-md-6 text-right">
                     <h6>Subtotal: <span>₹<%= order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0).toFixed(2) %></span></h6>
+                    <h6>Discount: <span>₹<%= order.discountAmount.toFixed(2) %></span></h6> <!-- Add this line -->
                     <h6>Shipping Charge: <span>₹<%= order.shippingCharge.toFixed(2) %></span></h6>
+                    
                     <h3 class="mt-4">Grand Total: <span>₹<%= order.totalAmount.toFixed(2) %></span></h3>
                 </div>
             </div>

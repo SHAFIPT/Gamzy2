@@ -15,7 +15,8 @@ const userListcontroller = require('../Controllers/Userlistcontroller');
 const cheakoutController = require('../Controllers/cheakoutController');
 const myaccountController = require('../Controllers/myAccountcontroller');
 const orderController     = require('../Controllers/OrderController');
-const productsController = require('../Controllers/userproductShowcontroller')
+const productsController = require('../Controllers/userproductShowcontroller');
+const userCouponController = require('../Controllers/usercouponController')
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 
@@ -121,6 +122,15 @@ router.get('/headSet',productsController.loadHeadsetPage);
 router.get('/mouse',productsController.loadMousePage);
 router.get('/controller',productsController.loadControllerPage)
 
+
+//applyCoupon
+router.post('/applyCoupon',userCouponController.applyCoupon);
+router.get('/getCoupons',userCouponController.getCoupons)
+
+
+
+
+router.get('/home2',userCouponController.loadHomePage)
 
 
 

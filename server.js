@@ -29,7 +29,7 @@ app.get('/', (req,res)=>{res.redirect('/user')});
 // app.get('/GoogleAuth',    
 //     passport.authenticate('google',{   
 //         failureRedirect : '/failure'
-//     }  
+//     }   
 // ));         
        
    
