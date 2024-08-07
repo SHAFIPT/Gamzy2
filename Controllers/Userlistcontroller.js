@@ -1,7 +1,8 @@
 const Product = require('../model/productModel')
 const Category = require('../model/catogoriesModel');
 const Cart = require('../model/cartShema');
-const  Order = require("../model/ordreModel")
+const  Order = require("../model/ordreModel");
+const  Offer = require('../model/offerModal')
 
 
 const truncateDescription = (description, maxLength) => {
@@ -10,10 +11,11 @@ const truncateDescription = (description, maxLength) => {
     }
     return description;
 };
+
 const LoadShopage = async (req, res) => {
     try {
         // Extract query parameters
-        const { price_from, price_to, category, subcategory, sort, search,  page = 1, limit = 6 } = req.query;
+        const { price_from, price_to, category, subcategory, sort, search, brand,  page = 1, limit = 9 } = req.query;
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
@@ -37,6 +39,10 @@ const LoadShopage = async (req, res) => {
 
         if (subcategory) {
             query.subCategory = subcategory;
+        }
+
+        if (brand) {
+            query.brand = brand;
         }
 
       // Build sorting object
@@ -68,11 +74,18 @@ const LoadShopage = async (req, res) => {
         // Fetch all categories and subcategories
         const categories = await Category.find({ is_listed: true });
         const subcategories = await Product.distinct('subCategory'); // Get unique subcategories from products
+        const brands = await Product.distinct('brand'); // Get unique brands from products
+         // Fetch active offers
+         const offers = await Offer.find({ active: true });
+
+         console.log("this my offers" , offers);
+         
 
         res.render('Shopage', {
             products,
             categories,
             subcategories,
+            brands,
             price_from,
             price_to,
             sort,
@@ -80,7 +93,9 @@ const LoadShopage = async (req, res) => {
             subcategory,
             currentPage: pageNumber,
             totalPages,
+            brand,
             search,
+            offers, // Pass offers to the template
             truncateDescription
         });
 

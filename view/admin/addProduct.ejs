@@ -150,6 +150,22 @@
         </select>
         <div class="error"></div>
     </div>
+  
+    <div class="form-group mb-3 col-xs-12 col-sm-12">
+      <label for="brand">Select Brand</label>
+      <select id="brand" name="brand" class="form-control validate" required>
+          <option value="">Select Brand</option>
+          <option value="Sony">Sony</option>
+          <option value="Redragon">Redragon</option>
+          <option value="Boat">Boat</option>
+          <option value="Zebronics">Zebronics</option>
+          <option value="Portronics">Portronics</option>
+          <option value="Logitech">Logitech</option>
+          <option value="ASUS">ASUS</option>
+          <option value="ASUS">XBOX</option>
+      </select>
+      <div class="error"></div>
+  </div>
 </div>
                <div class="form-group mb-3">
                 <label for="color">Color</label>
@@ -336,6 +352,7 @@
   const description = document.getElementById('description');
   const category = document.getElementById('category');
   const subCategory = document.getElementById('Sub-Category');
+  const brand = document.getElementById('brand'); // New field
   const price = document.getElementById('price');
   const color = document.getElementById('color');
   const quantity = document.getElementById('Quantity');
@@ -353,6 +370,7 @@
         formData.append('description', description.value.trim());
         formData.append('category', category.value);
         formData.append('subCategory', subCategory.value);
+        formData.append('brand', brand.value); // Added brand field
         formData.append('price', price.value.trim());
         formData.append('color', color.value.trim());
         formData.append('quantity', quantity.value.trim());
@@ -407,6 +425,7 @@
         description.parentElement.classList.contains('success') &&
         category.parentElement.classList.contains('success') &&
         subCategory.parentElement.classList.contains('success') &&
+        brand.parentElement.classList.contains('success') && // Added validation for brand
         price.parentElement.classList.contains('success') &&
         quantity.parentElement.classList.contains('success')
         // stock.parentElement.classList.contains('success');
@@ -435,7 +454,7 @@
 };
 
   const isValidUsername = (productName) => {
-    const re = /^[a-zA-Z0-9-+()]*$/;
+    const re = /^[a-zA-Z0-9-+()]/;
     return re.test(productName);
 
     const hasAlphanumeric = re.test(name);
@@ -456,6 +475,7 @@
     const descriptionValue = description.value.trim();
     const categoryValue = category.value;
     const subCategoryValue = subCategory.value;
+    const brandValue = brand.value; // New field
     const priceValue = price.value.trim();
     const quantityValue = quantity.value.trim();
     // const stockValue = stock.value.trim();
@@ -485,6 +505,14 @@
     } else {
         setSuccess(subCategory);
     }
+
+
+    if (brandValue === '' || brandValue === 'Select Brand') { // Added validation for brand
+        setError(brand, 'Brand is required');
+    } else {
+        setSuccess(brand);
+    }
+
 
     if (priceValue === '') {
         setError(price, 'Price is required');

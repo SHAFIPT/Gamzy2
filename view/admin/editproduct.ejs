@@ -158,6 +158,22 @@
                     </select>
                     <div class="error"></div>
                 </div>
+
+                <div class="form-group mb-3 col-xs-12 col-sm-12">
+                  <label for="brand">Select Brand</label>
+                  <select id="brand" name="brand" class="form-control validate" required>
+                      <option value="">Select Brand</option>
+                      <option value="Sony" <%= product.brand === 'Sony' ? 'selected' : '' %>>Sony</option>
+                      <option value="Redragon" <%= product.brand === 'Redragon' ? 'selected' : '' %>>Redragon</option>
+                      <option value="Boat" <%= product.brand === 'Boat' ? 'selected' : '' %>>Boat</option>
+                      <option value="Zebronics" <%= product.brand === 'Zebronics' ? 'selected' : '' %>>Zebronics</option>
+                      <option value="Portronics" <%= product.brand === 'Portronics' ? 'selected' : '' %>>Portronics</option>
+                      <option value="Logitech" <%= product.brand === 'Logitech' ? 'selected' : '' %>>Logitech</option>
+                      <option value="ASUS" <%= product.brand === 'ASUS' ? 'selected' : '' %>>ASUS</option>
+                      <option value="XBOX" <%= product.brand === 'XBOX' ? 'selected' : '' %>>XBOX</option>
+                  </select>
+                  <div class="error"></div>
+              </div>
               
                   </div>
 
@@ -340,6 +356,7 @@
       const description = document.getElementById('description');
       const category = document.getElementById('category');
       const subCategory = document.getElementById('Sub-Category');
+      const brand = document.getElementById('brand'); // New field
       const price = document.getElementById('price');
       const quantity = document.getElementById('quantity');
 
@@ -359,7 +376,8 @@
           formData.append('name', productName.value.trim());
           formData.append('description', description.value.trim());
           formData.append('category', category.value);
-          formData.append('subCategory', subCategory.value); // Include subCategory
+          formData.append('subCategory', subCategory.value);    
+          formData.append('brand', brand.value);
           formData.append('price', price.value.trim());
           formData.append('quantity', quantity.value.trim());
 
@@ -421,6 +439,7 @@
           description.parentElement.classList.contains('success') &&
           category.parentElement.classList.contains('success') &&
           subCategory.parentElement.classList.contains('success') && // Validate subCategory
+          brand.parentElement.classList.contains('success') && // Added validation for brand
           price.parentElement.classList.contains('success') &&
           quantity.parentElement.classList.contains('success')
       };
@@ -448,7 +467,7 @@
       };
 
       const isValidUsername = (productName) => {
-        const re = /^[a-zA-Z0-9-+()]*$/;
+        const re = /^[a-zA-Z0-9-+()]/;
         return re.test(productName);
         const hasAlphanumeric = re.test(name);
     // Check if the trimmed name has non-zero length
@@ -468,6 +487,7 @@
         const descriptionValue = description.value.trim();
         const categoryValue = category.value;
         const subCategoryValue = subCategory.value; // Get subCategory value
+        const brandValue = brand.value; // New field
         const priceValue = price.value.trim();
         const quantityValue = quantity.value.trim();
 
@@ -496,6 +516,13 @@
         } else {
             setSuccess(subCategory);
         }
+
+        if (brandValue === '' || brandValue === 'Select Brand') { // Added validation for brand
+        setError(brand, 'Brand is required');
+        } else {
+            setSuccess(brand);
+        }
+
 
         if (priceValue === '') {
           setError(price, 'Price is required');

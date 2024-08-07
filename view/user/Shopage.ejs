@@ -361,7 +361,7 @@
   display: block;
 }
 
-.offer-badge {
+.outofstock-badge {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -429,6 +429,130 @@
     padding: 15px;
     background-color: #f9f9f9;
 }
+
+
+
+
+
+
+  
+  .offer-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6347; /* Tomato color */
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-radius: 5px;
+    z-index: 10;
+  }
+
+  .out-of-stock-badge {
+    background-color: #dc3545; /* Bootstrap danger color */
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .img-prod:hover .overlay {
+    opacity: 1;
+  }
+
+  .product-name a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .product-name a:hover {
+    color: #ff6347; /* Tomato color */
+  }
+
+  .bottom-area {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-to-cart {
+    background-color: #28a745; /* Bootstrap success color */
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    flex: 1;
+    margin-right: 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-to-cart:hover {
+    background-color: #218838; /* Darker green */
+  }
+
+  .buy-now {
+    background-color: #ffc107; /* Bootstrap warning color */
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .buy-now:hover {
+    background-color: #e0a800; /* Darker yellow */
+  }
+
+  .out-of-stock-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: not-allowed;
+  }
+
+
+
+
+  /* General style for offer badges */
+.offer-badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ffd700; /* Gold color */
+    color: black;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow */
+    text-transform: uppercase; /* Makes text uppercase */
+}
+
+/* Style for out-of-stock badge */
+.out-of-stock-btn {
+    background-color: red;
+    color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase; /* Makes text uppercase */
+}
+
 </style>
 
 </head>
@@ -498,9 +622,15 @@
                     <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
                     <div class="overlay"></div>
                     <% if (product.variants[0].quantity < 1) { %>
-                      <!-- Offer Badge -->
-                      <div class="offer-badge">Out of stock</div>
-                    <% } %>
+                                <div class="offer-badge">Out of stock</div>
+                            <% } else { %>
+                                <% offers.forEach(offer => { %>
+                                  <% console.log("Checking offer:", offer); %>
+                                    <% if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) { %>
+                                        <div class="offer-badges"><%= offer.name %> - <%= offer.discount %>% Off</div>
+                                    <% } %>
+                                <% }) %>
+                            <% } %>
                   </a>
                   
                   <div class="text py-3 pb-4 px-3">
@@ -509,11 +639,10 @@
                         <span><%= product.category %></span>
                       </div>
                     </div> 
-                    <h3><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.name %></a></h3>
+                    <h3 class="product-name"><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= truncateDescription(product.productname,70) %></a></h3>
                     <div class="pricing">
-                      <p class="price"><span><%= product.productname %></span></p>
-                      <p class="price"><span>₹<%= product.price %></span></p>
-                      <p class="price"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
+                        <p class="price product-price"><span>₹<%= product.price %></span></p>
+                        <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
                     </div>
                     <p class="bottom-area d-flex px-3">
             
@@ -557,8 +686,8 @@
                   <span class="dropdown-icon" onclick="toggleDropdown()">&#9660;</span>
                 </h2>
                 <div id="subcategory-dropdown" class="dropdown-content">
-                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">Wired</a>
-                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">Wireless</a>
+                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>">Wired</a>
+                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>">Wireless</a>
                 </div>
               </div>
   
@@ -569,11 +698,11 @@
               <div class="sidebar-box-2">
                 <h2 class="heading">Sort By</h2>
                 <div class="form-group">
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc" class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc" class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc" class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc" class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
-              </div>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc&brand=<%= brand %>" class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc&brand=<%= brand %>" class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc&brand=<%= brand %>" class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc&brand=<%= brand %>" class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
+                </div>
               </div>
             </div>
   
@@ -584,7 +713,7 @@
                   <ul class="list">
                     <% categories.forEach(categoryItem => { %>
                       <li>
-                        <a href="/user/ShopPage?category=<%= categoryItem._id %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
+                        <a href="/user/ShopPage?category=<%= categoryItem._id %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>">
                           <%= categoryItem.name %>
                         </a>
                       </li>
@@ -634,7 +763,26 @@
               <div class="col-md-12">
                   <button type="submit" class="btn btn-primary">Filter</button>
               </div>
+
+
+
           </div>
+      </div>
+
+       <!-- Brand Filter -->
+       <div class="sidebar-box-2">
+        <h2 class="heading">Brands</h2>
+        <div class="widgets_inner">
+          <ul class="list">
+            <% brands.forEach(brandItem => { %>
+              <li>
+                <a href="/user/ShopPage?brand=<%= brandItem %>&category=<%= category %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
+                  <%= brandItem %>
+                </a>
+              </li>
+            <% }); %>
+          </ul>
+        </div>
       </div>
   
             </div>

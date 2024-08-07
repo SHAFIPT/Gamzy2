@@ -4,7 +4,8 @@ const path = require('path')
 const Admincontroller = require('../Controllers/Admincontroller')
 const Productcontroller = require('../Controllers/ProductController');
 const adminOrderController = require('../Controllers/AdminOrderController');
-const adminCouponController = require("../Controllers/AdmincouponController")
+const adminCouponController = require("../Controllers/AdmincouponController");
+const adminOfferController = require('../Controllers/AdminOfferController')
 const nocache = require('nocache') 
 const upload = require('../middlewares/multer')
 const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
@@ -98,6 +99,20 @@ admin_route.get('/editCoupon/:id',adminCouponController.loadEditPage);
 admin_route.post('/editCoupon/:id',adminCouponController.updateCoupon);
 //deleteCoupon
 admin_route.delete('/deleteCoupon/:id',adminCouponController.removeCoupon)
+
+
+//OfferManagement
+admin_route.get('/offerManage',adminOfferController.loadOfferPage);
+admin_route.get('/addOffer',adminOfferController.addOffer);
+admin_route.post('/addOffer',adminOfferController.addOfferDetails)
+admin_route.post('/toggleOfferStatus/:id',adminOfferController.offerStatus)
+admin_route.delete('/deleteOffer/:id',adminOfferController.deleteOffer);
+//editOffer
+admin_route.get('/editOffer/:id',adminOfferController.loadOfferEdit)
+admin_route.put('/editOffer/:id',adminOfferController.editOffer)
+
+admin_route.get('/getProducts',adminOfferController.getProducts);
+admin_route.get('/getCategories',adminOfferController.getCategories)
  
 
 module.exports = admin_route;

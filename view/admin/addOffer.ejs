@@ -1,0 +1,457 @@
+<%- include('../layouts/adminheader') %>
+</head>
+<style>
+  .form-group textarea.form-control {
+    /* background-color: #444; */
+    border: none;
+    color: #fff;
+    /* Adjust height and font size as needed */
+    height: 150px;
+    /* Example height */
+    font-size: 14px;
+    /* Example font size */
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .tm-footer {
+    padding: 1rem;
+  }
+
+  .tm-footer a {
+    color: #007bff;
+  }
+
+  /* user profile */
+  .error {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+  }
+
+  .success input {
+    border-color: green;
+  }
+
+  .error input {
+    border-color: red;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    z-index: 1000;
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+
+
+
+  /* Ensures the select element takes full width */
+.form-group select.form-control {
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding and borders are included in the width */
+}
+
+/* Optional: Increase font size for better readability */
+.form-group select.form-control {
+  font-size: 16px; /* Adjust as needed */
+}
+
+/* Optional: Adjust the height of the select dropdown */
+.form-group select.form-control {
+  height: auto; /* Ensure height adjusts to content */
+  padding: 10px; /* Adjust padding for better appearance */
+}
+
+/* Optional: Handle overflow to ensure text is not cut off */
+.form-group select.form-control {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+
+#selection-container select {
+  height: 150px; /* Set a fixed height */
+  overflow-y: scroll; /* Enable vertical scrolling */
+}
+
+
+/* Additional styling for checkboxes */
+.form-check {
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+  margin-right: 0.5rem;
+}
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-xl">
+  <div class="container h-100">
+    <a class="navbar-brand" href="index.html">
+      <h1 class="tm-site-title mb-0">MANAGE OFFER</h1>
+    </a>
+    <ul class="breadcrumb mt-2">
+      <li class="breadcrumb-item"><a href="/admin/Products">Admin &gt;&gt;</a>Dashboard</li>
+    </ul>
+    <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars tm-nav-icon"></i>
+    </button>
+    <div class="col-lg-3 col-md-6 ms-auto">
+      <form action="">
+        <!-- <input type="text" placeholder="Search..." class="form-control" id="searchInput" name="search" /> -->
+      </form>
+    </div>
+  </div>
+</nav>
+<div class="container tm-mt-big tm-mb-big">
+    <div class="row">
+      <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+          <div class="row">
+            <div class="col-12">
+              <h2 class="tm-block-title d-inline-block">Add Offer</h2>
+            </div>
+          </div>
+          <div class="row tm-edit-product-row">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+              <form action="/admin/addOffer" class="tm-edit-product-form" id="form" method="post">
+                <div class="form-group mb-3">
+                  <label for="name">Offer Name</label>
+                  <input id="name" name="name" type="text" class="form-control validate" required />
+                  <div class="error"></div> <!-- Error display -->
+                </div>
+                <div class="form-group mb-3">
+                  <label for="activation-date">Activation Date</label>
+                  <input id="activation-date" name="activation-date" type="date" class="form-control validate" required />
+                  <div class="error"></div> <!-- Error display -->
+                </div>
+                <div class="form-group mb-3">
+                  <label for="expire-date">Expire Date</label>
+                  <input id="expire-date" name="expire-date" type="date" class="form-control validate" required />
+                  <div class="error"></div> <!-- Error display -->
+                </div>
+                <div class="form-group mb-3">
+                  <label for="discount-amount">Discount Amount (%)</label>
+                  <input id="discount-amount" name="discount-amount" type="number" step="0.01" class="form-control validate" required />
+                  <div class="error"></div> <!-- Error display -->
+                </div>
+                <div class="form-group mb-3">
+                    <label for="offer-type">Offer Type</label>
+                    <select id="offer-type" name="offer-type" class="form-control validate" required>
+                        <option value="">Select Type</option>
+                        <option value="product">Products</option>
+                        <option value="category">Category</option>
+                    </select>
+                    <div class="error"></div>
+                  </div>
+                  <div class="form-group mb-3" id="selection-container">
+                    <!-- Options will be loaded here based on offer type selection -->
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <button type="submit" class="btn btn-primary btn-block text-uppercase">Submit</button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-primary btn-block text-uppercase" onclick="window.history.back();">Back</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+ document.getElementById('offer-type').addEventListener('change', async function() {
+    const offerType = this.value;
+    const selectionContainer = document.getElementById('selection-container');
+    
+    selectionContainer.innerHTML = ''; // Clear previous options
+
+    let selectedProducts = [];
+    let selectedCategories = [];
+    
+    if (offerType === 'product') {
+        const response = await fetch('/admin/getProducts');
+        const products = await response.json();
+
+        // Create a "Select All" checkbox
+        const selectAllCheckbox = document.createElement('input');
+        selectAllCheckbox.type = 'checkbox';
+        selectAllCheckbox.id = 'select-all-products';
+        selectAllCheckbox.className = 'form-check-input';
+        const selectAllLabel = document.createElement('label');
+        selectAllLabel.htmlFor = 'select-all-products';
+        selectAllLabel.textContent = 'Select All Products';
+        selectAllLabel.className = 'form-check-label';
+        
+        selectionContainer.appendChild(selectAllCheckbox);
+        selectionContainer.appendChild(selectAllLabel);
+        selectionContainer.appendChild(document.createElement('br'));
+
+        // Create a container for product checkboxes
+        const productCheckboxContainer = document.createElement('div');
+        productCheckboxContainer.id = 'product-checkbox-container';
+        
+        products.forEach(product => {
+            const checkboxContainer = document.createElement('div');
+            checkboxContainer.className = 'form-check';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'form-check-input';
+            checkbox.name = 'applicableToProducts[]'; // Array notation for multiple selections
+            checkbox.value = product._id;
+            checkbox.id = `product-${product._id}`;
+            
+            if (selectedProducts.includes(product._id)) {
+                checkbox.checked = true;
+            }
+
+            const label = document.createElement('label');
+            label.htmlFor = `product-${product._id}`;
+            label.textContent = product.productname;
+            label.className = 'form-check-label';
+            
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+            productCheckboxContainer.appendChild(checkboxContainer);
+        });
+        
+        selectionContainer.appendChild(productCheckboxContainer);
+
+        // Handle "Select All" checkbox
+        selectAllCheckbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('#product-checkbox-container input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+        });
+
+    } else if (offerType === 'category') {
+        const response = await fetch('/admin/getCategories');
+        const categories = await response.json();
+
+        // Create a "Select All" checkbox
+        const selectAllCheckbox = document.createElement('input');
+        selectAllCheckbox.type = 'checkbox';
+        selectAllCheckbox.id = 'select-all-categories';
+        selectAllCheckbox.className = 'form-check-input';
+        const selectAllLabel = document.createElement('label');
+        selectAllLabel.htmlFor = 'select-all-categories';
+        selectAllLabel.textContent = 'Select All Categories';
+        selectAllLabel.className = 'form-check-label';
+        
+        selectionContainer.appendChild(selectAllCheckbox);
+        selectionContainer.appendChild(selectAllLabel);
+        selectionContainer.appendChild(document.createElement('br'));
+
+        // Create a container for category checkboxes
+        const categoryCheckboxContainer = document.createElement('div');
+        categoryCheckboxContainer.id = 'category-checkbox-container';
+        
+        categories.forEach(category => {
+            const checkboxContainer = document.createElement('div');
+            checkboxContainer.className = 'form-check';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'form-check-input';
+            checkbox.name = 'applicableToCategories[]'; // Array notation for multiple selections
+            checkbox.value = category._id;
+            checkbox.id = `category-${category._id}`;
+            
+            if (selectedCategories.includes(category._id)) {
+                checkbox.checked = true;
+            }
+
+            const label = document.createElement('label');
+            label.htmlFor = `category-${category._id}`;
+            label.textContent = category.name;
+            label.className = 'form-check-label';
+            
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+            categoryCheckboxContainer.appendChild(checkboxContainer);
+        });
+        
+        selectionContainer.appendChild(categoryCheckboxContainer);
+
+        // Handle "Select All" checkbox
+        selectAllCheckbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('#category-checkbox-container input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+        });
+    }
+});
+
+  </script>
+<script>
+  $(document).ready(function() {
+    const form = document.getElementById('form');
+    const name = document.getElementById('name');
+    const activationDate = document.getElementById('activation-date');
+    const expireDate = document.getElementById('expire-date');
+    const discountAmount = document.getElementById('discount-amount');
+    const offerTypeBtn = document.getElementById('offer-type-btn');
+    const offerTypeMenu = document.getElementById('offer-type-menu');
+    const offerTypeInput = document.getElementById('offer-type');
+
+    form.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  validateInputs();
+
+  if (isValid()) {
+    // Collect selected products or categories based on offer type
+    const offerType = offerTypeInput.value;
+    const selectedItems = offerType === 'product'
+      ? Array.from(document.querySelectorAll('#product-checkbox-container input:checked')).map(checkbox => checkbox.value)
+      : Array.from(document.querySelectorAll('#category-checkbox-container input:checked')).map(checkbox => checkbox.value);
+
+    const formData = {
+      name: name.value.trim(),
+      activationDate: activationDate.value,
+      expireDate: expireDate.value,
+      discountAmount: discountAmount.value,
+      offerType: offerTypeInput.value,
+      applicableTo: selectedItems  // Add selected items here
+    };
+
+    try {
+      const response = await fetch('/admin/addOffer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success',
+          text: result.message,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = '/admin/offerManage'; // Adjust the redirect URL as needed
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: result.message,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    } catch (error) {
+      console.error('Error during fetch:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'An error occurred. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+});
+
+    const isValid = () => {
+      return name.parentElement.classList.contains('success') &&
+        activationDate.parentElement.classList.contains('success') &&
+        expireDate.parentElement.classList.contains('success') &&
+        discountAmount.parentElement.classList.contains('success') &&
+        offerTypeInput.value !== '';
+    };
+
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.error');
+
+      errorDisplay.innerText = message;
+      inputControl.classList.add('error');
+      inputControl.classList.remove('success');
+    };
+
+    const setSuccess = element => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.error');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('success');
+      inputControl.classList.remove('error');
+    };
+
+    const validateInputs = () => {
+      const nameValue = name.value.trim();
+      const activationDateValue = activationDate.value.trim();
+      const expireDateValue = expireDate.value.trim();
+      const discountAmountValue = discountAmount.value.trim();
+
+      if (nameValue === '') {
+        setError(name, 'Offer name is required');
+      } else {
+        setSuccess(name);
+      }
+
+      if (activationDateValue === '') {
+        setError(activationDate, 'Activation date is required');
+      } else {
+        setSuccess(activationDate);
+      }
+
+      if (expireDateValue === '') {
+        setError(expireDate, 'Expire date is required');
+      } else {
+        setSuccess(expireDate);
+      }
+
+      if (discountAmountValue === '' || isNaN(discountAmountValue)) {
+        setError(discountAmount, 'Discount amount is required and must be a number');
+      } else {
+        setSuccess(discountAmount);
+      }
+    };
+
+    $('.dropdown-item').click(function() {
+      const value = $(this).data('value');
+      offerTypeBtn.textContent = $(this).text();
+      offerTypeInput.value = value;
+      $('#offer-type-menu').removeClass('show');
+    });
+
+    $(document).click(function(event) {
+      if (!$(event.target).closest('.dropdown').length) {
+        $('#offer-type-menu').removeClass('show');
+      }
+    });
+
+    offerTypeBtn.addEventListener('click', () => {
+      $('#offer-type-menu').toggleClass('show');
+    });
+  });
+</script>
+
+<%- include('../layouts/footer') %>

@@ -107,7 +107,8 @@
                             <th scope="col">Image</th>
                             <th scope="col">Product Name</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Subcategory</th> <!-- New Subcategory Column -->
+                            <th scope="col">Subcategory</th>
+                            <th scope="col">Brand</th> <!-- New Brand Column -->
                             <th scope="col">Quantity</th>
                             <th scope="col">Price</th>
                             <th scope="col">Edit</th>
@@ -127,7 +128,8 @@
                                 </td>
                                 <td class="tm-product-name"><%= product.productname %></td>
                                 <td><%= product.productCategory ? product.productCategory.name : 'N/A' %></td>
-                                <td><%= product.subCategory ? product.subCategory : 'N/A' %></td> <!-- Display Subcategory -->
+                                <td><%= product.subCategory ? product.subCategory : 'N/A' %></td>
+                                <td><%= product.brand ? product.brand : 'N/A' %></td> <!-- Display Brand -->
                                 <td><%= product.variants[0].quantity %></td>
                                 <td>$<%= product.price %></td>
                                 <td><a href="/admin/edit-product/<%= product._id %>" class="btn btn-sm btn-primary">Edit</a></td>
@@ -136,13 +138,11 @@
                                         <%= product.is_Listed ? 'Unlist' : 'List' %>
                                     </button>
                                 </td>
-
                                 <td>
                                     <a href="/admin/VarientList/<%= product._id %>">
                                         <button class="btn btn-sm btn-variant variant-button" data-id="">Variant</button>
                                     </a>
                                 </td>
-                                
                             </tr>
                         <% }); %>
                     </tbody>

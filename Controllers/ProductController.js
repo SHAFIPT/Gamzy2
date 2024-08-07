@@ -20,7 +20,7 @@ const LoadProduct = async (req,res)=>{
 async function addProduct(req, res) {
     try {
 
-        const { name, description, category, price, quantity , color , subCategory} = req.body;
+        const { name, description, category, price, quantity , color , subCategory , brand } = req.body;
 
 
         // console.log("this is my subcategory",subCategory);
@@ -42,6 +42,7 @@ async function addProduct(req, res) {
             productCategory: getCategory._id,
             price,
             subCategory,
+            brand, // Add brand here
             is_Listed: true,
             variants : [{
                 color,
@@ -90,7 +91,7 @@ const UpdateProduct = async (req, res) => {
         const productId = req.body.productId;
         // console.log(productId);
         // console.log('hellow');
-        const { name, description, category, price, quantity ,subCategory} = req.body;
+        const { name, description, category, price, quantity ,subCategory ,brand} = req.body;
 
         // console.log(req.files)
 
@@ -111,6 +112,7 @@ const UpdateProduct = async (req, res) => {
         product.productCategory = getCategory._id
         product.price = price
         product.subCategory = subCategory
+        product.brand = brand
         // product.variants.quantity = quantity
 
             // Ensure variants array and update quantity

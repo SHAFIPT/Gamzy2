@@ -1,0 +1,410 @@
+<%- include('../layouts/adminheader') %>
+<style>
+    .tm-product-table .btn {
+        margin: 0 2px; /* Adjust the margin to reduce gaps */
+        padding: 4px 10px; /* Adjust the padding for a more compact layout */
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        /* Adjust font size as needed */
+        color: #777;
+        /* Adjust color as needed */
+    }
+
+    .tm-product-table th,
+    .tm-product-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .tm-product-table th {
+        width: auto;
+    }
+
+    .tm-product-table .btn {
+        margin: 0 5px;
+    }
+
+    .variant-button {
+        margin-left: 5px;
+    }
+
+    .btn-variant {
+        background-color: blue;
+        color: white;
+    }
+
+    .btn-variant:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    @media (max-width: 768px) {
+        .tm-product-table .btn {
+            margin: 2px 0;
+            display: block;
+        }
+    }
+
+
+    /* Style for action buttons in the table */
+.table .btn {
+    margin-right: 5px;
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+.table .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.table .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.table .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.table .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Style for the modal */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+</style>
+</head>
+
+<%- include('../layouts/adminheader') %>
+<style>
+    .tm-product-table .btn {
+        margin: 0 2px; /* Adjust the margin to reduce gaps */
+        padding: 4px 10px; /* Adjust the padding for a more compact layout */
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        /* Adjust font size as needed */
+        color: #777;
+        /* Adjust color as needed */
+    }
+
+    .tm-product-table th,
+    .tm-product-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .tm-product-table th {
+        width: auto;
+    }
+
+    .tm-product-table .btn {
+        margin: 0 5px;
+    }
+
+    .variant-button {
+        margin-left: 5px;
+    }
+
+    .btn-variant {
+        background-color: blue;
+        color: white;
+    }
+
+    .btn-variant:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    @media (max-width: 768px) {
+        .tm-product-table .btn {
+            margin: 2px 0;
+            display: block;
+        }
+    }
+
+
+    /* Style for action buttons in the table */
+.table .btn {
+    margin-right: 5px;
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+.table .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.table .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.table .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.table .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Style for the modal */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+</style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-xl">
+        <div class="container h-100">
+            <a class="navbar-brand" href="index.html">
+                <h1 class="tm-site-title mb-0">MANAGE OFFERS</h1>
+            </a>
+            <ul class="breadcrumb mt-2">
+                <li class="breadcrumb-item"><a href="/admin/Products">Admin &gt;&gt;</a>Dashboard</li>
+            </ul>
+            <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars tm-nav-icon"></i>
+            </button>
+            <div class="col-lg-3 col-md-6 ms-auto">
+                <form action="">
+                    <!-- <input type="text" placeholder="Search..." class="form-control" id="searchInput" name="search" /> -->
+                </form>
+            </div>
+        </div>
+    </nav>
+<!-- views/admin/offerManage.ejs or similar -->
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+    <div class="tm-bg-primary-dark tm-block tm-block-products">
+        <div class="tm-product-table-container">
+            <table class="table table-hover tm-table-small tm-product-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Offer Name</th>
+                        <th scope="col">Offer Code</th>
+                        <th scope="col">Activation Date</th>
+                        <th scope="col">Expire Date</th>
+                        <th scope="col">Offer Type</th>
+                        <th scope="col">Discount Amount</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% offers.forEach(offer => { %>
+                        <tr>
+                            <td><%= offer.name %></td>
+                            <td><%= offer._id %></td>
+                            <td><%= new Date(offer.activeDate).toLocaleDateString() %></td>
+                            <td><%= new Date(offer.expireDate).toLocaleDateString() %></td>
+                            <td><%= offer.type %></td>
+                            <td><%= offer.discount %>%</td>
+                            <td>
+                                <a href="/admin/editOffer/<%= offer._id %>" class="btn btn-warning btn-sm">Edit</a>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal<%= offer._id %>">Delete</button>
+                                <% if (offer.active) { %>
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="toggleOfferStatus('<%= offer._id %>', false)">Deactivate</button>
+                                <% } else { %>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="toggleOfferStatus('<%= offer._id %>', true)">Activate</button>
+                                <% } %>
+                            </td>
+                        </tr>
+
+                        <!-- Delete Confirmation Modal -->
+                        <div class="modal fade" id="deleteModal<%= offer._id %>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel<%= offer._id %>" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel<%= offer._id %>">Confirm Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete the offer "<%= offer.name %>"?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" data-offer-id="<%= offer._id %>" onclick="deleteOffer(this)">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <!-- table container -->
+        <a href="/admin/addOffer" class="btn btn-primary btn-block text-uppercase mb-3">Add New Offer</a>
+    </div>
+</div>
+
+
+    <footer class="tm-footer row tm-mt-small">
+        <div class="col-12 font-weight-light">
+            <p class="text-center text-white mb-0 px-4 small">
+                Copyright &copy; <b>2018</b> All rights reserved.
+                Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Function to handle offer deletion
+        async function deleteOffer(button) {
+            const offerId = button.getAttribute('data-offer-id');
+            
+            try {
+                const response = await fetch(`/admin/deleteOffer/${offerId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: result.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Reload the page or update the UI as needed
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: result.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
+                console.error('Error during fetch:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
+
+        async function toggleOfferStatus(offerId, status) {
+        try {
+            const response = await fetch(`/admin/toggleOfferStatus/${offerId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ active: status })
+            });
+            const result = await response.json();
+            if (result.success) {
+                location.reload();
+            } else {
+                alert('Failed to update offer status');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('An error occurred');
+        }
+    }
+    </script>
+            <%- include('../layouts/footer') %>
+
+
+
