@@ -125,7 +125,10 @@ router.get('/controller',productsController.loadControllerPage)
 
 //applyCoupon
 router.post('/applyCoupon',userCouponController.applyCoupon);
-router.get('/getCoupons',userCouponController.getCoupons)
+router.get('/getCoupons',userCouponController.getCoupons);
+//removeCoupon
+router.post('/removeCoupon',userCouponController.removeCoupon);
+router.get('/getCart',userCouponController.getCart)
 
 
 

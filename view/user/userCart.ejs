@@ -221,7 +221,14 @@ input[type="number"] {
                                             </div>
                                             <div class="product__cart__item__text">
                                                 <h6><%= product.productId.name %></h6>
-                                                 <h5>₹<%= product.productId.price %></h5>
+                                                <% if (product.discountedPrice < product.productId.price) { %>
+                                                    <h5>
+                                                        ₹<%= product.discountedPrice.toFixed(2) %>
+                                                        <span style="text-decoration: line-through; color: red;">₹<%= product.productId.price %></span>
+                                                    </h5>
+                                                <% } else { %>
+                                                    <h5>₹<%= product.productId.price %></h5>
+                                                <% } %>
                                             </div>
                                         </td>
                                         <td class="quantity__item">
@@ -237,39 +244,40 @@ input[type="number"] {
                                                         }
                                                     %>
                                                     <button class="qty-btn qty-decrease">-</button>
-                                                    <input type="number" value="<%= product.quantity %>" max="<%= maxQuantity %>" min="1" data-price="<%= product.productId.price %>" data-product-id="<%= product.productId._id %>" data-variant-id="<%= product.variantId %>" data-available-stock="<%= variant.quantity %>">
+                                                    <input type="number" value="<%= product.quantity %>" max="<%= maxQuantity %>" min="1" 
+                                                    data-price="<%= product.discountedPrice ? product.discountedPrice : product.productId.price %>" 
+                                                    data-product-id="<%= product.productId._id %>" 
+                                                    data-variant-id="<%= product.variantId %>" 
+                                                    data-available-stock="<%= variant.quantity %>">
                                                     <button class="qty-btn qty-increase">+</button>
-                                                </div>
-                                               
+                                                    </div>
                                                     <% if (stockMessage) { %>
                                                         <p class="stock-message"><%= stockMessage %></p>
                                                     <% } %>
-                                                    
                                                 <% } %>
                                             </td>
-                                        
-                                        <td class="cart__price">
-                                            <% if (variant.quantity < 1) { %>
-                                                ₹<span class="item-total">0.00</span>
-                                            <% } else { %>
-                                                ₹<span class="item-total"><%= (product.productId.price * product.quantity).toFixed(2) %></span>
-                                            <% } %>
-                                        </td>
-                                        <td class="cart__close">
-                                            <form id="removeProduct">
-                                                <input type="hidden" name="productId" value="<%= product.productId._id %>">
-                                                <input type="hidden" name="variantId" value="<%= product.variantId %>">
-                                                <button onclick="removeCart(event, '<%= product.productId._id %>', '<%= product.variantId %>')"><i class="fa fa-close"></i></button>
-                                            </form>
-                                        </td>
+                                            <td class="cart__price">
+                                                <% if (variant.quantity < 1) { %>
+                                                    ₹<span class="item-total">0.00</span>
+                                                <% } else { %>
+                                                    ₹<span class="item-total"><%= (product.discountedPrice * product.quantity).toFixed(2) %></span>
+                                                <% } %>
+                                            </td>
+                                            <td class="cart__close">
+                                                <form id="removeProduct">
+                                                    <input type="hidden" name="productId" value="<%= product.productId._id %>">
+                                                    <input type="hidden" name="variantId" value="<%= product.variantId %>">
+                                                    <button onclick="removeCart(event, '<%= product.productId._id %>', '<%= product.variantId %>')"><i class="fa fa-close"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4">Your cart is empty.</td>
                                     </tr>
-                                <% }) %>
-                            <% } else { %>
-                                <tr>
-                                    <td colspan="4">Your cart is empty.</td>
-                                </tr>
-                            <% } %>
-                        </tbody>
+                                <% } %>
+                            </tbody>
                     </table>
                 </div>
                 <div class="row">
@@ -288,18 +296,16 @@ input[type="number"] {
                     <ul>
                         <li>Subtotal <span>₹<span id="subtotal">
                             <%= cart && cart[0] ? cart[0].products.reduce((sum, product) => {
-                                const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
-                                return variant && variant.quantity > 0 ? sum + product.productId.price * product.quantity : sum;
+                                return sum + (product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity;
                             }, 0).toFixed(2) : 0 %>
                         </span></span></li>
                         <li>Total <span>₹<span id="total">
                             <%= cart && cart[0] ? cart[0].products.reduce((sum, product) => {
-                                const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
-                                return variant && variant.quantity > 0 ? sum + product.productId.price * product.quantity : sum;
+                                return sum + (product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity;
                             }, 0).toFixed(2) : 0 %>
                         </span></span></li>
                     </ul>
-                    <a href="/user/cheakOut"  class="primary-btn">Proceed to checkout</a>
+                    <a href="/user/cheakOut" class="primary-btn">Proceed to checkout</a>
                 </div>
             </div>
         </div>
@@ -541,7 +547,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({
                     productId: productId,
                     variantId: variantId,
-                    quantity: quantity
+                    quantity: quantity,
+                    discountedPrice: price // Send the price used for calculation
                 })
             });
 

@@ -15,7 +15,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'view', 'user'));
       
                         
-// Middleware for parsing JSON and urlencoded data  
+// Middleware for parsing JSON and urlencoded data 
 app.use(express.json());    
 app.use(express.urlencoded({ extended: true }));       
                          
@@ -31,8 +31,7 @@ app.get('/', (req,res)=>{res.redirect('/user')});
 //         failureRedirect : '/failure'
 //     }   
 // ));         
-       
-   
+
 app.use('/user',userRoute)     
                   
 //admin Route                        

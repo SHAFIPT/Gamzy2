@@ -23,7 +23,11 @@ const cartSchema = new mongoose.Schema({
                 default : 1,
             },
         },
-    ]
+    ],
+    couponCode: {  // Add this field to store applied coupon code
+        type: String,
+        default: null,
+    },
 })
 
 module.exports = mongoose.model('Cart' , cartSchema); 

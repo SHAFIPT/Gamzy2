@@ -78,7 +78,24 @@ const LoadShopage = async (req, res) => {
          // Fetch active offers
          const offers = await Offer.find({ active: true });
 
-         console.log("this my offers" , offers);
+
+         // Process offers and select the highest discount for each product
+         products.forEach(product => {
+            let highestDiscount = 0;
+            offers.forEach(offer => {
+                if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
+                    if (offer.discount > highestDiscount) {
+                        highestDiscount = offer.discount;
+                    }
+                }
+            });
+            product.highestDiscount = highestDiscount;
+            product.discountedPrice = product.price - (product.price * highestDiscount / 100);
+        });
+
+
+
+        //  console.log("this my offers" , offers);
          
 
         res.render('Shopage', {
@@ -104,6 +121,7 @@ const LoadShopage = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
+
 const loadProductDetails = async(req,res) =>{
     try {
 
@@ -115,6 +133,7 @@ const loadProductDetails = async(req,res) =>{
         // console.log('This is shop varient :', variantId);
         
         const product = await Product.findById(productId).populate('variants').populate('productCategory');
+        const  offers   = await Offer.find();
 
         // console.log('This is my shop product',product);
 
@@ -134,7 +153,18 @@ const loadProductDetails = async(req,res) =>{
             return res.status(404).send('category is not found...!');
         }
 
-        res.render('productDetails' , {product , variant ,category})
+        let discount = 0;
+
+        offers.forEach((offer) => {
+            if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
+                discount = Math.max(discount, offer.discount); // Get the highest discount applicable
+            }
+        });
+
+        const discountedPrice = product.price * (1 - discount / 100);
+
+
+        res.render('productDetails' , {product , variant ,category , discount, discountedPrice })
         
     } catch (error) {
         console.log(error);
@@ -156,6 +186,30 @@ const loadProductCart = async(req , res) =>{
             })
 
 
+                // Fetch all offers
+            const offers = await Offer.find();
+
+            // Calculate discounted prices for each product in the cart
+            cart.forEach(item => {
+            item.products.forEach(productInCart => {
+                const product = productInCart.productId;
+                let discount = 0;
+
+                // Check if any offers apply to the product or its category
+                offers.forEach(offer => {
+                    if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
+                        discount = Math.max(discount, offer.discount); // Get the highest discount applicable
+                    }
+                });
+
+                // Calculate discounted price
+                const discountedPrice = product.price * (1 - discount / 100);
+                productInCart.discountedPrice = discountedPrice;
+            });
+        });
+
+
+
             // console.log('the cart is here :',cart);
 
             res.render('userCart', { cart }); // Render cart.ejs template with cart data
@@ -175,7 +229,10 @@ const addToCart = async (req, res) => {
         }
 
 
-        const { productId, variantId, quantity } = req.body;
+        const { productId, variantId, quantity , price} = req.body;
+
+        // console.log("This is the price for productDetails page ",price );
+        
         const userId = req.session.user; // Assuming you have authenticated user stored in req.session.user
 
         // Fetch the product and variant to check available stock
@@ -215,9 +272,10 @@ const addToCart = async (req, res) => {
             }
 
             cart.products[productIndex].quantity = newQuantity;
+            cart.products[productIndex].price = price; // Update the price
         } else {
             // If the product with the variant doesn't exist in the cart, add it
-            cart.products.push({ productId, variantId, quantity: parseInt(quantity) });
+            cart.products.push({ productId, variantId, quantity: parseInt(quantity) , price: price });
         }
 
         // Save the cart to the database
@@ -231,7 +289,9 @@ const addToCart = async (req, res) => {
 };
 const updateCart = async (req, res) => {
     try {
-        const { productId, variantId, quantity } = req.body;
+        const { productId, variantId, quantity  } = req.body;
+        
+
         const userId = req.session.user;
 
         // Fetch cart document for the user
@@ -259,6 +319,7 @@ const updateCart = async (req, res) => {
 
         // Update the product quantity in the cart
         product.quantity = parseInt(quantity);
+
 
         await cart.save();
         res.status(200).json({ message: 'Cart updated successfully' });

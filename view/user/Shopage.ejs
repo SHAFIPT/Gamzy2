@@ -621,16 +621,20 @@
                   <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
                     <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
                     <div class="overlay"></div>
+        
                     <% if (product.variants[0].quantity < 1) { %>
-                                <div class="offer-badge">Out of stock</div>
-                            <% } else { %>
-                                <% offers.forEach(offer => { %>
-                                  <% console.log("Checking offer:", offer); %>
-                                    <% if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) { %>
-                                        <div class="offer-badges"><%= offer.name %> - <%= offer.discount %>% Off</div>
-                                    <% } %>
-                                <% }) %>
-                            <% } %>
+                      <div class="out-of-stock-btn">Out of stock</div>
+                    <% } else { %>
+                      <% let maxDiscount = 0; %>
+                      <% offers.forEach(offer => { %>
+                        <% if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) { %>
+                          <% if (offer.discount > maxDiscount) { %>
+                            <% maxDiscount = offer.discount; %>
+                            <div class="offer-badges"><%= offer.name %> - <%= offer.discount %>% Off</div>
+                          <% } %>
+                        <% } %>
+                      <% }) %>
+                    <% } %>
                   </a>
                   
                   <div class="text py-3 pb-4 px-3">
@@ -641,8 +645,15 @@
                     </div> 
                     <h3 class="product-name"><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= truncateDescription(product.productname,70) %></a></h3>
                     <div class="pricing">
-                        <p class="price product-price"><span>₹<%= product.price %></span></p>
-                        <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
+                      <% if (product.highestDiscount > 0) { %>
+                        <p class="price product-price">
+                          <span style="text-decoration: line-through; color: red;">₹<%= product.price.toFixed(2) %></span>
+                          <span> ₹<%= product.discountedPrice.toFixed(2) %></span>
+                        </p>
+                      <% } else { %>
+                        <p class="price product-price"><span>₹<%= product.price.toFixed(2) %></span></p>
+                      <% } %>
+                      <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
                     </div>
                     <p class="bottom-area d-flex px-3">
             

@@ -626,6 +626,81 @@ rel="stylesheet">
     background-color: #0056b3; /* Darker blue on hover */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+/* Style for the total list item */
+#total-item {
+    font-size: 20px; /* Font size for "Total" text */
+    margin: 10px 0; /* Spacing above and below */
+}
+
+/* Style for the "Total" text */
+#total-item::before {
+    content: 'Total'; /* Text before the amount */
+    font-size: 20px; /* Font size for "Total" */
+    font-weight: bold; /* Make the text bold */
+}
+
+/* Style for the total amount */
+#total-amount {
+    font-size: 28px; /* Larger font size for the amount */
+    color: #d32f2f; /* Color for the total amount */
+    font-weight: bold; /* Bold text for emphasis */
+}
+
+/* Style for the rupee symbol and amount */
+#total {
+    display: flex;
+    align-items: center;
+    font-size: 28px; /* Match the font size of the total amount */
+}
+
+/* Style for the rupee symbol before the amount */
+#total::before {
+    content: '₹'; /* Rupee symbol */
+    font-size: 28px; /* Same size as the total amount */
+    color: #d32f2f; /* Match the color with the total amount */
+    margin-right: 5px; /* Space between the symbol and amount */
+}
+
+
+
+
+.checkout__total__products {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.checkout__total__products li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.checkout__total__products li span {
+    white-space: nowrap;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.checkout__total__products li:last-child {
+    border-bottom: none;
+}
+
+.checkout__total__products li .product-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.checkout__total__products li .product-quantity {
+    margin-left: 15px;
+    font-size: 0.9em;
+    color: #555;
+}
 </style>
 
 <body>
@@ -715,7 +790,13 @@ rel="stylesheet">
                                 <ul class="checkout__total__products">
                                     <% if (cart && cart.products.length > 0) { %>
                                         <% cart.products.forEach(product => { %>
-                                            <li><%= product.productId.productname %> x <%= product.quantity %> <span>₹<%= (product.productId.price * product.quantity).toFixed(2) %></span></li>
+                                            <li>
+                                                <span class="product-name"><%= product.productId.productname %></span> 
+                                                <span class="product-quantity">x <%= product.quantity %></span> 
+                                                <span>
+                                                    ₹<%= ((product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity).toFixed(2) %>
+                                                </span>
+                                            </li>
                                         <% }) %>
                                     <% } else { %>
                                         <li>Your cart is empty.</li>
@@ -726,11 +807,12 @@ rel="stylesheet">
                                     <form id="discount-form" action="#">
                                         <input type="text" id="coupon-code" placeholder="Coupon code">
                                         <button type="button" id="apply-discount">Apply</button>
+                                        <button type="button" id="remove-coupon" style="display: none;">Remove</button>
                                     </form>
-                                
+                                    
                                     <!-- Toggle Button for Available Coupons -->
                                     <button type="button" id="toggle-coupons" class="toggle-coupons-button">Show Available Coupons</button>
-                                
+                                    
                                     <!-- Available Coupons Section -->
                                     <div class="available-coupons" id="available-coupons" style="display: none;">
                                         <h6>Available Coupons</h6>
@@ -740,15 +822,35 @@ rel="stylesheet">
                                     </div>
                                 </div>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span>₹<span id="subtotal">
-                                        <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => sum + product.productId.price * product.quantity, 0).toFixed(2) : 0 %>
-                                    </span></span></li>
-                                    <li>Discount <span id="discount">₹0.00</span></li> <!-- Add this line -->
-                                    <input type="hidden" id="discountAmount" value="0"> <!-- Default to 0 initially -->
-                                    <li>Total <span>₹<span id="total">
-                                        <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => sum + product.productId.price * product.quantity, 0).toFixed(2) : 0 %>
-                                    </span></span></li>
+                                    <li>Subtotal 
+                                        <span>₹<span id="subtotal">
+                                            <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                                const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                                                return sum + price * product.quantity;
+                                            }, 0).toFixed(2) : 0 %>
+                                        </span></span>
+                                    </li>
+                                    <li>Offer Discount 
+                                        <span id="offerDiscount">
+                                            ₹<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                                const discount = product.productId.price - (product.discountedPrice || product.productId.price);
+                                                return sum + discount * product.quantity;
+                                            }, 0).toFixed(2) : 0 %>
+                                        </span>
+                                    </li>
+                                    <li>Coupon Discount <span id="couponDiscount">-₹0.00</span></li>
+                                    <li id="total-item">
+                                        <span id="total-amount">
+                                            <span id="total">
+                                                <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                                    const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                                                    return sum + price * product.quantity;
+                                                }, 0).toFixed(2) : 0 %>
+                                            </span>
+                                        </span>
+                                    </li>
                                 </ul>
+                                <input type="hidden" id="discountAmount" value="0">
                                 <div class="checkout__input__checkbox">
                                     <label for="Cashondelivary">
                                         Cash on delivary
@@ -1720,6 +1822,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const toggleButton = document.getElementById('toggle-coupons');
     const couponsSection = document.getElementById('available-coupons');
     const couponsList = document.getElementById('coupons-list');
+    const applyButton = document.getElementById('apply-discount');
+    const removeButton = document.getElementById('remove-coupon');
+    const couponCodeInput = document.getElementById('coupon-code');
+    const couponDiscountElement = document.getElementById('couponDiscount');
+    const offerDiscountElement = document.getElementById('offerDiscount');
+    const totalElement = document.getElementById('total');
+    const discountAmountElement = document.getElementById('discountAmount');
+
+    console.log('DOM fully loaded and parsed');
 
     // Toggle coupons visibility
     toggleButton.addEventListener('click', () => {
@@ -1735,19 +1846,12 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fetch available coupons
     try {
         const response = await fetch('/user/getCoupons');
-
-        console.log("This is the response", response);
-        
         const coupons = await response.json();
 
         if (response.ok) {
             coupons.forEach(coupon => {
-                // Convert expireDate to a Date object
                 const expireDate = new Date(coupon.expireDate);
-                
-                // Format the date to 'YYYY-MM-DD'
                 const formattedDate = expireDate.toLocaleDateString();
-
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <span>${coupon.couponCode} - ${coupon.discount}% off (Expires: ${formattedDate})</span>
@@ -1759,7 +1863,8 @@ document.addEventListener("DOMContentLoaded", function() {
             // Add event listeners to all Apply buttons
             document.querySelectorAll('.apply-coupon').forEach(button => {
                 button.addEventListener('click', () => {
-                    document.getElementById('coupon-code').value = button.getAttribute('data-code');
+                    couponCodeInput.value = button.getAttribute('data-code');
+                    console.log('Coupon code set:', couponCodeInput.value);
                 });
             });
         } else {
@@ -1770,11 +1875,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Apply coupon
-    document.getElementById('apply-discount').addEventListener('click', async () => {
-        const couponCode = document.getElementById('coupon-code').value.trim();
-        const subtotalElement = document.getElementById('subtotal');
-        const totalElement = document.getElementById('total');
-        const discountAmountElement = document.getElementById('discountAmount');
+    applyButton.addEventListener('click', async () => {
+        const couponCode = couponCodeInput.value.trim();
 
         if (!couponCode) {
             alert('Please enter a coupon code.');
@@ -1794,10 +1896,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 const { discount, newTotal } = result;
+                couponDiscountElement.textContent = `-₹${discount.toFixed(2)}`;
+                const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
+                const finalTotal = newTotal ;
 
-                document.getElementById('discount').textContent = `₹${discount.toFixed(2)}`;
-                totalElement.textContent = newTotal.toFixed(2);
+                totalElement.textContent = finalTotal.toFixed(2);
                 discountAmountElement.value = discount.toFixed(2);
+
+                removeButton.style.display = 'inline-block'; // Show Remove button
 
                 Swal.fire({
                     title: 'Success',
@@ -1815,6 +1921,77 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         } catch (error) {
             console.error('Error during coupon application:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+
+    // Remove coupon
+    removeButton.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/user/removeCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ couponCode: couponCodeInput.value.trim() }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                couponDiscountElement.textContent = '₹0.00';
+                discountAmountElement.value = '0';
+
+                // Fetch updated cart to get the original subtotal
+                const cartResponse = await fetch('/user/getCart');
+                const cartData = await cartResponse.json();
+
+                if (cartResponse.ok) {
+                    // Calculate the original subtotal
+                    const subtotal = cartData.products.reduce((sum, product) => {
+                        const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                        return sum + price * product.quantity;
+                    }, 0);
+
+                    // Display the original subtotal and apply other discounts
+                    const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
+                    const finalTotal = subtotal - offerDiscount;
+
+                    totalElement.textContent = finalTotal.toFixed(2);
+
+                    applyButton.style.display = 'inline-block'; // Show Apply button
+                    removeButton.style.display = 'none'; // Hide Remove button
+
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Coupon removed!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    console.error('Failed to fetch updated cart:', cartData.message);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while fetching updated cart data.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: result.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            console.error('Error during coupon removal:', error);
             Swal.fire({
                 title: 'Error',
                 text: 'An error occurred. Please try again.',

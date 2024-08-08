@@ -354,7 +354,14 @@ footer a:hover {
                             <div class="col-lg-8">
                                 <div class="product__details__text">
                                     <h4 style="margin-top: 40px;"><%= product.productname %></h4>
-                                    <h3><span style="color: black;">₹</span><%= product.price %><span>70.00</span></h3>
+                                    <% if (discount > 0) { %>
+                                        <h3>
+                                            <span style="color: black;">₹</span><%= discountedPrice.toFixed(2) %>
+                                            <span style="text-decoration: line-through; color: red;">₹<%= product.price %></span>
+                                        </h3>
+                                    <% } else { %>
+                                        <h3><span style="color: black;">₹</span><%= product.price %></h3>
+                                    <% } %>
                                     <p><%= product.productDescription %></p>
                 
                                     <div class="product__details__option">
@@ -381,6 +388,8 @@ footer a:hover {
                     <form id="cartForm">
                         <input type="hidden" id="productId" name="productId" value="<%= product._id %>">
                         <input type="hidden" id="variantId" name="variantId" value="<%= variant._id %>">
+                        <input type="hidden" id="discountedPrice" name="discountedPrice" value="<%= discountedPrice %>">
+                        <input type="hidden" id="originalPrice" name="originalPrice" value="<%= product.price %>">
                         <div class="quantity">
                             <input type="number" id="quantity" name="quantity" value="1" min="1" max="5">
                         </div>
@@ -861,11 +870,13 @@ footer a:hover {
             const productId = document.getElementById('productId').value.trim();
             const variantId = document.getElementById('variantId').value.trim();
             const quantity = document.querySelector('input[name="quantity"]').value.trim();
+            const discountedPrice = document.getElementById('discountedPrice').value.trim();
 
             const data = {
                 productId: productId,
                 variantId: variantId,
-                quantity: quantity
+                quantity: quantity,
+                price: discountedPrice // Pass the discounted price
             };
 
             try {

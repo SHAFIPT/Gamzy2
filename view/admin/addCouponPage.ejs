@@ -102,6 +102,11 @@
                                     <input id="discount-amount" name="discount-amount" type="number" step="0.01" class="form-control validate" required />
                                     <div class="error"></div> <!-- Error display -->
                                 </div>
+                                <div class="form-group mb-3">
+                                    <label for="max-amount">Max Amount</label>
+                                    <input id="max-amount" name="max-amount" type="number" step="0.01" class="form-control validate" required />
+                                    <div class="error"></div> <!-- Error display -->
+                                </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <button type="submit" class="btn btn-primary btn-block text-uppercase">Submit</button>
@@ -133,6 +138,7 @@
             const expireDate = document.getElementById('expire-date');
             const limitOfUse = document.getElementById('limit-of-use');
             const discountAmount = document.getElementById('discount-amount');
+            const maxAmount = document.getElementById('max-amount');
       
             form.addEventListener('submit', async e => {
                 e.preventDefault();
@@ -145,7 +151,8 @@
                         activationDate: activationDate.value,
                         expireDate: expireDate.value,
                         limitOfUse: limitOfUse.value,
-                        discountAmount: discountAmount.value
+                        discountAmount: discountAmount.value,
+                        maxAmount: maxAmount.value
                     };
 
                     console.log(formData);
@@ -196,6 +203,7 @@
                        activationDate.parentElement.classList.contains('success') &&
                        expireDate.parentElement.classList.contains('success') &&
                        limitOfUse.parentElement.classList.contains('success') &&
+                       maxAmount.parentElement.classList.contains('success') &&
                        discountAmount.parentElement.classList.contains('success');
             };
       
@@ -223,6 +231,7 @@
                 const expireDateValue = expireDate.value.trim();
                 const limitOfUseValue = limitOfUse.value.trim();
                 const discountAmountValue = discountAmount.value.trim();
+                const maxAmountValue = maxAmount.value.trim();
       
                 if (nameValue === '') {
                     setError(name, 'Coupon name is required');
@@ -246,6 +255,12 @@
                 setError(limitOfUse, 'Limit of use must be a positive number');
                 } else {
                     setSuccess(limitOfUse);
+                }
+
+                if (maxAmountValue === '' || maxAmountValue <= 0) {
+                setError(maxAmount, 'Limit of use must be a positive number');
+                } else {
+                    setSuccess(maxAmount);
                 }
         
                 const discountAmountValueNumber = parseFloat(discountAmountValue);
