@@ -23,6 +23,7 @@
     "otp-generator": "^4.0.1",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
+    "razorpay": "^2.9.4",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

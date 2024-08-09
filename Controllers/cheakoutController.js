@@ -8,12 +8,21 @@ const loadCheakoutPage = async (req, res) => {
         if (req.session.user) {
             const userId = req.session.user;
 
+            const user = await User.findById(userId); // Assuming you have a User model
+
             // Fetch addresses and cart data
             const addresses = await Address.find({ user: userId });
-            const cart = await Cart.findOne({ userId }).populate({
+            let cart = await Cart.findOne({ userId }).populate({
                 path: 'products.productId',
                 populate: { path: 'variants' }
             });
+
+               // If cart is not found, initialize an empty cart
+               if (!cart) {
+                cart = {
+                    products: []
+                };
+            }
 
             // Fetch all offers
             const offers = await Offer.find();
@@ -21,6 +30,7 @@ const loadCheakoutPage = async (req, res) => {
             // Calculate discounted prices for each product in the cart
             cart.products.forEach(productInCart => {
                 const product = productInCart.productId;
+                // console.log("this is product from cart :", product);
                 let discount = 0;
 
                 // Check if any offers apply to the product or its category
@@ -36,7 +46,7 @@ const loadCheakoutPage = async (req, res) => {
             });
 
             // Render the checkout page with addresses and updated cart
-            res.render('cheakOut', { addresses, cart });
+            res.render('cheakOut', { addresses, cart , user });
         }
     } catch (error) {
         console.log(error);

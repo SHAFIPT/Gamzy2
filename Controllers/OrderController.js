@@ -2,6 +2,7 @@ const Address = require('../model/addressShema');
 const Order = require('../model/ordreModel');
 const Product = require('../model/productModel');
 const Cart = require('../model/cartShema');
+const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 // const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
@@ -10,6 +11,12 @@ const generateOrderId = () => {
     return crypto.randomBytes(6).toString('hex').toUpperCase(); // Generates a random hexadecimal string
 };
 
+
+
+function generateorderId() {
+    // Your logic to generate a unique order ID
+    return `ORDER_${Math.floor(Math.random() * 1000000)}`;
+}
 
 const loadOrderPage = async (req, res) => {
     try {
@@ -36,7 +43,13 @@ const loadOrderPage = async (req, res) => {
     }
 };
 
+// console.log("Razorpay Key ID:", process.env.key_id);
+// console.log("Razorpay Key Secret:", process.env.key_secret);
 
+const razerpay = new Razorpay({
+    key_id: process.env.key_id,
+    key_secret: process.env.key_secret
+});
 
 const orderSummory = async (req, res) => {
     try {
@@ -52,20 +65,13 @@ const orderSummory = async (req, res) => {
             return res.status(404).json({ success: false, message: "Cart not found" });
         }
 
-        const { PaymentMethod, addressId, discountAmount } = req.body;
+        const { PaymentMethod, addressId, offerDiscount, couponDiscount, shippingCharge } = req.body;
 
-        console.log("This is the discountAmount",discountAmount);
-        
-
-        console.log('This is my PaymentMethod', PaymentMethod);
-        console.log("This is my addressId", addressId);
-
-        // Generate the order ID
-        const orderId = generateOrderId();
-        console.log("Generated Order ID:", orderId);
+        if (!PaymentMethod || !addressId || offerDiscount === undefined || couponDiscount === undefined || shippingCharge === undefined) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
 
         const address = await Address.findById(addressId);
-
         if (!address) {
             return res.status(404).json({ success: false, message: "Address not found" });
         }
@@ -74,7 +80,7 @@ const orderSummory = async (req, res) => {
             productId: cartItem.productId._id,
             variantId: cartItem.variantId,
             quantity: cartItem.quantity,
-            price: cartItem.productId.price,  // Assuming the price is in the product model
+            price: cartItem.productId.price,
             status: "Pending",
         }));
 
@@ -96,18 +102,18 @@ const orderSummory = async (req, res) => {
         }
 
         const orderSubtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const totalAmount = orderSubtotal - offerDiscount - couponDiscount + shippingCharge;
 
-        // Determine shipping charge
-        const shippingCharge = orderSubtotal < 500 ? 50 : 0;
-
-        const totalAmount = orderSubtotal - discountAmount + shippingCharge;  // Adding shipping charge and subtracting discount
+        // Generate the order ID
+        const orderId = generateOrderId();
 
         const orderData = { 
             userId,
-            orderId: orderId,  // Generating a new unique order ID
+            orderId: orderId,
             PaymentMethod,
-            shippingCharge,  // Replace with actual shipping charge
-            discountAmount, // Add this line
+            shippingCharge,
+            offerDiscount,
+            couponDiscount,
             address: {
                 name: `${address.Firstname} ${address.Lastname}`,
                 number: address.number,
@@ -122,19 +128,42 @@ const orderSummory = async (req, res) => {
             orderDate: new Date()
         };
 
-        const order = new Order(orderData);
-        await order.save();
+        if (PaymentMethod === 'Cashondelivary') {
+            const order = new Order(orderData);
+            await order.save();
 
-        // Clear the cart after placing the order
-        await Cart.deleteOne({ userId });
+            // Clear the cart after placing the order
+            await Cart.deleteOne({ userId });
 
-        res.json({ success: true });
+            return res.json({ success: true });
+        } else if (PaymentMethod === 'razerpay') {
+            const options = {
+                amount: totalAmount * 100, // amount in the smallest currency unit
+                currency: "INR",
+                receipt: `receipt_${orderId}`,
+            };
+
+            try {
+                const razorpayOrder = await razerpay.orders.create(options);
+                orderData.razorpayOrderId = razorpayOrder.id;
+
+                const order = new Order(orderData);
+                await order.save();
+
+                // Clear the cart after placing the order
+                await Cart.deleteOne({ userId });
+
+                return res.json({ success: true, razorpayOrder });
+            } catch (error) {
+                return res.status(500).json({ success: false, message: error.message });
+            }
+        } else {
+            return res.status(400).json({ success: false, message: "Invalid payment method" });
+        }
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
-
 
 const loadViewPage = async (req,res) =>{
     try {

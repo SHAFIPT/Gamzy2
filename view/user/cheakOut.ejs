@@ -839,33 +839,42 @@ rel="stylesheet">
                                         </span>
                                     </li>
                                     <li>Coupon Discount <span id="couponDiscount">-₹0.00</span></li>
+                                    <% 
+                                    let subtotal = cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                        const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                                        return sum + price * product.quantity;
+                                    }, 0) : 0;
+                                    let shippingCharge = subtotal < 500 ? 50 : 0;
+                                    %>
+                                    <li>Shipping Charge <span id="shippingCharge">₹<%= shippingCharge.toFixed(2) %></span></li>
                                     <li id="total-item">
                                         <span id="total-amount">
                                             <span id="total">
-                                                <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
-                                                    const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
-                                                    return sum + price * product.quantity;
-                                                }, 0).toFixed(2) : 0 %>
+                                                <%= (subtotal + shippingCharge).toFixed(2) %>
                                             </span>
                                         </span>
                                     </li>
                                 </ul>
-                                <input type="hidden" id="discountAmount" value="0">
+                                <!-- <input type="hidden" id="discountAmount" value="0"> -->
                                 <div class="checkout__input__checkbox">
                                     <label for="Cashondelivary">
-                                        Cash on delivary
+                                        Cash on Delivery
                                         <input type="checkbox" id="Cashondelivary" class="payment-method">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
+                                    <input type="hidden" id="total-amount-hidden" value="<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                        const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                                        return sum + price * product.quantity;
+                                    }, 0).toFixed(2) : 0 %>">
                                     <label for="razerpay">
-                                        Razer Pay
+                                        Razor Pay
                                         <input type="checkbox" id="razerpay" class="payment-method">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <button type="submit" id="placeOrderButton" class="site-btn">PLACE ORDER</button>
+                                <button type="button" id="placeOrderButton" class="site-btn">PLACE ORDER</button>
                             </div>
                         </div>
                 </div>
@@ -1145,7 +1154,7 @@ rel="stylesheet">
     </div>
 </div>
 
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -1672,15 +1681,21 @@ document.addEventListener("DOMContentLoaded", function() {
     const placeOrderButton = document.getElementById("placeOrderButton");
     const paymentMethods = document.querySelectorAll(".payment-method");
     const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
-    const discountAmountElement = document.getElementById("discountAmount");
-    const discountAmount = parseFloat(discountAmountElement.value) || 0;
-
-    console.log("This is the discount-amount :", discountAmount);
+    // const discountAmountElement = document.getElementById("discountAmount");
+    const offerDiscountElement = document.getElementById("offerDiscount");
+    const couponDiscountElement = document.getElementById("couponDiscount");
+    const shippingChargeElement = document.getElementById("shippingCharge");
     
+    // const discountAmount = parseFloat(discountAmountElement.value) || 0;
+    const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
+    const couponDiscount = parseFloat(couponDiscountElement.textContent.replace('₹', '').replace('-', '')) || 0;
+    const shippingCharge = parseFloat(shippingChargeElement.textContent.replace('₹', '')) || 0;
 
-    console.log("this in my ordre domcontents :",placeOrderButton);
-    console.log("this in my ordre domcontents :",paymentMethods);
-    console.log("this in my ordre domcontents :",addressRadios);
+    // console.log("This is my  discountAmount:",discountAmount);
+    console.log("This is my  offerDiscount:",offerDiscount);
+    console.log("This is my  couponDiscount:",couponDiscount);
+    console.log("This is my  shippingCharge:",shippingCharge);
+    
 
     paymentMethods.forEach(method => {
         method.addEventListener("change", function() {
@@ -1701,18 +1716,14 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-                // Verify discountAmount before sending
-                console.log("Discount Amount before placing order: ", discountAmountElement.value);
-
         const orderData = {
-            // userId: "USER_ID_HERE",  // Replace with actual user ID
-            // orderId: "ORDER_ID_HERE",  // Replace with actual order ID
             PaymentMethod: selectedPaymentMethod,
             addressId: selectedAddress,
-            discountAmount:  discountAmountElement.value // Include discount amount
-            // Other order data fields here
+            // discountAmount,
+            offerDiscount,
+            couponDiscount,
+            shippingCharge
         };
-        console.log("this is my passing addressId", orderData);
 
         fetch("/user/place-order", {
             method: "POST",
@@ -1724,14 +1735,43 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Order Placed',
-                    text: 'Your order has been placed successfully!'
-                }).then((data)=>{
-                    window.location.href = "/user/order"
-                })
-                // Redirect or update the page as needed
+                if (selectedPaymentMethod === 'Cashondelivary') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Placed',
+                        text: 'Your order has been placed successfully!'
+                    }).then(() => {
+                        window.location.href = "/user/order";
+                    });
+                } else if (selectedPaymentMethod === 'razerpay') {
+                    const options = {
+                        key: 'rzp_test_qPtwviU68jrUXP', // Replace with your actual Razorpay key
+                        amount: data.razorpayOrder.amount,
+                        currency: data.razorpayOrder.currency,
+                        name: 'Your Company Name',
+                        description: 'Order Payment',
+                        order_id: data.razorpayOrder.id,
+                        handler: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Payment Successful',
+                                text: 'Your order has been placed successfully!'
+                            }).then(() => {
+                                window.location.href = "/user/order";
+                            });
+                        },
+                        prefill: {
+                            name: 'Customer Name',
+                            email: 'customer@example.com',
+                            contact: 'Customer Phone Number'
+                        },
+                        theme: {
+                            color: '#3399cc'
+                        }
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -1753,70 +1793,6 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
-    // document.getElementById('apply-discount').addEventListener('click', async () => {
-    //     const couponCode = document.getElementById('coupon-code').value.trim();
-    //     const subtotalElement = document.getElementById('subtotal');
-    //     const totalElement = document.getElementById('total');
-    //     const discountAmountElement = document.getElementById('discountAmount');
-
-    //     if (!couponCode) {
-    //         alert('Please enter a coupon code.');
-    //         return;
-    //     }
-
-    //     try {
-    //         const response = await fetch('/user/applyCoupon', { // Adjust the URL to your endpoint
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ couponCode }),
-    //         });
-
-    //         const result = await response.json();
-
-    //         if (response.ok) {
-    //             const { discount, newTotal } = result;
-
-    //             // Update UI with new total
-
-    //             document.getElementById('discount').textContent = `₹${discount.toFixed(2)}`;
-
-    //             totalElement.textContent = newTotal.toFixed(2);
-
-
-    //             // Save discount amount to hidden input field
-    //             discountAmountElement.value = discount.toFixed(2);
-
-    //             // Log discountAmountElement for debugging
-    //             console.log("Discount Amount Element Value: ", discountAmountElement.value);
-                                
-
-
-    //             Swal.fire({
-    //                 title: 'Success',
-    //                 text: `Coupon applied! Discount: ₹${discount.toFixed(2)}`,
-    //                 icon: 'success',
-    //                 confirmButtonText: 'OK'
-    //             });
-    //         } else {
-    //             Swal.fire({
-    //                 title: 'Error',
-    //                 text: result.message,
-    //                 icon: 'error',
-    //                 confirmButtonText: 'OK'
-    //             });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error during coupon application:', error);
-    //         Swal.fire({
-    //             title: 'Error',
-    //             text: 'An error occurred. Please try again.',
-    //             icon: 'error',
-    //             confirmButtonText: 'OK'
-    //         });
-    //     }
-    // });
 
     document.addEventListener('DOMContentLoaded', async () => {
     const toggleButton = document.getElementById('toggle-coupons');
@@ -1831,6 +1807,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const discountAmountElement = document.getElementById('discountAmount');
 
     console.log('DOM fully loaded and parsed');
+
 
     // Toggle coupons visibility
     toggleButton.addEventListener('click', () => {
@@ -2002,4 +1979,67 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
+
+<!-- <script>
+   document.getElementById('placeOrderButton').addEventListener('click', async () => {
+    const totalAmount = document.getElementById('total-amount-hidden').value * 100; // Convert to paise
+    const paymentMethod = document.querySelector('.payment-method:checked');
+
+    if (!paymentMethod) {
+        alert('Please select a payment method.');
+        return;
+    }
+
+    if (paymentMethod.id === 'razerpay') {
+        try {
+            const response = await fetch('/user/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount: totalAmount })
+            });
+
+            const orderData = await response.json();
+
+            if (response.ok) {
+                console.log('Order created successfully:', orderData);
+                // Proceed to Razorpay payment
+                var options = {
+                    "key": "rzp_test_qPtwviU68jrUXP", // Replace with your Razorpay key ID
+                    "amount": totalAmount,
+                    "currency": "INR",
+                    "name": "Your Company Name",
+                    "description": "Test Transaction",
+                    "order_id": orderData.id, // Razorpay order ID
+                    "handler": function (response) {
+                        alert('Payment successful');
+                        // Redirect or handle successful payment
+                    },
+                    "prefill": {
+                        "name": "Your Customer Name",
+                        "email": "customer@example.com",
+                        "contact": "9999999999"
+                    },
+                    "theme": {
+                        "color": "#F37254"
+                    }
+                };
+
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            } else {
+                console.error('Error creating order:', orderData);
+            }
+        } catch (error) {
+            console.error('Error creating order:', error);
+        }
+    } else if (paymentMethod.id === 'Cashondelivary') {
+        // Handle Cash on Delivery
+        alert('Order placed with Cash on Delivery');
+        // Redirect or handle the COD logic
+    }
+});
+    </script> -->
     <%- include('../layouts/footer') %>

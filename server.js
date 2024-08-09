@@ -33,11 +33,11 @@ app.get('/', (req,res)=>{res.redirect('/user')});
 // ));         
 
 app.use('/user',userRoute)     
-                  
+                   
 //admin Route                        
                               
 app.use('/admin',adminRoute);             
-                           
+                            
 // Start the server                 
 const PORT = process.env.PORT;    
 app.listen(PORT, () => { 

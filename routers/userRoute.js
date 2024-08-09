@@ -16,7 +16,7 @@ const cheakoutController = require('../Controllers/cheakoutController');
 const myaccountController = require('../Controllers/myAccountcontroller');
 const orderController     = require('../Controllers/OrderController');
 const productsController = require('../Controllers/userproductShowcontroller');
-const userCouponController = require('../Controllers/usercouponController')
+const userCouponController = require('../Controllers/usercouponController');
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 
@@ -129,8 +129,6 @@ router.get('/getCoupons',userCouponController.getCoupons);
 //removeCoupon
 router.post('/removeCoupon',userCouponController.removeCoupon);
 router.get('/getCart',userCouponController.getCart)
-
-
 
 
 router.get('/home2',userCouponController.loadHomePage)

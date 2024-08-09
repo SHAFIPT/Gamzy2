@@ -228,9 +228,9 @@
                 </div>
                 <div class="col-md-6 text-right">
                     <h6>Subtotal: <span>₹<%= order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0).toFixed(2) %></span></h6>
-                    <h6>Discount: <span>₹<%= order.discountAmount.toFixed(2) %></span></h6> <!-- Add this line -->
-                    <h6>Shipping Charge: <span>₹<%= order.shippingCharge.toFixed(2) %></span></h6>
-                    
+                    <p><strong class="order-summary-label">Shipping Charge:</strong> <span class="order-summary-text">₹<%= order.shippingCharge.toFixed(2) %></span></p>
+                <p><strong class="order-summary-label">Offer Discount:</strong> <span class="order-summary-text">₹<%= order.offerDiscount.toFixed(2) %></span></p>
+                <p><strong class="order-summary-label">Coupon Discount:</strong> <span class="order-summary-text">₹<%= order.couponDiscount.toFixed(2) %></span></p>
                     <h3 class="mt-4">Grand Total: <span>₹<%= order.totalAmount.toFixed(2) %></span></h3>
                 </div>
             </div>
