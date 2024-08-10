@@ -89,6 +89,29 @@
             background-color: #0056b3;
             border-color: #004085;
         }
+        
+
+
+
+        .tm-status-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.tm-status-circle.Delivered{
+  background-color: #00c851; /* Blue for moving */
+}
+
+.tm-status-circle.pending {
+  background-color: #ffc107; /* Yellow for pending */
+}
+
+.tm-status-circle.cancelled {
+  background-color: #dc3545; /* Red for cancelled */
+}
 </style>
 </head>
 
@@ -137,11 +160,12 @@
                             <td></td>
                             <td>
                                 <% order.products.forEach(product => { %>
-                                    <div>
-                                         <%= product.status %>
-                                    </div>
+                                  <div class="d-inline-block">
+                                    <div class="tm-status-circle <%= product.status.toLowerCase() %>"></div>
+                                    <%= product.status %>
+                                  </div><br>
                                 <% }); %>
-                            </td>
+                              </td>
                             <td><%= order.PaymentMethod %></td>
                             <td><a href="/admin/viewOrder/<%= order._id %>"><button class="btn btn-view">View</button></a></td>
                         </tr>

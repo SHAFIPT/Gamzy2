@@ -664,42 +664,62 @@ rel="stylesheet">
 
 
 
-
-.checkout__total__products {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* Add your existing CSS */
+.checkout__input__checkbox {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    padding-left: 35px; /* Adds padding to the left of the label text */
+    margin-bottom: 12px;
+    font-size: 22px;
+    line-height: 25px;
 }
 
-.checkout__total__products li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #ddd;
+.checkout__input__checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
 }
 
-.checkout__total__products li span {
-    white-space: nowrap;
-    margin-left: 10px;
-    font-weight: bold;
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 5px;
 }
 
-.checkout__total__products li:last-child {
-    border-bottom: none;
+.checkout__input__checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
 }
 
-.checkout__total__products li .product-name {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.checkout__input__checkbox input:checked ~ .checkmark {
+    background-color: #2196F3;
 }
 
-.checkout__total__products li .product-quantity {
-    margin-left: 15px;
-    font-size: 0.9em;
-    color: #555;
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkout__input__checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkout__input__checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
 }
 </style>
 
@@ -793,9 +813,7 @@ rel="stylesheet">
                                             <li>
                                                 <span class="product-name"><%= product.productId.productname %></span> 
                                                 <span class="product-quantity">x <%= product.quantity %></span> 
-                                                <span>
-                                                    ₹<%= ((product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity).toFixed(2) %>
-                                                </span>
+                                                <span>₹<%= (product.discountedPrice * product.quantity).toFixed(2) %></span>
                                             </li>
                                         <% }) %>
                                     <% } else { %>
@@ -822,38 +840,11 @@ rel="stylesheet">
                                     </div>
                                 </div>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal 
-                                        <span>₹<span id="subtotal">
-                                            <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
-                                                const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
-                                                return sum + price * product.quantity;
-                                            }, 0).toFixed(2) : 0 %>
-                                        </span></span>
-                                    </li>
-                                    <li>Offer Discount 
-                                        <span id="offerDiscount">
-                                            ₹<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
-                                                const discount = product.productId.price - (product.discountedPrice || product.productId.price);
-                                                return sum + discount * product.quantity;
-                                            }, 0).toFixed(2) : 0 %>
-                                        </span>
-                                    </li>
+                                    <li>Subtotal <span>₹<span id="subtotal"><%= subtotal %></span></span></li>
+                                    <li>Offer Discount <span id="offerDiscount">₹<%= totalDiscount %></span></li>
                                     <li>Coupon Discount <span id="couponDiscount">-₹0.00</span></li>
-                                    <% 
-                                    let subtotal = cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
-                                        const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
-                                        return sum + price * product.quantity;
-                                    }, 0) : 0;
-                                    let shippingCharge = subtotal < 500 ? 50 : 0;
-                                    %>
-                                    <li>Shipping Charge <span id="shippingCharge">₹<%= shippingCharge.toFixed(2) %></span></li>
-                                    <li id="total-item">
-                                        <span id="total-amount">
-                                            <span id="total">
-                                                <%= (subtotal + shippingCharge).toFixed(2) %>
-                                            </span>
-                                        </span>
-                                    </li>
+                                    <li>Shipping Charge <span id="shippingCharge">₹<%= shippingCharge %></span></li>
+                                    <li id="total-item"> <span id="total-amount"><span id="total"><%= total %></span></span></li>
                                 </ul>
                                 <!-- <input type="hidden" id="discountAmount" value="0"> -->
                                 <div class="checkout__input__checkbox">
@@ -1681,27 +1672,24 @@ document.addEventListener("DOMContentLoaded", function() {
     const placeOrderButton = document.getElementById("placeOrderButton");
     const paymentMethods = document.querySelectorAll(".payment-method");
     const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
-    // const discountAmountElement = document.getElementById("discountAmount");
     const offerDiscountElement = document.getElementById("offerDiscount");
     const couponDiscountElement = document.getElementById("couponDiscount");
     const shippingChargeElement = document.getElementById("shippingCharge");
-    
-    // const discountAmount = parseFloat(discountAmountElement.value) || 0;
-    const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
-    const couponDiscount = parseFloat(couponDiscountElement.textContent.replace('₹', '').replace('-', '')) || 0;
-    const shippingCharge = parseFloat(shippingChargeElement.textContent.replace('₹', '')) || 0;
-
-    // console.log("This is my  discountAmount:",discountAmount);
-    console.log("This is my  offerDiscount:",offerDiscount);
-    console.log("This is my  couponDiscount:",couponDiscount);
-    console.log("This is my  shippingCharge:",shippingCharge);
-    
+    const totalElement = document.getElementById("total");
 
     paymentMethods.forEach(method => {
         method.addEventListener("change", function() {
+            // Deselect all other payment methods
+            paymentMethods.forEach(otherMethod => {
+                if (otherMethod !== method) {
+                    otherMethod.checked = false;
+                }
+            });
+            // Enable/disable the place order button
             placeOrderButton.disabled = !Array.from(paymentMethods).some(method => method.checked);
         });
     });
+
 
     placeOrderButton.addEventListener("click", function() {
         const selectedAddress = Array.from(addressRadios).find(radio => radio.checked)?.value;
@@ -1716,13 +1704,18 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
+        const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
+        const couponDiscount = parseFloat(couponDiscountElement.textContent.replace('₹', '').replace('-', '')) || 0;
+        const shippingCharge = parseFloat(shippingChargeElement.textContent.replace('₹', '')) || 0;
+        const totalAmount = parseFloat(totalElement.textContent.replace('₹', '')) || 0;
+
         const orderData = {
             PaymentMethod: selectedPaymentMethod,
             addressId: selectedAddress,
-            // discountAmount,
             offerDiscount,
             couponDiscount,
-            shippingCharge
+            shippingCharge,
+            totalAmount
         };
 
         fetch("/user/place-order", {
@@ -1776,7 +1769,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Order Failed',
-                    text: 'Failed to place order. Please try again.'
+                    text: data.message || 'Failed to place order. Please try again.'
+                }).then(() => {
+                    window.location.href = "/user/productCart";
                 });
             }
         })
@@ -1794,7 +1789,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const toggleButton = document.getElementById('toggle-coupons');
     const couponsSection = document.getElementById('available-coupons');
     const couponsList = document.getElementById('coupons-list');
@@ -1807,7 +1802,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const discountAmountElement = document.getElementById('discountAmount');
 
     console.log('DOM fully loaded and parsed');
-
 
     // Toggle coupons visibility
     toggleButton.addEventListener('click', () => {
@@ -1873,13 +1867,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 const { discount, newTotal } = result;
+
+                console.log("This is discount for couponApplay :", discount);
+                console.log("This is newTotal for couponApplay :", newTotal);
+
                 couponDiscountElement.textContent = `-₹${discount.toFixed(2)}`;
                 const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
-                const finalTotal = newTotal ;
+                const finalTotal = newTotal;
 
                 totalElement.textContent = finalTotal.toFixed(2);
                 discountAmountElement.value = discount.toFixed(2);
 
+                applyButton.style.display = 'none'; // Hide Apply button
                 removeButton.style.display = 'inline-block'; // Show Remove button
 
                 Swal.fire({
@@ -1938,6 +1937,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Display the original subtotal and apply other discounts
                     const offerDiscount = parseFloat(offerDiscountElement.textContent.replace('₹', '')) || 0;
                     const finalTotal = subtotal - offerDiscount;
+
+                    console.log("This is the offerDiscount :", offerDiscount);
+                    console.log("This is the finalTotal :", finalTotal);
 
                     totalElement.textContent = finalTotal.toFixed(2);
 

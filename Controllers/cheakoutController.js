@@ -8,51 +8,81 @@ const loadCheakoutPage = async (req, res) => {
         if (req.session.user) {
             const userId = req.session.user;
 
-            const user = await User.findById(userId); // Assuming you have a User model
+            const user = await User.findById(userId);
 
             // Fetch addresses and cart data
             const addresses = await Address.find({ user: userId });
             let cart = await Cart.findOne({ userId }).populate({
                 path: 'products.productId',
-                populate: { path: 'variants' }
+                populate: [
+                    { path: 'variants' },
+                    { path: 'productCategory' }
+                ]
             });
 
-               // If cart is not found, initialize an empty cart
-               if (!cart) {
+            // If cart is not found, initialize an empty cart
+            if (!cart) {
                 cart = {
                     products: []
                 };
             }
 
-            // Fetch all offers
-            const offers = await Offer.find();
+            // Fetch all active offers
+            const offers = await Offer.find({ active: true });
 
             // Calculate discounted prices for each product in the cart
             cart.products.forEach(productInCart => {
                 const product = productInCart.productId;
-                // console.log("this is product from cart :", product);
-                let discount = 0;
+                let highestDiscount = 0;
 
                 // Check if any offers apply to the product or its category
                 offers.forEach(offer => {
-                    if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
-                        discount = Math.max(discount, offer.discount); // Get the highest discount applicable
+                    if (offer.applicableToProducts.includes(product._id) || 
+                        offer.applicableToCategories.includes(product.productCategory._id)) {
+                        highestDiscount = Math.max(highestDiscount, offer.discount);
                     }
                 });
 
                 // Calculate discounted price
-                const discountedPrice = product.price * (1 - discount / 100);
+                const discountedPrice = product.price - (product.price * highestDiscount / 100);
+                
                 productInCart.discountedPrice = discountedPrice;
+                productInCart.discount = highestDiscount;
+
+                console.log(`Product: ${product.productname}, Original Price: ${product.price}, Discount: ${highestDiscount}%, Discounted Price: ${discountedPrice}`);
             });
 
-            // Render the checkout page with addresses and updated cart
-            res.render('cheakOut', { addresses, cart , user });
+            // Calculate totals
+            const subtotal = cart.products.reduce((sum, product) => {
+                return sum + product.discountedPrice * product.quantity;
+            }, 0);
+
+            const totalDiscount = cart.products.reduce((sum, product) => {
+                return sum + (product.productId.price - product.discountedPrice) * product.quantity;
+            }, 0);
+
+            const shippingCharge = subtotal < 500 ? 50 : 0;
+            const total = subtotal + shippingCharge;
+
+            // Render the checkout page with addresses, updated cart, and calculated totals
+            res.render('cheakOut', { 
+                addresses, 
+                cart, 
+                user,
+                subtotal: subtotal.toFixed(2),
+                totalDiscount: totalDiscount.toFixed(2),
+                shippingCharge: shippingCharge.toFixed(2),
+                total: total.toFixed(2)
+            });
+        } else {
+            res.redirect('/login'); // Redirect to login if user is not authenticated
         }
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
 };
+
 const breadCrumbCart = async (req,res) =>{
     try {
         const userId = req.session.user;

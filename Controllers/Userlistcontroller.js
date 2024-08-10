@@ -90,7 +90,12 @@ const LoadShopage = async (req, res) => {
                 }
             });
             product.highestDiscount = highestDiscount;
+            console.log("this is the highestDiscount :",highestDiscount);
+            
             product.discountedPrice = product.price - (product.price * highestDiscount / 100);
+            
+            console.log("This is product discountedPrice :",product.discountedPrice);
+            
         });
 
 
@@ -122,105 +127,103 @@ const LoadShopage = async (req, res) => {
     }
 }
 
-const loadProductDetails = async(req,res) =>{
+const loadProductDetails = async (req, res) => {
     try {
-
-        
         const productId = req.params.productId;
         const variantId = req.params.variantId;
 
-        // console.log('This is shop product :', productId);
-        // console.log('This is shop varient :', variantId);
-        
         const product = await Product.findById(productId).populate('variants').populate('productCategory');
-        const  offers   = await Offer.find();
+        const offers = await Offer.find({ active: true });
 
-        // console.log('This is my shop product',product);
+        let variant = product.variants.find((variant) => variant._id == variantId);
 
-        let variant = product.variants.find((variant)=> variant._id == variantId);
-
-        // console.log('This is my variant',variant);
-
-        if(!variant){
+        if (!variant) {
             return res.status(404).send('Variant is not found...!');
         }
 
         const category = product.productCategory;
 
-        // console.log('This is my category',category);
-        
-        if(!category){
+        if (!category) {
             return res.status(404).send('category is not found...!');
         }
 
-        let discount = 0;
-
-        offers.forEach((offer) => {
+        // Calculate the highest discount
+        let highestDiscount = 0;
+        offers.forEach(offer => {
             if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
-                discount = Math.max(discount, offer.discount); // Get the highest discount applicable
+                if (offer.discount > highestDiscount) {
+                    highestDiscount = offer.discount;
+                }
             }
         });
 
-        const discountedPrice = product.price * (1 - discount / 100);
+        console.log("This is the highest discount:", highestDiscount);
 
+        // Calculate the discounted price
+        const discountedPrice = product.price - (product.price * highestDiscount / 100);
 
-        res.render('productDetails' , {product , variant ,category , discount, discountedPrice })
-        
+        console.log("This is the discounted price:", discountedPrice);
+
+        res.render('productDetails', { 
+            product, 
+            variant, 
+            category, 
+            discount: highestDiscount, 
+            discountedPrice 
+        });
+
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
-}
+};
 
-const loadProductCart = async(req , res) =>{
-  
-    try { 
+const loadProductCart = async (req, res) => {
+    try {
+        const userId = req.session.user;
 
-            const userId = req.session.user;
+        const cart = await Cart.find({ userId }).populate({
+            path: 'products.productId',
+            populate: [
+                { path: 'variants' },
+                { path: 'productCategory' }
+            ]
+        });
 
-            // console.log('The user is here : ',userId);
+        // Fetch all active offers
+        const offers = await Offer.find({ active: true });
 
-            const cart = await Cart.find({ userId }).populate({
-                path: 'products.productId',
-                populate: { path: 'variants' }
-            })
-
-
-                // Fetch all offers
-            const offers = await Offer.find();
-
-            // Calculate discounted prices for each product in the cart
-            cart.forEach(item => {
+        // Calculate discounted prices for each product in the cart
+        cart.forEach(item => {
             item.products.forEach(productInCart => {
                 const product = productInCart.productId;
-                let discount = 0;
+                let highestDiscount = 0;
 
                 // Check if any offers apply to the product or its category
                 offers.forEach(offer => {
-                    if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
-                        discount = Math.max(discount, offer.discount); // Get the highest discount applicable
+                    if (offer.applicableToProducts.includes(product._id) || 
+                        offer.applicableToCategories.includes(product.productCategory._id)) {
+                        highestDiscount = Math.max(highestDiscount, offer.discount);
                     }
                 });
 
                 // Calculate discounted price
-                const discountedPrice = product.price * (1 - discount / 100);
+                const discountedPrice = product.price - (product.price * highestDiscount / 100);
+                
                 productInCart.discountedPrice = discountedPrice;
+                productInCart.discount = highestDiscount;
+
+                console.log(`Product: ${product.name}, Original Price: ${product.price}, Discount: ${highestDiscount}%, Discounted Price: ${discountedPrice}`);
             });
         });
 
-
-
-            // console.log('the cart is here :',cart);
-
-            res.render('userCart', { cart }); // Render cart.ejs template with cart data
-
-
-   
+        res.render('userCart', { cart });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
 };
+
 const addToCart = async (req, res) => {
     try {
 

@@ -48,7 +48,6 @@ const productSchema = new Schema({
     },
     discountedPrice: {
         type: Number, // Optional
-        required: false
     }
 });
 

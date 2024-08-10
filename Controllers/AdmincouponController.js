@@ -94,7 +94,7 @@ const loadEditPage = async (req,res) =>{
 
 const updateCoupon = async (req,res) =>{
     try {
-        const { name, activationDate, expireDate, limitOfUse, discountAmount } = req.body;
+        const { name, activationDate, expireDate, limitOfUse, discountAmount,maxAmount } = req.body;
 
         let coupon = req.params.id;
         console.log("id :",coupon);
@@ -105,6 +105,7 @@ const updateCoupon = async (req,res) =>{
             activationDate,
             expireDate,
             limitOfUse,
+            maxDiscountAmount : maxAmount,
             discount: discountAmount
         }, { new: true });
 

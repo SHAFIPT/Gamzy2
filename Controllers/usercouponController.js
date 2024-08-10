@@ -65,13 +65,13 @@ const applyCoupon = async (req, res) => {
             // Calculate discounted price
             const discountedPrice = productPrice * (1 - discount / 100);
 
-            console.log('This is product price to calculate:', discountedPrice);
+            // console.log('This is product price to calculate:', discountedPrice);
 
             const quantity = productInCart.quantity;
             return sum + (discountedPrice * quantity);
         }, 0);
 
-        console.log('This is orderSubtotal:', orderSubtotal);
+        // console.log('This is orderSubtotal:', orderSubtotal);
 
         // Check if the subtotal is eligible for the coupon
         if (orderSubtotal < 500) {

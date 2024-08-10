@@ -357,10 +357,10 @@ footer a:hover {
                                     <% if (discount > 0) { %>
                                         <h3>
                                             <span style="color: black;">₹</span><%= discountedPrice.toFixed(2) %>
-                                            <span style="text-decoration: line-through; color: red;">₹<%= product.price %></span>
+                                            <span style="text-decoration: line-through; color: red;">₹<%= product.price.toFixed(2) %></span>
                                         </h3>
                                     <% } else { %>
-                                        <h3><span style="color: black;">₹</span><%= product.price %></h3>
+                                        <h3><span style="color: black;">₹</span><%= product.price.toFixed(2) %></h3>
                                     <% } %>
                                     <p><%= product.productDescription %></p>
                 
@@ -382,7 +382,6 @@ footer a:hover {
                         </div>
                     </div>
                 </div>
-
 
                 <div class="product__details__cart__option">
                     <form id="cartForm">

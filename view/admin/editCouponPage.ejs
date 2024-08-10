@@ -105,6 +105,11 @@
                                 <input id="discount-amount" name="discount-amount" type="number" step="0.01" class="form-control validate" value="<%= coupon.discount %>" required />
                                 <div class="error"></div> <!-- Error display -->
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="max-amount">Max Amount</label>
+                                <input id="max-amount" name="max-amount" type="number" step="0.01" class="form-control validate" value="<%= coupon.maxDiscountAmount %>"required />
+                                <div class="error"></div> <!-- Error display -->
+                            </div>
                             <div class="row">
                                 <div class="col-6">
                                     <button type="submit" class="btn btn-primary btn-block text-uppercase">Update</button>
@@ -132,6 +137,7 @@
     const expireDate = document.getElementById('expire-date');
     const limitOfUse = document.getElementById('limit-of-use');
     const discountAmount = document.getElementById('discount-amount');
+    const maxAmount = document.getElementById('max-amount');
     const couponId = document.getElementById('coupon-id').value; // Get the coupon ID
 
     // Define the functions before using them
@@ -141,6 +147,7 @@
         const expireDateValue = expireDate.value.trim();
         const limitOfUseValue = limitOfUse.value.trim();
         const discountAmountValue = discountAmount.value.trim();
+        const maxAmountValue = maxAmount.value.trim();
 
         if (nameValue === '') {
             setError(name, 'Coupon name is required');
@@ -175,6 +182,12 @@
         } else {
             setSuccess(discountAmount);
         }
+
+        if (maxAmountValue === '') {
+            setError(maxAmount, 'maxAmount date is required');
+        } else {
+            setSuccess(maxAmount);
+        }
     };
 
     const isValid = () => {
@@ -182,6 +195,8 @@
                activationDate.parentElement.classList.contains('success') &&
                expireDate.parentElement.classList.contains('success') &&
                limitOfUse.parentElement.classList.contains('success') &&
+               limitOfUse.parentElement.classList.contains('success') &&
+               maxAmount.parentElement.classList.contains('success') &&
                discountAmount.parentElement.classList.contains('success');
     };
 
@@ -214,6 +229,7 @@
                 activationDate: activationDate.value,
                 expireDate: expireDate.value,
                 limitOfUse: limitOfUse.value,
+                maxAmount: maxAmount.value,
                 discountAmount: discountAmount.value,
                 id: couponId // Include coupon ID
             };

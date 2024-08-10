@@ -221,13 +221,13 @@ input[type="number"] {
                                             </div>
                                             <div class="product__cart__item__text">
                                                 <h6><%= product.productId.name %></h6>
-                                                <% if (product.discountedPrice < product.productId.price) { %>
+                                                <% if (product.discount > 0) { %>
                                                     <h5>
                                                         ₹<%= product.discountedPrice.toFixed(2) %>
-                                                        <span style="text-decoration: line-through; color: red;">₹<%= product.productId.price %></span>
+                                                        <span style="text-decoration: line-through; color: red;">₹<%= product.productId.price.toFixed(2) %></span>
                                                     </h5>
                                                 <% } else { %>
-                                                    <h5>₹<%= product.productId.price %></h5>
+                                                    <h5>₹<%= product.productId.price.toFixed(2) %></h5>
                                                 <% } %>
                                             </div>
                                         </td>
@@ -296,12 +296,12 @@ input[type="number"] {
                     <ul>
                         <li>Subtotal <span>₹<span id="subtotal">
                             <%= cart && cart[0] ? cart[0].products.reduce((sum, product) => {
-                                return sum + (product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity;
+                                return sum + product.discountedPrice * product.quantity;
                             }, 0).toFixed(2) : 0 %>
                         </span></span></li>
                         <li>Total <span>₹<span id="total">
                             <%= cart && cart[0] ? cart[0].products.reduce((sum, product) => {
-                                return sum + (product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity;
+                                return sum + product.discountedPrice * product.quantity;
                             }, 0).toFixed(2) : 0 %>
                         </span></span></li>
                     </ul>

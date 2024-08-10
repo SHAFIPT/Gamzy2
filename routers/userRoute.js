@@ -20,6 +20,14 @@ const userCouponController = require('../Controllers/usercouponController');
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 
+const checkOrderStatus = (req, res, next) => {
+    if (req.session.orderPlaced) {
+        return res.redirect("/user/order");
+    }
+    next();
+};
+
+
 // Apply express-session middleware first
 router.use(session({
     secret: config.sessionSecret,
@@ -41,6 +49,8 @@ router.get('/GoogleAuth',
         failureRedirect : '/user/failure'
     }
 ));
+
+
  
 //success
 router.get('/success',userController.successGoogleLogin)

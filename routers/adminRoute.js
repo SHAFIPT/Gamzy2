@@ -5,7 +5,8 @@ const Admincontroller = require('../Controllers/Admincontroller')
 const Productcontroller = require('../Controllers/ProductController');
 const adminOrderController = require('../Controllers/AdminOrderController');
 const adminCouponController = require("../Controllers/AdmincouponController");
-const adminOfferController = require('../Controllers/AdminOfferController')
+const adminOfferController = require('../Controllers/AdminOfferController');
+const adminSaleController = require('../Controllers/AdminSalesController')
 const nocache = require('nocache') 
 const upload = require('../middlewares/multer')
 const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
@@ -113,6 +114,9 @@ admin_route.put('/editOffer/:id',adminOfferController.editOffer)
 
 admin_route.get('/getProducts',adminOfferController.getProducts);
 admin_route.get('/getCategories',adminOfferController.getCategories)
+
+//sales Report
+admin_route.get('/salesReport',adminSaleController.loadSalesReport)
  
 
 module.exports = admin_route;

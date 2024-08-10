@@ -1,0 +1,253 @@
+<%- include('../layouts/adminheader') %>
+<style>
+    .tm-product-table .btn {
+        margin: 0 2px; /* Adjust the margin to reduce gaps */
+        padding: 4px 10px; /* Adjust the padding for a more compact layout */
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        /* Adjust font size as needed */
+        color: #777;
+        /* Adjust color as needed */
+    }
+
+    .tm-product-table th,
+    .tm-product-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .tm-product-table th {
+        width: auto;
+    }
+
+    .tm-product-table .btn {
+        margin: 0 5px;
+    }
+
+    .variant-button {
+        margin-left: 5px;
+    }
+
+    .btn-variant {
+        background-color: blue;
+        color: white;
+    }
+
+    .btn-variant:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    @media (max-width: 768px) {
+        .tm-product-table .btn {
+            margin: 2px 0;
+            display: block;
+        }
+    }
+
+
+    /* Style for action buttons in the table */
+.table .btn {
+    margin-right: 5px;
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+.table .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.table .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.table .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.table .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Style for the modal */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+</style>
+</head>
+
+<nav class="navbar navbar-expand-xl">
+    <div class="container h-100">
+        <a class="navbar-brand" href="index.html">
+            <h1 class="tm-site-title mb-0">SALES REPORT</h1>
+        </a>
+        <ul class="breadcrumb mt-2">
+            <li class="breadcrumb-item"><a href="/admin/Products">Admin &gt;&gt;</a>Dashboard</li>
+        </ul>
+        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars tm-nav-icon"></i>
+        </button>
+        <div class="col-lg-3 col-md-6 ms-auto">
+            <form action="">
+                <!-- <input type="text" placeholder="Search..." class="form-control" id="searchInput" name="search" /> -->
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+    <div class="tm-bg-primary-dark tm-block tm-block-products">
+        <div class="tm-product-table-container">
+            <table class="table table-hover tm-table-small tm-product-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Payment Status</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Total Discounted Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order => { %>
+                        <% order.products.forEach(product => { %>
+                            <tr>
+                                <td><%= order.orderId %></td>
+                          
+                                <td><%= order.userId.name %></td> <!-- Assuming you have a way to get the user's name -->
+                                <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
+                                <td><%= order.PaymentMethod %></td>
+                                <td><%= product.status %></td>
+                                <td><%= product.quantity %></td>
+                                <td><%= product.price - order.offerDiscount %></td>
+                                <td>$<%= (product.price * product.quantity).toFixed(2) %></td>
+                                <td>
+                                    $<%= (product.price * product.quantity - order.offerDiscount - order.couponDiscount).toFixed(2) %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <!-- table container -->
+        <a href="/admin/addSale" class="btn btn-primary btn-block text-uppercase mb-3">Add New Sale</a>
+    </div>
+</div>
+
+<footer class="tm-footer row tm-mt-small">
+    <div class="col-12 font-weight-light">
+        <p class="text-center text-white mb-0 px-4 small">
+            Copyright &copy; <b>2018</b> All rights reserved.
+            Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+                $(function () {
+                    $(".tm-product-name").on("click", function () {
+                        window.location.href = "edit-product.html";
+                    });
+                });
+
+            </script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+<script>
+    // Function to handle coupon deletion
+    async function deleteCoupon(button) {
+        const couponId = button.getAttribute('data-coupon-id');
+        
+        try {
+            const response = await fetch(`/admin/deleteCoupon/${couponId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Success',
+                    text: result.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Reload the page or update the UI as needed
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: result.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+</script>
+            <%- include('../layouts/footer') %>
+
