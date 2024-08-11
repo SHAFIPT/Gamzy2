@@ -25,6 +25,8 @@ const orderSchema = new Schema({
         price: { type: Number, required: true },
         status: { type: String },
         cancelReason: { type: String },
+        returnReason: { type: String },  // Add this field for return reason
+        returnStatus: { type: String }   // Add this field for return status
     }],
     totalAmount: { type: Number, required: true },
     orderDate: { type: Date, required: true }

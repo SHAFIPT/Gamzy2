@@ -13,7 +13,7 @@ connectDB();
 app.set('view engine', 'ejs'); 
  
 app.set('views', path.join(__dirname, 'view', 'user'));
-      
+       
                         
 // Middleware for parsing JSON and urlencoded data 
 app.use(express.json());    
@@ -42,5 +42,5 @@ app.use('/admin',adminRoute);
 const PORT = process.env.PORT;    
 app.listen(PORT, () => { 
     console.log(`Server is running on http://localhost:${PORT}`); 
-});                   
+});                    
                                                                                

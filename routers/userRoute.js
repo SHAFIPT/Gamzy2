@@ -119,7 +119,13 @@ router.delete('/removeaddress/:id', myaccountController.removeAddress)
 router.get('/Userorders',userMiddleware.isLogin,myaccountController.loadOrderDetails);
 //userOrderAccout cancel
 router.post('/cancel-order/:orderId', myaccountController.orderCancel);
+//userOrderAccout return
+router.post('/return-order/:orderId', myaccountController.orderReturn)
 
+//userAccount wallet
+router.get('/wallet',myaccountController.loadWalletPage);
+//userAccount wishlist
+router.get('/wishlist',myaccountController.loadWishList)
 
 //order page
 router.get("/order",userMiddleware.isLogin,orderController.loadOrderPage);

@@ -646,6 +646,7 @@
                         <li class="active"><a href="/user/myaccount">My Profile</a></li>
                         <li><a href="/user/Userorders">Orders</a></li>
                         <li><a href="/user/address">Address</a></li>
+                        <li><a href="/user/wallet">Wallet</a></li>
                         <li><a href="/user/signout">Signout</a></li>
                     </ul>
                 </div>
@@ -683,7 +684,6 @@
                                     <th>Image</th>
                                     <th>Product</th>
                                     <th>Quantity</th>
-                                    <th>Price</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -701,17 +701,26 @@
                                             <%= variant.color %>
                                         </td>
                                         <td><%= product.quantity %></td>
-                                        <td>₹<%= product.price.toFixed(2) %></td>
-                                        <td>₹<%= (product.price * product.quantity).toFixed(2) %></td>
+                                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
                                     </tr>
                                 <% }); %>
                             </tbody>
                         </table>
                         <div class="order-summary-footer">
                             <div class="row align-items-center">
-                                <div class="col-md-6 text-left">
-                                    <a href="/cancel-order/<%= order._id %>" class="btn btn-danger btn-lg custom-btn">Cancel</a>
-                                </div>
+                                <% order.products.forEach(function(product) { %>
+                                    <div class="col-md-6 text-left">
+                                        <% if (product.status === 'Delivered') { %>
+                                            <a href="/return-order/<%= order._id %>" class="btn btn-warning btn-lg custom-btn">Return</a>
+                                        <% } else if (product.status === 'Returned') { %>
+                                            <!-- No buttons for returned products -->
+                                        <% } else if (product.status === 'Canceled') { %>
+                                            <!-- No buttons for canceled products -->
+                                        <% } else { %>
+                                            <a href="/cancel-order/<%= order._id %>" class="btn btn-danger btn-lg custom-btn">Cancel</a>
+                                        <% } %>
+                                    </div>
+                                <% }); %>
                                 <div class="col-md-6 text-right">
                                     <h6 class="mt-2">Status: 
                                         <% 
@@ -719,6 +728,8 @@
                                         order.products.forEach(product => {
                                             if (product.status === 'Canceled') {
                                                 overallStatus = 'Canceled';
+                                            } else if (product.status === 'Returned') {
+                                                overallStatus = 'Returned';
                                             } else if (product.status === 'Delivered') {
                                                 overallStatus = 'Delivered';
                                             } else if (product.status === 'Out For Delivery') {
@@ -731,6 +742,8 @@
                                         <span class="
                                             <% if (overallStatus === 'Canceled') { %>
                                                 status-canceled
+                                            <% } else if (overallStatus === 'Returned') { %>
+                                                status-returned
                                             <% } else if (overallStatus === 'Delivered') { %>
                                                 status-delivered
                                             <% } else if (overallStatus === 'Out For Delivery') { %>
@@ -794,6 +807,31 @@
 </div>
 
 
+<!-- Return Order Modal -->
+<div id="returnOrderModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Return Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="returnOrderForm">
+                    <input type="hidden" id="orderId" name="orderId">
+                    <div class="form-group">
+                        <label for="returnReason">Return Reason</label>
+                        <textarea id="returnReason" name="returnReason" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Return Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -825,22 +863,31 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
-        // When a cancel button is clicked, show the modal and set the order ID
+        // When a cancel button is clicked, show SweetAlert confirmation
         $('.btn.btn-danger').on('click', function() {
             const orderId = $(this).attr('href').split('/').pop();
-            $('#orderId').val(orderId);
-            $('#cancelOrderModal').modal('show');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to cancel this order?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#orderId').val(orderId);
+                    $('#cancelOrderModal').modal('show');
+                }
+            });
             return false; // Prevent default anchor behavior
         });
 
-        // Handle form submission
+        // Handle cancel form submission
         $('#cancelOrderForm').on('submit', function(event) {
             event.preventDefault();
             const orderId = $('#orderId').val();
             const cancelReason = $('#cancelReason').val();
-
-            console.log("cancelReason",cancelReason);
-            console.log("orderId",orderId);
 
             $.ajax({
                 url: `/user/cancel-order/${orderId}`, // Adjusted URL
@@ -849,13 +896,85 @@
                 success: function(response) {
                     if (response.success) {
                         $('#cancelOrderModal').modal('hide');
-                        location.reload(); // Reload the page or redirect as needed
+                        Swal.fire(
+                            'Cancelled!',
+                            'Your order has been cancelled.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
                     } else {
-                        alert('Failed to cancel order: ' + response.message);
+                        Swal.fire(
+                            'Failed!',
+                            'Failed to cancel order: ' + response.message,
+                            'error'
+                        );
                     }
                 },
                 error: function() {
-                    alert('An error occurred. Please try again.');
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred. Please try again.',
+                        'error'
+                    );
+                }
+            });
+        });
+
+        // When a return button is clicked, show SweetAlert confirmation
+        $('.btn.btn-warning').on('click', function() {
+            const orderId = $(this).attr('href').split('/').pop();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to return this order?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, return it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#orderId').val(orderId);
+                    $('#returnOrderModal').modal('show');
+                }
+            });
+            return false; // Prevent default anchor behavior
+        });
+
+        // Handle return form submission
+        $('#returnOrderForm').on('submit', function(event) {
+            event.preventDefault();
+            const orderId = $('#orderId').val();
+            const returnReason = $('#returnReason').val();
+
+            $.ajax({
+                url: `/user/return-order/${orderId}`,
+                method: 'POST',
+                data: { returnReason },
+                success: function(response) {
+                    if (response.success) {
+                        $('#returnOrderModal').modal('hide');
+                        Swal.fire(
+                            'Returned!',
+                            'Your order has been returned.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            'Failed to return order: ' + response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred. Please try again.',
+                        'error'
+                    );
                 }
             });
         });

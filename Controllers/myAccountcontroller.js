@@ -2,6 +2,7 @@ const Address = require('../model/addressShema');
 const User = require('../model/UserModel')
 const mongoose=require('mongoose');
 const Order = require('../model/ordreModel');
+const Wallet = require('../model/walletSchema')
 const Product = require('../model/productModel');
 const bcrypt = require('bcrypt');
 
@@ -238,6 +239,51 @@ const orderCancel = async (req, res) => {
     }
 };
 
+const orderReturn = async (req, res) => {
+    try {
+        const { returnReason } = req.body;
+        const { orderId } = req.params;
+
+        const userId = req.session.user;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "User not authenticated" });
+        }
+
+
+        console.log("This is orderId:", orderId);
+        console.log("This is returnReason:", returnReason);
+
+        // Find the order by orderId (note: orderId is a string, not an ObjectId)
+        const order = await Order.findOne({ _id: orderId, userId });
+
+        console.log("This is my order:", order);
+
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+
+        // Update the order products with return reason and status
+        order.products.forEach(product => {
+            if (product.status === 'Delivered') {
+                product.returnReason = returnReason;
+                product.returnStatus = 'Requested'; // or 'Pending' if you prefer
+                product.status = 'Returned'; // Update the product status to 'Returned'
+            }
+        });
+
+        console.log("Order successfully updated....!");
+
+        // Save the updated order
+        await order.save();
+
+        res.json({ success: true, message: 'Return request submitted successfully' });
+    } catch (error) {
+        console.error('Error processing return:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
 
 const updateProfile = async (req, res) => {
     try {
@@ -307,6 +353,45 @@ const updatePassword = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to update password' });
     }
 };
+const loadWalletPage = async (req, res) => {
+    try {
+        const userId = req.session.user; // Assuming you store user ID in session
+        let wallet = await Wallet.findOne({ user: userId });
+
+
+        console.log("this is wallet :",wallet);
+        
+
+        if (!wallet) {
+            // If wallet doesn't exist, create a new one with zero balance
+            wallet = new Wallet({
+                user: userId,
+                balance: 0,
+                transactions: []
+            });
+            await wallet.save();
+        }
+
+        // Ensure transactions is always an array
+        wallet.transactions = wallet.transactions || [];
+
+        res.render('wallet', { wallet });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+const loadWishList = async (req,res) =>{
+    try {
+
+        res.render('wishlist')
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
 
 module.exports = {
     loadMyAccount,
@@ -317,6 +402,9 @@ module.exports = {
     removeAddress,
     loadOrderDetails,
     orderCancel,
+    orderReturn,
     updateProfile,
-    updatePassword
+    updatePassword,
+    loadWalletPage,
+    loadWishList
 }

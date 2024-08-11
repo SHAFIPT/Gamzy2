@@ -1,4 +1,8 @@
 <%- include('../layouts/adminheader') %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
 <style>
     .tm-product-table .btn {
         margin: 0 2px; /* Adjust the margin to reduce gaps */
@@ -116,9 +120,92 @@
 .modal-footer {
     border-top: 1px solid #dee2e6;
 }
+
+
+
+
+
+.summary-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #435c70;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.summary-item {
+    text-align: center;
+    flex: 1;
+    min-width: 150px; /* Adjust this value for responsive design */
+    margin: 10px;
+}
+
+.summary-item h3 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.summary-item p {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #435c70;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #435c70;
+}
+
+.filter-container form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-container form label,
+.filter-container form input,
+.filter-container form button {
+    margin: 5px;
+}
+
+.filter-container form input,
+.filter-container form button {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filter-buttons button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-buttons button:hover {
+    background-color: #0056b3;
+}
 </style>
 </head>
-
 <nav class="navbar navbar-expand-xl">
     <div class="container h-100">
         <a class="navbar-brand" href="index.html">
@@ -139,47 +226,104 @@
     </div>
 </nav>
 
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
-    <div class="tm-bg-primary-dark tm-block tm-block-products">
-        <div class="tm-product-table-container">
-            <table class="table table-hover tm-table-small tm-product-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">User</th>
-                        <th scope="col">Order Date</th>
-                        <th scope="col">Payment Method</th>
-                        <th scope="col">Payment Status</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Total Discounted Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% orders.forEach(order => { %>
-                        <% order.products.forEach(product => { %>
-                            <tr>
-                                <td><%= order.orderId %></td>
-                          
-                                <td><%= order.userId.name %></td> <!-- Assuming you have a way to get the user's name -->
-                                <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
-                                <td><%= order.PaymentMethod %></td>
-                                <td><%= product.status %></td>
-                                <td><%= product.quantity %></td>
-                                <td><%= product.price - order.offerDiscount %></td>
-                                <td>$<%= (product.price * product.quantity).toFixed(2) %></td>
-                                <td>
-                                    $<%= (product.price * product.quantity - order.offerDiscount - order.couponDiscount).toFixed(2) %>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    <% }) %>
-                </tbody>
-            </table>
+<div class="container mt-5">
+    <!-- Sales Summary -->
+    <div class="summary-container">
+        <div class="summary-item">
+            <h3>Sales Count</h3>
+            <p><%= summaryData.salesCount %></p>
         </div>
-        <!-- table container -->
-        <a href="/admin/addSale" class="btn btn-primary btn-block text-uppercase mb-3">Add New Sale</a>
+        <div class="summary-item">
+            <h3>Order Amount</h3>
+            <p>₹<%= summaryData.orderAmount %></p>
+        </div>
+        <div class="summary-item">
+            <h3>Discount</h3>
+            <p>₹<%= summaryData.totalDiscount %></p>
+        </div>
+        <div class="summary-item">
+            <h3>Refunded Total</h3>
+            <p>₹<%= summaryData.refundedTotal %></p>
+        </div>
+        <div class="summary-item">
+            <h3>Final Amount</h3>
+            <p>₹<%= summaryData.finalAmount %></p>
+        </div>
+    </div>
+    <!-- Filter Options -->
+    <div class="filter-container">
+        <form>
+            <label for="startDate" style="color: white;">Start:</label>
+            <input type="date" id="startDate" name="startDate">
+            <label for="endDate" style="color: white;">End:</label>
+            <input type="date" id="endDate" name="endDate">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+        <div class="filter-buttons">
+            <button type="button">1 Day</button>
+            <button type="button">7 Days</button>
+            <button type="button">30 Days</button>
+            <button type="button">Yearly</button>
+        </div>
+    </div>
+
+    <!-- Sales Report Table -->
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-products">
+            <div class="tm-product-table-container">
+                <table class="table table-hover tm-table-small tm-product-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total Discounted Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(order => { %>
+                            <% order.products.forEach(product => { %>
+                                <% if (product.status === 'Delivered') { %>
+                                    <tr>
+                                        <td><%= order.orderId %></td>
+                                        <td><%= order.userId.name %></td>
+                                        <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
+                                        <td><%= order.PaymentMethod %></td>
+                                        <td><%= product.status %></td>
+                                        <td><%= product.quantity %></td>
+                                        <td>
+                                            <% 
+                                            // Calculate the discounted price for a single unit
+                                            let discountedUnitPrice;
+                                            if (product.discountedPrice) {
+                                                // If discountedPrice is already calculated and stored
+                                                discountedUnitPrice = product.discountedPrice;
+                                            } else {
+                                                // Calculate the discounted price if not already stored
+                                                const discountPercentage = (order.offerDiscount / order.products.reduce((sum, p) => sum + p.price * p.quantity, 0)) * 100;
+                                                discountedUnitPrice = product.price * (1 - discountPercentage / 100);
+                                            }
+                                            %>
+                                            ₹<%= discountedUnitPrice.toFixed(2) %>
+                                        </td>
+                                        <td>
+                                            ₹<%= ((discountedUnitPrice * product.quantity) - (order.couponDiscount / order.products.length)).toFixed(2) %>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            <% }); %>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <!-- table container -->
+            <a href="/admin/addSale" class="btn btn-primary btn-block text-uppercase mb-3">PDF</a>
+            <a href="/admin/addSale" class="btn btn-primary btn-block text-uppercase mb-3">EXCEL</a>
+        </div>
     </div>
 </div>
 
@@ -191,7 +335,7 @@
         </p>
     </div>
 </footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

@@ -145,5 +145,195 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+    <div class="container order-summary-container">
+        <div class="order-summary">
+            <div class="order-details">
+                <div class="order-info">
+                    <p><strong class="order-summary-label">Order ID:</strong> <span class="order-summary-text">#<%= order.orderId %></span></p>
+                    <p><strong class="order-summary-label">Total Amount:</strong> <span class="order-summary-text">₹<%= order.totalAmount.toFixed(2) %></span></p>
+                    <p><strong class="order-summary-label">Ordered Date:</strong> <span class="order-summary-text"><%= new Date(order.orderDate).toLocaleString() %></span></p>
+                </div>
+                <div class="address-details">
+                    <p><strong class="order-summary-label">Ship to:</strong> <span class="order-summary-text"><%= order.address.name %></span></p>
+                    <p><strong class="order-summary-label">Delivery Address:</strong><br>
+                        <span class="order-summary-text">
+                        <%= order.address.address %>, <br>
+                        <%= order.address.Landmark %> <%= order.address.Landmark ? ', ' : '' %><%= order.address.street %><br>
+                        <%= order.address.city %>, <%= order.address.state %> <%= order.address.pincode %><br>
+                        +<%= order.address.number %>
+                    </span>
+                    </p>
+                </div>
+            </div>
+            <h3 class="mt-4 mb-3">Products</h3>
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.products.forEach(product => { %>
+                        <tr>
+                            <% const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString()); %>
+                            <% if (variant && variant.images && variant.images.length > 0) { %>
+                                <td><img src="/uploads/<%= variant.images[0] %>" alt="Product image" class="variant-image"></td>
+                            <% } else { %>
+                                <td><img src="/path/to/default/image.jpg" alt="Default Image" class="variant-image"></td>
+                            <% } %>
+                            <td>
+                                <%= product.productId.productname %> <br>
+                                <%= variant.color %> <br>
+                              
+                            </td>
+                            <td><%= product.quantity %></td>
+                            <td>₹<%= product.price.toFixed(2) %></td>
+                            <td>₹<%= (product.price * product.quantity).toFixed(2) %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <div class="order-summary-footer">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-left">
+                        <a href="/user/ShopPage" class="btn btn-primary btn-lg mr-2 custom-btn">Continue Shopping</a>
+                        <a href="/user/Userorders" class="btn btn-secondary btn-lg custom-btn">Order Details</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <h6>Subtotal: <span>₹<%= order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0).toFixed(2) %></span></h6>
+                        <p><strong class="order-summary-label">Shipping Charge:</strong> <span class="order-summary-text">₹<%= order.shippingCharge.toFixed(2) %></span></p>
+                    <p><strong class="order-summary-label">Offer Discount:</strong> <span class="order-summary-text">-₹<%= order.offerDiscount.toFixed(2) %></span></p>
+                    <p><strong class="order-summary-label">Coupon Discount:</strong> <span class="order-summary-text">-₹<%= order.couponDiscount.toFixed(2) %></span></p>
+                        <h3 class="mt-4">Grand Total: <span>₹<%= order.totalAmount.toFixed(2) %></span></h3>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+
+
+
+
+    <div class="col-lg-4 col-md-6">
+        <div class="checkout__order">
+            <h4 class="order__title">Your order</h4>
+            <div class="checkout__order__products">Product <span>Total</span></div>
+            <ul class="checkout__total__products">
+                <% if (cart && cart.products.length > 0) { %>
+                    <% cart.products.forEach(product => { %>
+                        <li>
+                            <span class="product-name"><%= product.productId.productname %></span> 
+                            <span class="product-quantity">x <%= product.quantity %></span> 
+                            <span>
+                                ₹<%= ((product.discountedPrice ? product.discountedPrice : product.productId.price) * product.quantity).toFixed(2) %>
+                            </span>
+                        </li>
+                    <% }) %>
+                <% } else { %>
+                    <li>Your cart is empty.</li>
+                <% } %>
+            </ul>
+            <div class="cart__discount">
+                <h6>Discount codes</h6>
+                <form id="discount-form" action="#">
+                    <input type="text" id="coupon-code" placeholder="Coupon code">
+                    <button type="button" id="apply-discount">Apply</button>
+                    <button type="button" id="remove-coupon" style="display: none;">Remove</button>
+                </form>
+                
+                <!-- Toggle Button for Available Coupons -->
+                <button type="button" id="toggle-coupons" class="toggle-coupons-button">Show Available Coupons</button>
+                
+                <!-- Available Coupons Section -->
+                <div class="available-coupons" id="available-coupons" style="display: none;">
+                    <h6>Available Coupons</h6>
+                    <ul id="coupons-list">
+                        <!-- Coupons will be dynamically inserted here -->
+                    </ul>
+                </div>
+            </div>
+            <ul class="checkout__total__all">
+                <li>Subtotal 
+                    <span>₹<span id="subtotal">
+                        <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                            const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                            return sum + price * product.quantity;
+                        }, 0).toFixed(2) : 0 %>
+                    </span></span>
+                </li>
+                <li>Offer Discount 
+                    <span id="offerDiscount">
+                        ₹<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                            const discount = product.productId.price - (product.discountedPrice || product.productId.price);
+                            return sum + discount * product.quantity;
+                        }, 0).toFixed(2) : 0 %>
+                    </span>
+                </li>
+                <li>Coupon Discount <span id="couponDiscount">-₹0.00</span></li>
+                <input type="hidden" id="discountAmount" value="0">
+                <% 
+                let subtotal = cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                    const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                    return sum + price * product.quantity;
+                }, 0) : 0;
+                let shippingCharge = subtotal < 500 ? 50 : 0;
+                %>
+                <li>Shipping Charge <span id="shippingCharge">₹<%= shippingCharge.toFixed(2) %></span></li>
+                <li id="total-item">
+                    <span id="total-amount">
+                        <span id="total">
+                            <%= (subtotal + shippingCharge).toFixed(2) %>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+            <!-- <input type="hidden" id="discountAmount" value="0"> -->
+            <div class="checkout__input__checkbox">
+                <label for="Cashondelivary">
+                    Cash on Delivery
+                    <input type="checkbox" id="Cashondelivary" class="payment-method">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div class="checkout__input__checkbox">
+                <input type="hidden" id="total-amount-hidden" value="<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                    const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                    return sum + price * product.quantity;
+                }, 0).toFixed(2) : 0 %>">
+                <label for="razerpay">
+                    Razor Pay
+                    <input type="checkbox" id="razerpay" class="payment-method">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <button type="button" id="placeOrderButton" class="site-btn">PLACE ORDER</button>
+        </div>
+    </div>
+</div>
+<!-- </form> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

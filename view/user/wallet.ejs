@@ -1,0 +1,472 @@
+<%- include('../layouts/userheader') %>
+
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+</head>
+
+<style>
+ /* Navbar Styles */
+.navbar {
+    background-color: #343a40; /* Dark background */
+    padding: 1rem 1rem; /* Padding */
+}
+
+.navbar-brand h1 {
+    color: #ffffff; /* White text for the brand name */
+    font-size: 2rem; /* Adjust as needed */
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* White text for nav links */
+    margin-right: 1rem; /* Spacing between links */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow text on hover */
+}
+
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffc107; /* Yellow text for the active link */
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
+}
+
+/* Breadcrumb Section Styles */
+.breadcrumb-option {
+    background: #f8f9fa; /* Light background */
+    padding: 3.5rem 0; /* Padding */
+    margin-bottom: 140px; /* Adjust the margin as needed */
+}
+
+.breadcrumb__text h4 {
+    text-align: center; /* Center the text */
+    margin: 0; /* Remove margin */
+    font-size: 40px; /* Adjust as needed */
+    color: #333333; /* Dark text color */
+}
+
+.breadcrumb__links {
+    text-align: center; /* Center the breadcrumb links */
+    font-size: 1rem; /* Adjust as needed */
+    color: #777777; /* Light grey color */
+}
+
+/* Ensure breadcrumb links have some margin and are styled correctly */
+.breadcrumb__links a {
+    color: #007bff; /* Primary color for links */
+    text-decoration: none; /* Remove underline */
+}
+
+.breadcrumb__links a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.breadcrumb__links span {
+    color: #333; /* Dark color for current page */
+}
+.bg-black {
+    background-color: #000000;
+}
+
+.topper {
+    color: #ffffff;
+}
+
+.topper .icon {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.topper .text {
+    color: #ffffff;
+}
+
+.hero-wrap {
+    padding: 60px 0;
+    color: #ffffff;
+    text-align: center;
+}
+
+.bread {
+    font-size: 36px;
+    margin-bottom: 0;
+}
+.left-sidebar {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.sidebar-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-options li {
+  margin-bottom: 15px;
+}
+
+.sidebar-options li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar-options li.active a,
+.sidebar-options li a:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+
+
+
+.ftco-animate {
+    animation: fadeInUp 0.5s both;
+}
+
+.addresses-list {
+    margin-top: 20px;
+}
+
+.address-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    position: relative;
+    padding-left: 50px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.address-item:hover {
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.address-item input[type="radio"] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.address-item label {
+    display: block;
+    cursor: pointer;
+}
+
+.address-item h5 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.address-item p {
+    margin: 0 0 5px;
+    font-size: 17px;
+    color: #666;
+}
+.button-group {
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.edit-btn {
+    background: #ffc107;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background: #e0a800;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: #fff;
+    margin-left: 0.5rem;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* General button styles */
+.btn {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #4e555b;
+}
+
+/* Style the button group container */
+.button-group {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Style the modals */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.close {
+    font-size: 24px;
+    line-height: 1;
+    color: #000;
+}
+
+.input-group-text {
+    cursor: pointer;
+}
+
+.input-group-text i {
+    font-size: 1.2rem;
+}
+
+.input-group input[type="password"] {
+    padding-right: 2.5rem; /* Adjust this value as needed to accommodate the eye icon */
+}
+
+.modal-body form .form-group {
+    margin-bottom: 1rem;
+}
+
+
+
+/* user profile */
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+.success input {
+  border-color: green;
+}
+
+.error input {
+  border-color: red;
+}
+
+.wallet-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.wallet-section h5 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.wallet-balance {
+    font-size: 2rem;
+    color: #28a745; /* Adjust color as needed */
+    margin-bottom: 20px;
+}
+
+.transaction-history {
+    list-style: none;
+    padding: 0;
+}
+
+.transaction-history li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.transaction-description {
+    font-weight: bold;
+}
+
+.transaction-date {
+    color: #777;
+}
+
+.transaction-amount {
+    color: #28a745; /* Adjust color as needed */
+}
+
+</style>
+  <!-- Navbar section -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                    <!-- Add dropdown content if needed -->
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar section -->
+
+ <!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>My Wallet</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Breadcrumb Section -->
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="left-sidebar">
+                    <ul class="sidebar-options">
+                        <li><a href="/user/myaccount">My Profile</a></li>
+                        <li class="active"><a href="/user/wallet">Wallet</a></li>
+                        <li><a href="/user/Userorders">Orders</a></li>
+                        <li><a href="/user/address">Address</a></li>
+                        <li><a href="/user/wishlist">WishList</a></li>
+                        <li><a href="/user/signout">Signout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9 ftco-animate">
+                <div class="wallet-section">
+                    <h5>Wallet Balance</h5>
+                    <p class="wallet-balance">₹<%= wallet.balance %></p>
+                    
+                    <h5>Transaction History</h5>
+                    <% if (wallet.transactions && wallet.transactions.length > 0) { %>
+                        <ul class="transaction-history">
+                            <% wallet.transactions.reverse().forEach(function(transaction) { %>
+                                <li>
+                                    <span class="transaction-description"><%= transaction.entry %></span>
+                                    <span class="transaction-date"><%= transaction.date.toLocaleDateString() %></span>
+                                    <span class="transaction-amount <%= transaction.type === 'credit' ? 'text-success' : 'text-danger' %>">
+                                        <%= transaction.type === 'credit' ? '+' : '-' %>₹<%= transaction.amount %>
+                                    </span>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <p>No transactions yet.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Wallet Section -->
+
+  
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.stellar.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/jquery.animateNumber.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/scrollax.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+<script src="/js/google-map.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<%- include('../layouts/footer') %>

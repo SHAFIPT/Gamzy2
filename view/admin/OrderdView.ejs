@@ -448,11 +448,11 @@
                   <tbody>
                       <% order.products.forEach(product => { %>
                       <tr>
-                          <td><%= product.productId.productname %></td>
+                          <td><%= truncateDescription(product.productId.productname, 30) %></td>
                           <td><%= product.status %></td>
-                          <td>$<%= product.price %></td>
+                          <td>₹<%= order.totalAmount.toFixed(2) %></td>
                           <td><%= product.quantity %></td>
-                          <td>$<%= product.price * product.quantity %></td>
+                          <td>₹<%= order.totalAmount.toFixed(2)  * product.quantity %></td>
                           <td><button class="btn btn-view edit-status-btn" data-product-id="<%= product._id %>" data-order-id="<%= order._id %>">Edit Status</button></td>
                       </tr>
                       <% }) %>
@@ -506,13 +506,10 @@
       </footer>
 
     </div>
-
-
-    <!-- Edit Status Modal -->
+<!-- Edit Status Modal -->
 <div class="modal fade" id="editStatusModal" tabindex="-1" role="dialog" aria-labelledby="editStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <!-- <form action="/admin/update-status" method="post"> -->
         <div class="modal-header">
           <h5 class="modal-title" id="editStatusModalLabel">Edit Status</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -520,29 +517,36 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="editStatusForm" >
+          <form id="editStatusForm">
             <div class="form-group">
               <label for="statusSelect">Select Status</label>
               <select class="form-control" id="statusSelect" name="status">
-                <option value="pending">pending</option>
-                <option value="Dispatched">Dispatched</option>
-                <option value="Out For Delivery">Out For Delivery</option>
-                <option value="Delivered">Delivered</option>
+                <% order.products.forEach(function(product) { %>
+                  <% if (product.returnStatus) { %>
+                    <option value="Return Confirmed">Return Confirmed</option>
+                    <option value="Return Processing">Return Processing</option>
+                    <option value="Ready to Pickup">Ready to Pickup</option>
+                    <option value="Return Completed">Return Completed</option>
+                  <% } else { %>
+                    <option value="Pending">Pending</option>
+                    <option value="Dispatched">Dispatched</option>
+                    <option value="Out For Delivery">Out For Delivery</option>
+                    <option value="Delivered">Delivered</option>
+                  <% } %>
+                <% }); %>
               </select>
             </div>
             <input type="hidden" id="productId" name="productId">
-            <input type="hidden" id="orderId" name="orderId">
+            <input type="hidden" id="orderId" name="orderId" value="<%= order._id %>">
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id="saveStatusBtn">Save changes</button>
+          <button type="button" class="btn btn-primary" id="saveStatusBtn">Save changes</button>
         </div>
-       </form>
       </div>
     </div>
   </div>
-  
 
   <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

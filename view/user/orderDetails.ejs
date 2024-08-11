@@ -195,8 +195,6 @@
                     <th>Image</th>
                     <th>Product</th>
                     <th>Quantity</th>
-                    <th>Original Price</th>
-                    <th>Discounted Price</th>
                     <th>Total</th>
                 </tr>
             </thead>
@@ -214,9 +212,7 @@
                             <%= variant.color %> <br>
                         </td>
                         <td><%= product.quantity %></td>
-                        <td>₹<%= product.price.toFixed(2) %></td>
-                        <td>₹<%= product.discountedPrice.toFixed(2) %></td>
-                        <td>₹<%= (product.discountedPrice * product.quantity).toFixed(2) %></td>
+                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
                     </tr>
                 <% }) %>
             </tbody>
@@ -228,14 +224,15 @@
                     <a href="/user/Userorders" class="btn btn-secondary btn-lg custom-btn">Order Details</a>
                 </div>
                 <div class="col-md-6 text-right">
-                    <h6>Subtotal: <span>₹<%= order.products.reduce((sum, product) => sum + (product.discountedPrice * product.quantity), 0).toFixed(2) %></span></h6>
+                    <h6>Subtotal: <span>₹<%= order.totalAmount.toFixed(2) %></span></h6>
                     <p><strong class="order-summary-label">Shipping Charge:</strong> <span class="order-summary-text">₹<%= order.shippingCharge.toFixed(2) %></span></p>
-                    <p><strong class="order-summary-label">Offer Discount:</strong> <span class="order-summary-text">-₹<%= order.offerDiscount.toFixed(2) %></span></p>
+                    <!-- <p><strong class="order-summary-label">Offer Discount:</strong> <span class="order-summary-text">-₹<%= order.offerDiscount.toFixed(2) %></span></p> -->
                     <p><strong class="order-summary-label">Coupon Discount:</strong> <span class="order-summary-text">-₹<%= order.couponDiscount.toFixed(2) %></span></p>
                     <h3 class="mt-4">Grand Total: <span>₹<%= order.totalAmount.toFixed(2) %></span></h3>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
 

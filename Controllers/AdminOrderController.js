@@ -1,6 +1,16 @@
 const Order = require('../model/ordreModel');
+const Wallet = require('../model/walletSchema')
 const { findById } = require('../model/productModel');
 const mongoose = require('mongoose')
+
+
+
+const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+        return description.substring(0, maxLength) + '...';
+    }
+    return description;
+};
 
 const loadOrderPage = async (req, res) => {
     try {
@@ -29,64 +39,87 @@ const loadViewPage = async (req,res) =>{
             return res.status(404).send('Order not found');
         }
 
-        res.render('OrderdView', {order})
+        res.render('OrderdView', {order ,truncateDescription})
         
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
 }
-
-const updateStatus = async (req,res) =>{
+const updateStatus = async (req, res) => {
     try {
-
-        const {productId , status ,OrderId} = req.body;
-
-        // console.log("This is my order now",OrderId)
+        const { productId, status, OrderId } = req.body;
 
         const allowedTransitions = {
-            'pending' : ['Dispatched'],
-            'Dispatched' : ['Out For Delivery'],
-            'Out For Delivery' : ['Delivered'],
-            'Delivered' : []
-        }
+            'pending': ['Dispatched'],
+            'Dispatched': ['Out For Delivery'],
+            'Out For Delivery': ['Delivered'],
+            'Delivered': ['Return Confirmed']
+        };
 
+        const allowedReturnTransitions = {
+            'Return Confirmed': ['Return Processing'],
+            'Return Processing': ['Ready to Pickup'],
+            'Ready to Pickup': ['Return Completed'],
+            'Return Completed': []
+        };
 
-        const order = await Order.findById(OrderId);
-
+        const order = await Order.findById(OrderId).populate('userId');
 
         if (!order) {
-            return res.status(404).json({message: 'Order not found'});
+            return res.status(404).json({ message: 'Order not found' });
         }
 
-        console.log("this is my order to status:", order);
+        const productItem = order.products.id(productId);
 
-         // Find the product in the order and update its status
-         const productiItem = order.products.id(productId);
+        if (!productItem) {
+            return res.status(404).json({ message: 'Product not found in order' });
+        }
 
-         console.log("this is my product to status:", productiItem );
+        const currentStatus = productItem.status;
+        
+        if (allowedTransitions[currentStatus] && !allowedTransitions[currentStatus].includes(status) &&
+            allowedReturnTransitions[currentStatus] && !allowedReturnTransitions[currentStatus].includes(status)) {
+            return res.status(400).json({ message: `Invalid status transition from ${currentStatus} to ${status}` });
+        }
 
-         const currentStatus = productiItem.status;
-         if(allowedTransitions[currentStatus] && !allowedTransitions[currentStatus].includes(status)){
-            return res.status(400).json({message : `Invalid status transition form ${currentStatus} to ${status}`})
-         }
+        productItem.status = status;
 
-         if (productiItem) {
-            
-            productiItem.status = status;
+        // If status is changed to "Return Completed", refund the amount to the user's wallet
+        if (status === 'Return Completed') {
+            const userId = order.userId;
+            const refundAmount = order.totalAmount * (productItem.price * productItem.quantity) / order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
 
-             await order.save(); // Save changes to the order
+            let wallet = await Wallet.findOne({ user: userId });
 
-             res.status(200).json({message: 'Status updated successfully'});
-         } else {
-             res.status(404).json({message: 'Product not found'});
-         }
+            if (!wallet) {
+                wallet = new Wallet({
+                    user: userId,
+                    balance: 0,
+                    transactions: []
+                });
+            }
+
+            wallet.balance += refundAmount;
+            wallet.transactions.push({
+                amount: refundAmount,
+                type: 'credit',
+                entry: `Refund for order ${order.orderId}, product ${productItem.productId}`,
+                date: new Date()
+            });
+
+            await wallet.save();
+        }
+
+        await order.save();
+
+        res.status(200).json({ message: 'Status updated successfully' });
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: 'Internal Server Error'});
+        res.status(500).json({ message: 'Internal Server Error' });
     }
-}
+};
 
 module.exports ={
     loadOrderPage,

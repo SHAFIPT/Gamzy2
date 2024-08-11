@@ -840,11 +840,39 @@ rel="stylesheet">
                                     </div>
                                 </div>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span>₹<span id="subtotal"><%= subtotal %></span></span></li>
-                                    <li>Offer Discount <span id="offerDiscount">₹<%= totalDiscount %></span></li>
+                                    <li>Subtotal 
+                                        <span>₹<span id="subtotal">
+                                            <%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                                const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                                                return sum + price * product.quantity;
+                                            }, 0).toFixed(2) : 0 %>
+                                        </span></span>
+                                    </li>
+                                    <li>Offer Discount 
+                                        <span id="offerDiscount">
+                                            ₹<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                                const discount = product.productId.price - (product.discountedPrice || product.productId.price);
+                                                return sum + discount * product.quantity;
+                                            }, 0).toFixed(2) : 0 %>
+                                        </span>
+                                    </li>
                                     <li>Coupon Discount <span id="couponDiscount">-₹0.00</span></li>
-                                    <li>Shipping Charge <span id="shippingCharge">₹<%= shippingCharge %></span></li>
-                                    <li id="total-item"> <span id="total-amount"><span id="total"><%= total %></span></span></li>
+                                    <input type="hidden" id="discountAmount" value="0">
+                                    <% 
+                                    let subtotal = cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
+                                        const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
+                                        return sum + price * product.quantity;
+                                    }, 0) : 0;
+                                    let shippingCharge = subtotal < 500 ? 50 : 0;
+                                    %>
+                                    <li>Shipping Charge <span id="shippingCharge">₹<%= shippingCharge.toFixed(2) %></span></li>
+                                    <li id="total-item">
+                                        <span id="total-amount">
+                                            <span id="total">
+                                                <%= (subtotal + shippingCharge).toFixed(2) %>
+                                            </span>
+                                        </span>
+                                    </li>
                                 </ul>
                                 <!-- <input type="hidden" id="discountAmount" value="0"> -->
                                 <div class="checkout__input__checkbox">
@@ -1677,6 +1705,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const shippingChargeElement = document.getElementById("shippingCharge");
     const totalElement = document.getElementById("total");
 
+    console.log('This is placeOrderButton :',placeOrderButton);
+    console.log('This is paymentMethods :',paymentMethods);
+    console.log('This is addressRadios :',addressRadios);
+    console.log('This is offerDiscountElement :',offerDiscountElement);
+    console.log('This is couponDiscountElement :',couponDiscountElement);
+
+    
+
+
+
+
     paymentMethods.forEach(method => {
         method.addEventListener("change", function() {
             // Deselect all other payment methods
@@ -1717,6 +1756,9 @@ document.addEventListener("DOMContentLoaded", function() {
             shippingCharge,
             totalAmount
         };
+
+        console.log("This is orderData :",orderData);
+        
 
         fetch("/user/place-order", {
             method: "POST",
@@ -1850,9 +1892,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const couponCode = couponCodeInput.value.trim();
 
         if (!couponCode) {
-            alert('Please enter a coupon code.');
-            return;
-        }
+        Swal.fire({
+            title: 'Oops!',
+            text: 'Please enter a coupon code.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return;
+}
 
         try {
             const response = await fetch('/user/applyCoupon', {
