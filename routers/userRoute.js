@@ -147,6 +147,9 @@ router.post('/removeCoupon',userCouponController.removeCoupon);
 router.get('/getCart',userCouponController.getCart)
 
 
+//addtowishlist
+router.post('/add-to-wishlist',myaccountController.addWishList)
+
 router.get('/home2',userCouponController.loadHomePage)
 
 

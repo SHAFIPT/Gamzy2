@@ -156,7 +156,7 @@ const orderSummory = async (req, res) => {
             };
 
             try {
-                const razorpayOrder = await razorpay.orders.create(options);
+                const razorpayOrder = await razerpay.orders.create(options);
                 orderData.razorpayOrderId = razorpayOrder.id;
 
                 const order = new Order(orderData);

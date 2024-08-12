@@ -663,7 +663,7 @@
                       <% if (product.variants[0].quantity < 1) { %>
                         <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
                       <% } else { %>
-                        <a href="#" class="buy-now text-center py-2">Buy now<span></span></a>
+                        <a href="#" class="buy-now text-center py-2 wishlist-btn" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>">Wishlist<span></span></a>
                       <% } %>
                     </p>
                   </div>
@@ -860,6 +860,51 @@
 <script src="/js/google-map.js"></script>
 <script src="/js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.querySelectorAll('.wishlist-btn').forEach(button => {
+      button.addEventListener('click', async (event) => {
+          event.preventDefault();
+          const productId = button.getAttribute('data-product-id');
+          const variantId = button.getAttribute('data-variant-id');
+
+          try {
+              const response = await fetch('/user/add-to-wishlist', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ productId, variantId })
+              });
+              const result = await response.json();
+
+              if (response.ok) {
+                  Swal.fire({
+                      title: 'Success!',
+                      text: result.message,
+                      icon: 'success',
+                      confirmButtonText: 'OK'
+                  });
+              } else {
+                  Swal.fire({
+                      title: 'Error!',
+                      text: result.error || 'Something went wrong.',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              Swal.fire({
+                  title: 'Error!',
+                  text: 'An error occurred. Please try again.',
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+              });
+          }
+      });
+  });
+</script>
 <script>
   
   document.addEventListener('DOMContentLoaded', function() {

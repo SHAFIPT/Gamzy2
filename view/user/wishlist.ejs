@@ -274,20 +274,33 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Example Product Row -->
-                            <tr>
-                                <td><img src="path/to/product-image.jpg" alt="Product Image"></td>
-                                <td>Product Name</td>
-                                <td>₹1500</td>
-                                <td>In Stock</td>
-                                <td class="actions">
-                                    <button class="btn add-to-cart">Add to Cart</button>
-                                    <button class="btn delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <!-- Repeat the above <tr> block for each product -->
-                        </tbody>
+                       <!-- Wishlist Page -->
+<tbody>
+    <% if (wishlist && wishlist.products.length > 0) { %>
+        <% wishlist.products.forEach(item => { %>
+            <tr>
+                <td>
+                    <% if (item.variants && item.variants.images && item.variants.images.length > 0) { %>
+                        <img src="/uploads/<%= item.variants[0].images[0]  %>" alt="Product Image">
+                    <% } else { %>
+                        <img src="/uploads/default-image.jpg" alt="Default Image">
+                    <% } %>
+                </td>
+                <td><%= item.product.productname %></td>
+                <td>₹<%= item.product.price %></td>
+                <td><%= item.variant && item.variant.quantity < 1? 'In Stock' : 'Out of Stock' %></td>
+                <td class="actions">
+                    <button class="btn add-to-cart" data-product-id="<%= item.product._id %>" data-variant-id="<%= item.variant._id %>">Add to Cart</button>
+                    <button class="btn delete"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        <% }); %>
+    <% } else { %>
+        <tr>
+            <td colspan="5">No items in your wishlist</td>
+        </tr>
+    <% } %>
+</tbody>
                     </table>
                 </div>
             </div>
@@ -295,7 +308,80 @@
     </div>
 </section>
 <!-- End Wishlist Section -->
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
 <script src="/js/jquery.min.js"></script>
-<script src="/js/jquery-migrate-3.0.1.min.js"></script
+<script src="/js/jquery-migrate-3.0.1.min.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', async function(event) {
+      event.preventDefault(); // Prevent default link behavior
+
+      // Get product ID and variant ID from data attributes
+      const productId = this.getAttribute('data-product-id');
+      const variantId = this.getAttribute('data-variant-id');
+
+      console.log("product", productId);
+      console.log("variant",variantId);
+      
+      
+
+      const data = {
+        productId: productId,
+        variantId: variantId,
+        quantity: 1 // You can set a default quantity or get it from somewhere
+      };
+
+      try {
+        const response = await fetch('/user/addToCart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json(); 
+        
+        if (response.status === 401) {
+          Swal.fire({
+            title: 'Login Required',
+            text: result.error,
+            icon: 'warning',
+            confirmButtonText: 'Login'
+          }).then(() => {
+            window.location.href = '/user/login';
+          });
+        } else if (response.ok) {
+          Swal.fire({
+            title: 'Success',
+            text: result.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: result.error || 'An error occurred. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error during fetch:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'An error occurred. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  });
+});
+
+</script>
+    

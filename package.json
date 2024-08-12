@@ -11,6 +11,7 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "googleapis": "^140.0.1",
@@ -23,6 +24,7 @@
     "otp-generator": "^4.0.1",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
+    "pdfkit": "^0.15.0",
     "razorpay": "^2.9.4",
     "uuid": "^10.0.0"
   },

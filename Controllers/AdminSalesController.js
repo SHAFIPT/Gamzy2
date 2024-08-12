@@ -2,9 +2,30 @@ const Order = require('../model/ordreModel');
 
 const loadSalesReport = async (req, res) => {
     try {
-        const orders = await Order.find({ 'products.status': 'Delivered' })
-            .populate('userId', 'name')
-            .populate('products.productId', 'productname');
+        let { startDate, endDate } = req.query;
+
+        // If no dates provided, default to all-time
+        if (!startDate && !endDate) {
+            startDate = new Date(0);
+            endDate = new Date();
+        } else {
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            // Set endDate to end of the day
+            endDate.setHours(23, 59, 59, 999);
+        }
+
+        const orders = await Order.find({
+            orderDate: { $gte: startDate, $lte: endDate },
+            $or: [
+                { 'products.status': 'Delivered' },
+                { 'products.status': 'Returned' },
+                { 'products.status': 'Return Completed' },
+                { 'products.returnStatus': 'Requested' }
+            ]
+        })
+        .populate('userId', 'name')
+        .populate('products.productId', 'productname');
 
         let salesCount = 0;
         let orderAmount = 0;
@@ -13,24 +34,25 @@ const loadSalesReport = async (req, res) => {
         let finalAmount = 0;
 
         orders.forEach(order => {
+            const shippingChargePerProduct = order.shippingCharge / order.products.length;
+            
             order.products.forEach(product => {
-                if (product.status === 'Delivered') {
+                const productTotal = product.price * product.quantity + shippingChargePerProduct;
+                const productDiscount = (order.offerDiscount / order.products.length) + (order.couponDiscount / order.products.length);
+
+                if (product.status === 'Delivered' || product.status === 'Returned' || product.returnStatus === 'Requested') {
                     salesCount++;
-                    const productTotal = product.price * product.quantity;
                     orderAmount += productTotal;
-                    
-                    // Calculate discount for this product
-                    const productDiscount = (order.offerDiscount / order.products.length) + (order.couponDiscount / order.products.length);
                     totalDiscount += productDiscount;
-                    
                     finalAmount += productTotal - productDiscount;
-                } else if (product.status === 'Refunded') {
-                    refundedTotal += product.price * product.quantity;
+                }
+
+                if (product.status === 'Return Completed') {
+                    refundedTotal += productTotal - productDiscount;
                 }
             });
         });
 
-        // Adjust final amount by subtracting refunded total
         finalAmount -= refundedTotal;
 
         const summaryData = {
@@ -41,7 +63,7 @@ const loadSalesReport = async (req, res) => {
             finalAmount: finalAmount.toFixed(2)
         };
 
-        res.render('adminSalesReport', { orders, summaryData });
+        res.render('adminSalesReport', { orders, summaryData, startDate, endDate });
         
     } catch (error) {
         console.log(error);

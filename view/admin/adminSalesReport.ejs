@@ -251,21 +251,22 @@
         </div>
     </div>
     <!-- Filter Options -->
-    <div class="filter-container">
-        <form>
-            <label for="startDate" style="color: white;">Start:</label>
-            <input type="date" id="startDate" name="startDate">
-            <label for="endDate" style="color: white;">End:</label>
-            <input type="date" id="endDate" name="endDate">
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </form>
-        <div class="filter-buttons">
-            <button type="button">1 Day</button>
-            <button type="button">7 Days</button>
-            <button type="button">30 Days</button>
-            <button type="button">Yearly</button>
-        </div>
+<div class="filter-container">
+    <form id="dateRangeForm">
+        <label for="startDate" style="color: white;">Start:</label>
+        <input type="date" id="startDate" name="startDate">
+        <label for="endDate" style="color: white;">End:</label>
+        <input type="date" id="endDate" name="endDate">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <div class="filter-buttons">
+        <button type="button" class="quick-filter" data-days="1">1 Day</button>
+        <button type="button" class="quick-filter" data-days="7">7 Days</button>
+        <button type="button" class="quick-filter" data-days="30">30 Days</button>
+        <button type="button" class="quick-filter" data-days="365">Yearly</button>
     </div>
+</div>
+
 
     <!-- Sales Report Table -->
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
@@ -286,37 +287,44 @@
                     </thead>
                     <tbody>
                         <% orders.forEach(order => { %>
+                            <% const shippingChargePerProduct = order.shippingCharge / order.products.length; %>
                             <% order.products.forEach(product => { %>
-                                <% if (product.status === 'Delivered') { %>
+                                <% if (product.status === 'Delivered' || product.status === 'Returned' || product.status === 'Return Complete' || product.returnStatus === 'Requested') { %>
                                     <tr>
                                         <td><%= order.orderId %></td>
                                         <td><%= order.userId.name %></td>
                                         <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
                                         <td><%= order.PaymentMethod %></td>
-                                        <td><%= product.status %></td>
+                                        <td>
+                                            <%= product.status %>
+                                            <% if (product.returnStatus === 'Requested') { %>
+                                                (Return Requested)
+                                            <% } else if (product.status === 'Return Completed') { %>
+                                                (Return Complete)
+                                            <% } %>
+                                        </td>
                                         <td><%= product.quantity %></td>
                                         <td>
                                             <% 
-                                            // Calculate the discounted price for a single unit
-                                            let discountedUnitPrice;
-                                            if (product.discountedPrice) {
-                                                // If discountedPrice is already calculated and stored
-                                                discountedUnitPrice = product.discountedPrice;
-                                            } else {
-                                                // Calculate the discounted price if not already stored
-                                                const discountPercentage = (order.offerDiscount / order.products.reduce((sum, p) => sum + p.price * p.quantity, 0)) * 100;
-                                                discountedUnitPrice = product.price * (1 - discountPercentage / 100);
-                                            }
+                                            const discountPercentage = (order.offerDiscount / order.products.reduce((sum, p) => sum + p.price * p.quantity, 0)) * 100;
+                                            const discountedUnitPrice = product.price * (1 - discountPercentage / 100);
+                                            const unitPriceWithShipping = discountedUnitPrice + (shippingChargePerProduct / product.quantity);
                                             %>
-                                            ₹<%= discountedUnitPrice.toFixed(2) %>
+                                            ₹<%= unitPriceWithShipping.toFixed(2) %>
                                         </td>
                                         <td>
-                                            ₹<%= ((discountedUnitPrice * product.quantity) - (order.couponDiscount / order.products.length)).toFixed(2) %>
+                                            <% 
+                                            const totalPrice = (discountedUnitPrice * product.quantity) + shippingChargePerProduct - (order.couponDiscount / order.products.length);
+                                            %>
+                                            ₹<%= totalPrice.toFixed(2) %>
+                                            <% if (product.status === 'Return Completed') { %>
+                                                (Refunded)
+                                            <% } %>
                                         </td>
                                     </tr>
                                 <% } %>
                             <% }); %>
-                        <% }) %>
+                        <% }); %>
                     </tbody>
                 </table>
             </div>
@@ -393,5 +401,29 @@
         }
     }
 </script>
+
+<!-- Add this script at the end of your EJS file -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateRangeForm = document.getElementById('dateRangeForm');
+        const quickFilterButtons = document.querySelectorAll('.quick-filter');
+    
+        dateRangeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            window.location.href = `/admin/salesReport?startDate=${startDate}&endDate=${endDate}`;
+        });
+    
+        quickFilterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const days = this.getAttribute('data-days');
+                const endDate = new Date().toISOString().split('T')[0];
+                const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                window.location.href = `/admin/salesReport?startDate=${startDate}&endDate=${endDate}`;
+            });
+        });
+    });
+    </script>
             <%- include('../layouts/footer') %>
 

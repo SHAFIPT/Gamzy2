@@ -2,6 +2,7 @@ const Address = require('../model/addressShema');
 const User = require('../model/UserModel')
 const mongoose=require('mongoose');
 const Order = require('../model/ordreModel');
+const Wishlist = require('../model/wishlistShema')
 const Wallet = require('../model/walletSchema')
 const Product = require('../model/productModel');
 const bcrypt = require('bcrypt');
@@ -381,17 +382,50 @@ const loadWalletPage = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
-
-const loadWishList = async (req,res) =>{
+const loadWishList = async (req, res) => {
     try {
+        const userId = req.session.user; // Assuming user is logged in and user ID is available in req.user
+        const wishlist = await Wishlist.findOne({ user: userId }).populate('products.product');
 
-        res.render('wishlist')
-        
+        if (wishlist) {
+            for (let item of wishlist.products) {
+                if (item.variant) {
+                    const product = await Product.findById(item.product._id).select('variants');
+                    const variant = product.variants.id(item.variant);
+                    item.variant = variant;
+                }
+            }
+        }
+
+        res.render('wishlist', { wishlist });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });
     }
-}
+};
+
+const addWishList = async (req,res)=>{
+    try {
+        const { productId, variantId } = req.body;
+        const userId = req.session.user; // Assuming user is logged in and user ID is available in req.user
+
+        let wishlist = await Wishlist.findOne({ user: userId });
+        if (!wishlist) {
+            wishlist = new Wishlist({ user: userId, products: [] });
+        }
+
+        const existingProductIndex = wishlist.products.findIndex(p => p.product.toString() === productId && p.variant.toString() === variantId);
+        if (existingProductIndex === -1) {
+            wishlist.products.push({ product: productId, variant: variantId });
+        }
+
+        await wishlist.save();
+        res.status(200).json({ message: 'Product added to wishlist' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
 
 module.exports = {
     loadMyAccount,
@@ -406,5 +440,6 @@ module.exports = {
     updateProfile,
     updatePassword,
     loadWalletPage,
-    loadWishList
+    loadWishList,
+    addWishList
 }
