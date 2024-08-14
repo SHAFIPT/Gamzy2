@@ -189,10 +189,10 @@ const loadOrderDetails = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 }
-
 const orderCancel = async (req, res) => {
     try {
         const { orderId } = req.params; // Get orderId from params
+        const { productId, variantId } = req.query; // Get productId and variantId from query params
         const { cancelReason } = req.body; // Get cancelReason from body
         const userId = req.session.user;
 
@@ -206,32 +206,36 @@ const orderCancel = async (req, res) => {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
 
-        // Restore product quantities
-        for (const orderItem of order.products) {
-            const product = await Product.findOne({ 
-                _id: orderItem.productId, 
-                'variants._id': orderItem.variantId 
-            });
+        // Find the specific product in the order
+        const orderItem = order.products.find(item => item.productId.equals(productId) && item.variantId.equals(variantId));
 
-            if (product) {
-                const variant = product.variants.id(orderItem.variantId);
-                if (variant) {
-                    variant.quantity += orderItem.quantity;
-                    await product.save();
-                }
+        if (!orderItem) {
+            return res.status(404).json({ success: false, message: "Product not found in the order" });
+        }
+
+        // Restore product quantity
+        const product = await Product.findOne({ 
+            _id: productId, 
+            'variants._id': variantId 
+        });
+
+        if (product) {
+            const variant = product.variants.id(variantId);
+            if (variant) {
+                variant.quantity += orderItem.quantity;
+                await product.save();
             }
         }
 
-        // Change order status to canceled
-        order.products.forEach(product => {
-            product.status = "Canceled";
-            product.cancelReason = cancelReason;
-        });
-        order.status = "Canceled"; // You might still want to update the order status too
+        // Change the status of the specific product to canceled
+        orderItem.status = "Canceled";
+        orderItem.cancelReason = cancelReason;
+
+        // Save the updated order
         await order.save();
 
         // Calculate overall status
-        const overallStatus = order.products.some(product => product.status === 'Canceled') ? 'Canceled' : 'Pending';
+        const overallStatus = order.products.every(product => product.status === 'Canceled') ? 'Canceled' : 'Pending';
 
         res.json({ success: true, overallStatus });
     } catch (error) {

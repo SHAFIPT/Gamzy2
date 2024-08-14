@@ -92,6 +92,16 @@
 .form-check-input {
   margin-right: 0.5rem;
 }
+
+#selection-container {
+    margin-bottom: 15px;
+}
+
+
+#selected-items-display {
+    background-color: #1474d3;
+    cursor: default;
+}
 </style>
 </head>
 
@@ -180,128 +190,72 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
- document.getElementById('offer-type').addEventListener('change', async function() {
+document.getElementById('offer-type').addEventListener('change', async function() {
     const offerType = this.value;
     const selectionContainer = document.getElementById('selection-container');
     
     selectionContainer.innerHTML = ''; // Clear previous options
 
-    let selectedProducts = [];
-    let selectedCategories = [];
+    let selectedItems = [];
     
-    if (offerType === 'product') {
-        const response = await fetch('/admin/getProducts');
-        const products = await response.json();
+    if (offerType === 'product' || offerType === 'category') {
+        const endpoint = offerType === 'product' ? '/admin/getProducts' : '/admin/getCategories';
+        const response = await fetch(endpoint);
+        const items = await response.json();
 
-        // Create a "Select All" checkbox
-        const selectAllCheckbox = document.createElement('input');
-        selectAllCheckbox.type = 'checkbox';
-        selectAllCheckbox.id = 'select-all-products';
-        selectAllCheckbox.className = 'form-check-input';
-        const selectAllLabel = document.createElement('label');
-        selectAllLabel.htmlFor = 'select-all-products';
-        selectAllLabel.textContent = 'Select All Products';
-        selectAllLabel.className = 'form-check-label';
-        
-        selectionContainer.appendChild(selectAllCheckbox);
-        selectionContainer.appendChild(selectAllLabel);
-        selectionContainer.appendChild(document.createElement('br'));
+        // Create a container for the selected items display
+        const selectedItemsDisplay = document.createElement('input');
+        selectedItemsDisplay.type = 'text';
+        selectedItemsDisplay.id = 'selected-items-display';
+        selectedItemsDisplay.className = 'form-control mb-2';
+        selectedItemsDisplay.readOnly = true;
+        selectedItemsDisplay.placeholder = `Selected ${offerType}s will appear here`;
+        selectionContainer.appendChild(selectedItemsDisplay);
 
-        // Create a container for product checkboxes
-        const productCheckboxContainer = document.createElement('div');
-        productCheckboxContainer.id = 'product-checkbox-container';
-        
-        products.forEach(product => {
-            const checkboxContainer = document.createElement('div');
-            checkboxContainer.className = 'form-check';
+        // Create a container for checkboxes
+        const checkboxContainer = document.createElement('div');
+        checkboxContainer.id = `${offerType}-checkbox-container`;
+        checkboxContainer.style.maxHeight = '200px';
+        checkboxContainer.style.overflowY = 'auto';
+        checkboxContainer.style.border = '1px solid #ced4da';
+        checkboxContainer.style.padding = '10px';
+
+        items.forEach(item => {
+            const checkboxWrapper = document.createElement('div');
+            checkboxWrapper.className = 'form-check';
             
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'form-check-input';
-            checkbox.name = 'applicableToProducts[]'; // Array notation for multiple selections
-            checkbox.value = product._id;
-            checkbox.id = `product-${product._id}`;
+            checkbox.name = `applicableTo${offerType.charAt(0).toUpperCase() + offerType.slice(1)}s[]`;
+            checkbox.value = item._id;
+            checkbox.id = `${offerType}-${item._id}`;
             
-            if (selectedProducts.includes(product._id)) {
-                checkbox.checked = true;
-            }
-
             const label = document.createElement('label');
-            label.htmlFor = `product-${product._id}`;
-            label.textContent = product.productname;
+            label.htmlFor = `${offerType}-${item._id}`;
+            label.textContent = offerType === 'product' ? item.productname : item.name;
             label.className = 'form-check-label';
             
-            checkboxContainer.appendChild(checkbox);
-            checkboxContainer.appendChild(label);
-            productCheckboxContainer.appendChild(checkboxContainer);
-        });
-        
-        selectionContainer.appendChild(productCheckboxContainer);
+            checkboxWrapper.appendChild(checkbox);
+            checkboxWrapper.appendChild(label);
 
-        // Handle "Select All" checkbox
-        selectAllCheckbox.addEventListener('change', function() {
-            const isChecked = this.checked;
-            document.querySelectorAll('#product-checkbox-container input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = isChecked;
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedItems.push(label.textContent);
+                } else {
+                    const index = selectedItems.indexOf(label.textContent);
+                    if (index > -1) selectedItems.splice(index, 1);
+                }
+                selectedItemsDisplay.value = selectedItems.join(', ');
             });
-        });
 
-    } else if (offerType === 'category') {
-        const response = await fetch('/admin/getCategories');
-        const categories = await response.json();
-
-        // Create a "Select All" checkbox
-        const selectAllCheckbox = document.createElement('input');
-        selectAllCheckbox.type = 'checkbox';
-        selectAllCheckbox.id = 'select-all-categories';
-        selectAllCheckbox.className = 'form-check-input';
-        const selectAllLabel = document.createElement('label');
-        selectAllLabel.htmlFor = 'select-all-categories';
-        selectAllLabel.textContent = 'Select All Categories';
-        selectAllLabel.className = 'form-check-label';
-        
-        selectionContainer.appendChild(selectAllCheckbox);
-        selectionContainer.appendChild(selectAllLabel);
-        selectionContainer.appendChild(document.createElement('br'));
-
-        // Create a container for category checkboxes
-        const categoryCheckboxContainer = document.createElement('div');
-        categoryCheckboxContainer.id = 'category-checkbox-container';
-        
-        categories.forEach(category => {
-            const checkboxContainer = document.createElement('div');
-            checkboxContainer.className = 'form-check';
-            
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'form-check-input';
-            checkbox.name = 'applicableToCategories[]'; // Array notation for multiple selections
-            checkbox.value = category._id;
-            checkbox.id = `category-${category._id}`;
-            
-            if (selectedCategories.includes(category._id)) {
-                checkbox.checked = true;
-            }
-
-            const label = document.createElement('label');
-            label.htmlFor = `category-${category._id}`;
-            label.textContent = category.name;
-            label.className = 'form-check-label';
-            
-            checkboxContainer.appendChild(checkbox);
-            checkboxContainer.appendChild(label);
-            categoryCheckboxContainer.appendChild(checkboxContainer);
+            checkboxContainer.appendChild(checkboxWrapper);
         });
         
-        selectionContainer.appendChild(categoryCheckboxContainer);
+        selectionContainer.appendChild(checkboxContainer);
 
-        // Handle "Select All" checkbox
-        selectAllCheckbox.addEventListener('change', function() {
-            const isChecked = this.checked;
-            document.querySelectorAll('#category-checkbox-container input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = isChecked;
-            });
-        });
+        // Ensure the checkbox container is scrollable
+        checkboxContainer.style.display = 'block';
     }
 });
 

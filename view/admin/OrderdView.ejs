@@ -408,72 +408,101 @@
           </div>
       </div>
   </div>
-
- <!-- Ordered Product Details -->
+<!-- Ordered Product Details -->
 <div class="row tm-content-row">
-  <div class="tm-block-col tm-col-avatar">
-      <div class="tm-bg-primary-dark tm-block tm-block-avatar tm-block-settings">
-          <!-- <h2 class="tm-block-title">Product Image</h2> -->
-          <div class="tm-avatar-container">
-              <% if (order.products.length > 0) { %>
-                  <% const product = order.products[0]; %>
+    <div class="tm-block-col tm-col-avatar">
+        <div class="tm-bg-primary-dark tm-block tm-block-avatar tm-block-settings">
+            <div class="tm-avatar-container">
+              <img id="product-image" src="/path/to/default/image.jpg" alt="Default Image" class="tm-avatar img-fluid mb-4" />
+          </div>
+        </div>
+    </div>
+
+    <div class="tm-block-col tm-col-account-settings">
+        <div class="tm-bg-primary-dark tm-block tm-block-settings">
+            <h2 class="tm-block-title">Ordered Product Details</h2>
+            <table class="table table-hover tm-table-small tm-product-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% order.products.forEach((product, index) => { %>
                   <% const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString()); %>
-                  <% if (variant && variant.images && variant.images.length > 0) { %>
-                      <img src="/uploads/<%= variant.images[0] %>" alt="Product image" class="tm-avatar img-fluid mb-4" />
-                  <% } else { %>
-                      <img src="/path/to/default/image.jpg" alt="Default Image" class="tm-avatar img-fluid mb-4" />
-                  <% } %>
-              <% } else { %>
-                  <img src="/path/to/default/image.jpg" alt="Default Image" class="tm-avatar img-fluid mb-4" />
-              <% } %>
-          </div>
+                  <% const imageUrl = variant && variant.images && variant.images.length > 0 ? `/uploads/${variant.images[0]}` : '/path/to/default/image.jpg'; %>
+                  <tr class="product-row" data-image-url="<%= imageUrl %>">
+                      <td><%= truncateDescription(product.productId.productname, 30) %></td>
+                      <td><%= product.status %></td>
+                      <td>₹<%= product.price %></td>
+                      <td><%= product.quantity %></td>
+                      <td>₹<%= product.price * product.quantity %></td>
+                      <td><button class="btn btn-view edit-status-btn" data-toggle="modal" data-target="#editStatusModal<%= index %>">Edit Status</button></td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+            </table>
+  
+            <div class="tm-bg-primary-dark tm-block tm-block-settings">
+                <h2 class="tm-block-title new_block">Order Summary</h2>
+                <div class="summary">
+                    <p>Subtotal: ₹<%= order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0).toFixed(2) %></p>
+                    <p>Discount: ₹<%= order.discount %></p>
+                    <p>Shipping: ₹<%= order.shippingCharge.toFixed(2) %></p>
+                    <p>Total: ₹<%= order.totalAmount.toFixed(2) %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Status Modal for each product -->
+<% order.products.forEach((product, index) => { %>
+  <div class="modal fade" id="editStatusModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="editStatusModalLabel<%= index %>" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editStatusModalLabel<%= index %>">Edit Status</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="editStatusForm" data-index="<%= index %>">
+            <div class="form-group">
+              <select class="form-control statusSelect" name="status">
+                <% if (product.returnStatus === "Requested") { %>
+                  <option value="Return Confirmed">Return Confirmed</option>
+                  <option value="Return Processing">Return Processing</option>
+                  <option value="Ready to Pickup">Ready to Pickup</option>
+                  <option value="Return Completed">Return Completed</option>
+                <% } else { %>
+                  <option value="Pending">Pending</option>
+                  <option value="Dispatched">Dispatched</option>
+                  <option value="Out For Delivery">Out For Delivery</option>
+                  <option value="Delivered">Delivered</option>
+                <% } %>
+              </select>
+            </div>
+            <input type="hidden" class="productId" value="<%= product._id %>">
+            <input type="hidden" class="orderId" value="<%= order._id %>">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary saveStatusBtn" data-index="<%= index %>">Save changes</button>
+        </div>
       </div>
+    </div>
   </div>
+<% }) %>
 
-
-      <div class="tm-block-col tm-col-account-settings">
-          <div class="tm-bg-primary-dark tm-block tm-block-settings">
-              <h2 class="tm-block-title">Ordered Product Details</h2>
-              <table class="table table-hover tm-table-small tm-product-table">
-                  <thead>
-                      <tr>
-                          <th>Product Name</th>
-                          <th>Status</th>
-                          <th>Price</th>
-                          <th>Quantity</th>
-                          <th>Total</th>
-                          <th>Action</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <% order.products.forEach(product => { %>
-                      <tr>
-                          <td><%= truncateDescription(product.productId.productname, 30) %></td>
-                          <td><%= product.status %></td>
-                          <td>₹<%= order.totalAmount.toFixed(2) %></td>
-                          <td><%= product.quantity %></td>
-                          <td>₹<%= order.totalAmount.toFixed(2)  * product.quantity %></td>
-                          <td><button class="btn btn-view edit-status-btn" data-product-id="<%= product._id %>" data-order-id="<%= order._id %>">Edit Status</button></td>
-                      </tr>
-                      <% }) %>
-                  </tbody>
-              </table>
-
-              <div class="tm-bg-primary-dark tm-block tm-block-settings">
-                  <h2 class="tm-block-title new_block">Order Summary</h2>
-                  <div class="summary">
-                      <p>Subtotal: ₹<%= order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0).toFixed(2) %></p>
-                      <p>Discount: ₹<%= order.discount %>0.00</p>
-                      <p>Shipping: ₹<%= order.shippingCharge.toFixed(2) %></p>
-                      <p>Total: ₹<%= order.totalAmount.toFixed(2) %></p>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-
-
-  <div class="row tm-content-row">
+<div class="row tm-content-row">
     <div class="col-12 tm-block-col">
         <div class="tm-bg-primary-dark tm-block tm-block-h-auto custom-shipping-address">
             <div class="d-flex flex-column align-items-start">
@@ -490,148 +519,114 @@
         </div>
     </div>
 </div>
-</div>
 
-
-</div>
-      
-
-      <footer class="tm-footer row tm-mt-small">
-        <div class="col-12 font-weight-light">
-          <p class="text-center text-white mb-0 px-4 small">
-            Copyright &copy; <b>2018</b> All rights reserved.
-            Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
-          </p>
-        </div>
-      </footer>
-
+<footer class="tm-footer row tm-mt-small">
+    <div class="col-12 font-weight-light">
+      <p class="text-center text-white mb-0 px-4 small">
+        Copyright &copy; <b>2018</b> All rights reserved.
+        Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
+      </p>
     </div>
-<!-- Edit Status Modal -->
-<div class="modal fade" id="editStatusModal" tabindex="-1" role="dialog" aria-labelledby="editStatusModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editStatusModalLabel">Edit Status</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="editStatusForm">
-            <div class="form-group">
-              <label for="statusSelect">Select Status</label>
-              <select class="form-control" id="statusSelect" name="status">
-                <% order.products.forEach(function(product) { %>
-                  <% if (product.returnStatus) { %>
-                    <option value="Return Confirmed">Return Confirmed</option>
-                    <option value="Return Processing">Return Processing</option>
-                    <option value="Ready to Pickup">Ready to Pickup</option>
-                    <option value="Return Completed">Return Completed</option>
-                  <% } else { %>
-                    <option value="Pending">Pending</option>
-                    <option value="Dispatched">Dispatched</option>
-                    <option value="Out For Delivery">Out For Delivery</option>
-                    <option value="Delivered">Delivered</option>
-                  <% } %>
-                <% }); %>
-              </select>
-            </div>
-            <input type="hidden" id="productId" name="productId">
-            <input type="hidden" id="orderId" name="orderId" value="<%= order._id %>">
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveStatusBtn">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+</footer>
 
-  <!-- jQuery -->
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-  <!-- Bootstrap CSS -->
-<!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-
-<!-- jQuery and Bootstrap JS -->
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const productImage = document.getElementById('product-image');
+      const productRows = document.querySelectorAll('.product-row');
+
+      productRows.forEach(row => {
+          row.addEventListener('click', function() {
+              const imageUrl = this.dataset.imageUrl;
+              productImage.src = imageUrl;
+          });
+      });
+
+      // Set the first product's image as default
+      if (productRows.length > 0) {
+          const firstProductImageUrl = productRows[0].dataset.imageUrl;
+          productImage.src = firstProductImageUrl;
+      }
+  });
+</script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const productIdInput = document.getElementById('productId');
-        const orderInput = document.getElementById('orderId');
-        const editStatusButtons = document.querySelectorAll('.edit-status-btn');
-        const editStatusModal = $('#editStatusModal');
-        const saveStatusBtn = document.getElementById('saveStatusBtn');
+  document.addEventListener('DOMContentLoaded', () => {
+    const saveStatusButtons = document.querySelectorAll('.saveStatusBtn');
 
-        editStatusButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const productId = button.getAttribute('data-product-id');
-                const OrderId = button.getAttribute('data-order-id');
+    saveStatusButtons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const index = button.getAttribute('data-index');
+        const form = document.querySelector(`.editStatusForm[data-index="${index}"]`);
+        
+        if (form) {
+          const productIdElement = form.querySelector('.productId');
+          const orderIdElement = form.querySelector('.orderId');
+          const statusSelectElement = form.querySelector('.statusSelect');
 
+          if (productIdElement && orderIdElement && statusSelectElement) {
+            const productId = productIdElement.value.trim();
+            const orderId = orderIdElement.value.trim();
+            const status = statusSelectElement.value.trim();
+
+            console.log("productId :",productId);
+            console.log("orderId :", orderId);
+            console.log("status :", status);
             
-                productIdInput.value = productId;
-                orderInput.value =  OrderId
-                editStatusModal.modal('show');
-            });
-        });
-
-        saveStatusBtn.addEventListener('click', async () => {
-            const statusSelect = document.getElementById('statusSelect');
+            
+            
 
             const formData = {
-                productId: productIdInput.value.trim(),
-                OrderId : orderInput.value.trim(),
-                status: statusSelect.value.trim(),
+              productId: productId,
+              orderId: orderId,
+              status: status
             };
 
             try {
-                const response = await fetch('/admin/update-status', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                });
+              const response = await fetch('/admin/update-status', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+              });
 
-                const result = await response.json();
-                console.log(result)
+              const result = await response.json();
 
-                if (response.ok) {
-                    Swal.fire({
-                        title: 'Success',
-                        text: result.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        editStatusModal.modal('hide');
-                        location.reload(); // Reload the page or update the status in the table
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: result.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            } catch (error) {
-                console.error('Error during fetch:', error);
+              if (response.ok) {
                 Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
+                  title: 'Success',
+                  text: result.message,
+                  icon: 'success',
+                  confirmButtonText: 'OK'
+                }).then(() => {
+                  $(`#editStatusModal${index}`).modal('hide');
+                  location.reload();
                 });
+              } else {
+                Swal.fire({
+                  title: 'Error',
+                  text: result.message,
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+                });
+              }
+            } catch (error) {
+              Swal.fire({
+                title: 'Error',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              });
             }
-        });
+          }
+        }
+      });
     });
+  });
 </script>
-
-<%- include('../layouts/footer') %>

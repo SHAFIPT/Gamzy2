@@ -48,13 +48,18 @@ const loadViewPage = async (req,res) =>{
 }
 const updateStatus = async (req, res) => {
     try {
-        const { productId, status, OrderId } = req.body;
-
+        const { productId, status, orderId } = req.body;
+        
+        console.log("productId :", productId);
+        console.log("orderId :", orderId);
+        console.log("status :", status);
+        
+        // Define allowed status transitions
         const allowedTransitions = {
-            'pending': ['Dispatched'],
+            'Pending': ['Dispatched'],
             'Dispatched': ['Out For Delivery'],
             'Out For Delivery': ['Delivered'],
-            'Delivered': ['Return Confirmed']
+            'Delivered': []
         };
 
         const allowedReturnTransitions = {
@@ -64,7 +69,7 @@ const updateStatus = async (req, res) => {
             'Return Completed': []
         };
 
-        const order = await Order.findById(OrderId).populate('userId');
+        const order = await Order.findById(orderId).populate('userId');
 
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
@@ -78,8 +83,18 @@ const updateStatus = async (req, res) => {
 
         const currentStatus = productItem.status;
         
-        if (allowedTransitions[currentStatus] && !allowedTransitions[currentStatus].includes(status) &&
-            allowedReturnTransitions[currentStatus] && !allowedReturnTransitions[currentStatus].includes(status)) {
+        // Determine the valid transitions based on the current status
+        let validTransitions;
+        if (currentStatus in allowedTransitions) {
+            validTransitions = allowedTransitions[currentStatus];
+        } else if (currentStatus in allowedReturnTransitions) {
+            validTransitions = allowedReturnTransitions[currentStatus];
+        } else {
+            return res.status(400).json({ message: `Invalid current status ${currentStatus}` });
+        }
+
+        // Check if the new status is a valid transition
+        if (!validTransitions.includes(status)) {
             return res.status(400).json({ message: `Invalid status transition from ${currentStatus} to ${status}` });
         }
 

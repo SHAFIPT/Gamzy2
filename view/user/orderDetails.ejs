@@ -131,6 +131,15 @@
     color: black; /* Color for the text after the 'strong' elements */
 }
 
+
+
+
+.original-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 0.9em;
+    margin-left: 5px;
+}
 </style>
 <body>
 <!-- Navbar section -->
@@ -212,7 +221,7 @@
                             <%= variant.color %> <br>
                         </td>
                         <td><%= product.quantity %></td>
-                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                        <td>₹<%= product.price %></td> <!-- This now shows the reduced price -->
                     </tr>
                 <% }) %>
             </tbody>

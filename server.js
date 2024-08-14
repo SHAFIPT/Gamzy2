@@ -36,7 +36,7 @@ app.use('/user',userRoute)
                    
 //admin Route                        
                               
-app.use('/admin',adminRoute);             
+app.use('/admin',adminRoute);              
                             
 // Start the server                 
 const PORT = process.env.PORT;    

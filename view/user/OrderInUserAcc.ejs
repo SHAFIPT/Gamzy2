@@ -580,7 +580,7 @@
     color: red !important;
 }
 
-.order-summary-footer .status-delivered {
+.order-summary-footer .status-Delivered {
     color: green !important;
 }
 
@@ -685,6 +685,8 @@
                                     <th>Product</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
+                                    <th>Action</th>
+                                    <th>Status</th> <!-- Added Status column -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -701,64 +703,38 @@
                                             <%= variant.color %>
                                         </td>
                                         <td><%= product.quantity %></td>
-                                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                                        <td>₹<%= (product.price * product.quantity).toFixed(2) %></td>
+                                        <td>
+                                            <% if (product.status === 'Delivered') { %>
+                                                <a href="/return-order/<%= order._id %>" class="btn btn-warning btn-lg custom-btn">Return</a>
+                                            <% } else if (product.status === 'Return Confirmed') { %>
+                                                <!-- No buttons for returned products -->
+                                            <% } else if (product.status === 'Canceled') { %>
+                                                <!-- No buttons for canceled products -->
+                                            <% } else { %>
+                                                <a href="/cancel-order/<%= order._id %>?productId=<%= product.productId._id %>&variantId=<%= variant._id %>" class="btn btn-danger btn-lg custom-btn">Cancel</a>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (product.status === 'Canceled') { %>
+                                                <span class="status-canceled">Canceled</span>
+                                            <% } else if (product.status === 'Return Confirmed') { %>
+                                                <span class="status-returned">Returned</span>
+                                            <% } else if (product.status === 'Delivered') { %>
+                                                <span class="status-delivered">Delivered</span>
+                                            <% } else if (product.status === 'Out For Delivery') { %>
+                                                <span class="status-out-for-delivery">Out For Delivery</span>
+                                            <% } else if (product.status === 'Dispatched') { %>
+                                                <span class="status-dispatched">Dispatched</span>
+                                            <% } else { %>
+                                                <span class="status-pending">Pending</span>
+                                            <% } %>
+                                        </td>
                                     </tr>
                                 <% }); %>
                             </tbody>
                         </table>
-                        <div class="order-summary-footer">
-                            <div class="row align-items-center">
-                                <% order.products.forEach(function(product) { %>
-                                    <div class="col-md-6 text-left">
-                                        <% if (product.status === 'Delivered') { %>
-                                            <a href="/return-order/<%= order._id %>" class="btn btn-warning btn-lg custom-btn">Return</a>
-                                        <% } else if (product.status === 'Returned') { %>
-                                            <!-- No buttons for returned products -->
-                                        <% } else if (product.status === 'Canceled') { %>
-                                            <!-- No buttons for canceled products -->
-                                        <% } else { %>
-                                            <a href="/cancel-order/<%= order._id %>" class="btn btn-danger btn-lg custom-btn">Cancel</a>
-                                        <% } %>
-                                    </div>
-                                <% }); %>
-                                <div class="col-md-6 text-right">
-                                    <h6 class="mt-2">Status: 
-                                        <% 
-                                        let overallStatus = 'Pending'; 
-                                        order.products.forEach(product => {
-                                            if (product.status === 'Canceled') {
-                                                overallStatus = 'Canceled';
-                                            } else if (product.status === 'Returned') {
-                                                overallStatus = 'Returned';
-                                            } else if (product.status === 'Delivered') {
-                                                overallStatus = 'Delivered';
-                                            } else if (product.status === 'Out For Delivery') {
-                                                overallStatus = 'Out For Delivery';
-                                            } else if (product.status === 'Dispatched') {
-                                                overallStatus = 'Dispatched';
-                                            }
-                                        });
-                                        %>
-                                        <span class="
-                                            <% if (overallStatus === 'Canceled') { %>
-                                                status-canceled
-                                            <% } else if (overallStatus === 'Returned') { %>
-                                                status-returned
-                                            <% } else if (overallStatus === 'Delivered') { %>
-                                                status-delivered
-                                            <% } else if (overallStatus === 'Out For Delivery') { %>
-                                                status-out-for-delivery
-                                            <% } else if (overallStatus === 'Dispatched') { %>
-                                                status-dispatched
-                                            <% } else { %>
-                                                status-pending
-                                            <% } %>">
-                                            <%= overallStatus %>
-                                        </span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
+                     
                     </div>
                     <% }); %>
 

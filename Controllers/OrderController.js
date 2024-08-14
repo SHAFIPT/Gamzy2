@@ -68,6 +68,8 @@ const orderSummory = async (req, res) => {
 
         const { PaymentMethod, addressId, offerDiscount, couponDiscount, shippingCharge } = req.body;
 
+        console.log("This is the offer discounted : ", offerDiscount);
+
         if (!PaymentMethod || !addressId || offerDiscount === undefined || couponDiscount === undefined || shippingCharge === undefined) {
             return res.status(400).json({ success: false, message: "Missing required fields" });
         }
@@ -77,12 +79,29 @@ const orderSummory = async (req, res) => {
             return res.status(404).json({ success: false, message: "Address not found" });
         }
 
-        const products = cart.products.map(cartItem => ({
-            productId: cartItem.productId._id,
-            variantId: cartItem.variantId,
-            quantity: cartItem.quantity,
-            price: cartItem.productId.price,
-            status: "Pending",
+       
+        const products = await Promise.all(cart.products.map(async cartItem => {
+            let discountPrice = cartItem.productId.price;
+            const activeOffer = await Offer.findOne({ 
+                applicableToProducts: cartItem.productId._id,
+                active: true,
+                activeDate: { $lte: new Date() },
+                expireDate: { $gte: new Date() }
+            });
+
+            if (activeOffer) {
+                discountPrice -= offerDiscount;
+            }
+
+            console.log("this is discountedPrice :", discountPrice);
+
+            return {
+                productId: cartItem.productId._id,
+                variantId: cartItem.variantId,
+                quantity: cartItem.quantity,
+                price: discountPrice,
+                status: "Pending",
+            };
         }));
 
         // Check stock availability
@@ -103,7 +122,7 @@ const orderSummory = async (req, res) => {
         }
 
         const orderSubtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
-        const totalAmount = orderSubtotal - offerDiscount - couponDiscount + shippingCharge;
+        const totalAmount = orderSubtotal - couponDiscount + shippingCharge;
 
         // Generate the order ID
         const orderId = generateOrderId();

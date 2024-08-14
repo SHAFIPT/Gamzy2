@@ -97,20 +97,23 @@ const offerStatus = async (req,res) =>{
     }
 }
 
-const loadOfferEdit = async (req,res) =>{
+const loadOfferEdit = async (req, res) => {
     try {
-
         const offerId = req.params.id;
-
-        // Fetch the offer details from the database
-        const offer = await Offer.findById(offerId); // Ensure Offer is your model name
+        const offer = await Offer.findById(offerId);
 
         if (!offer) {
             return res.status(404).send('Offer not found');
         }
 
+        // Convert the offer data to a JSON string
+        const offerData = JSON.stringify({
+            offerType: offer.type,
+            applicableIds: offer.type === 'product' ? offer.applicableToProducts : offer.applicableToCategories
+        });
+
         // Render the edit page with the offer data
-        res.render('editOffer', { offer });
+        res.render('editOffer', { offer, offerData });
         
     } catch (error) {
         console.error(error);
