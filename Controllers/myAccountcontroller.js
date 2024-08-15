@@ -189,11 +189,12 @@ const loadOrderDetails = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 }
+
 const orderCancel = async (req, res) => {
     try {
-        const { orderId } = req.params; // Get orderId from params
-        const { productId, variantId } = req.query; // Get productId and variantId from query params
-        const { cancelReason } = req.body; // Get cancelReason from body
+        const { orderId } = req.params;
+        const { productId, variantId } = req.query;
+        const { cancelReason } = req.body;
         const userId = req.session.user;
 
         if (!userId) {
@@ -206,11 +207,14 @@ const orderCancel = async (req, res) => {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
 
-        // Find the specific product in the order
         const orderItem = order.products.find(item => item.productId.equals(productId) && item.variantId.equals(variantId));
 
         if (!orderItem) {
             return res.status(404).json({ success: false, message: "Product not found in the order" });
+        }
+
+        if (orderItem.status === "Canceled") {
+            return res.status(400).json({ success: false, message: "This product has already been cancelled" });
         }
 
         // Restore product quantity
@@ -227,17 +231,57 @@ const orderCancel = async (req, res) => {
             }
         }
 
-        // Change the status of the specific product to canceled
+        // Calculate refund amount
+        const totalOrderValue = order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+        const productProportion = (orderItem.price * orderItem.quantity) / totalOrderValue;
+        const productCouponDiscount = order.couponDiscount * productProportion;
+        const refundAmount = (orderItem.price * orderItem.quantity) - productCouponDiscount;
+
+        if (order.paymentMethod === 'Razorpay') {
+            // Handle Razorpay refund
+            const razorpayRefund = await razerpay.refunds.create({
+                payment_id: order.paymentId, // Payment ID from Razorpay for the original transaction
+                amount: refundAmount * 100 // Amount in paise
+            });
+
+            if (!razorpayRefund) {
+                return res.status(500).json({ success: false, message: 'Failed to process Razorpay refund' });
+            }
+        }
+
+        // Update wallet for COD or Razorpay refunds
+        let wallet = await Wallet.findOne({ user: userId });
+        if (!wallet) {
+            wallet = new Wallet({
+                user: userId,
+                balance: 0,
+                transactions: []
+            });
+        }
+        wallet.balance += refundAmount;
+        wallet.transactions.push({
+            amount: refundAmount,
+            type: 'credit',
+            entry: `Refund for cancellation: order ${order.orderId}, product ${orderItem.productId}`,
+            date: new Date()
+        });
+        await wallet.save();
+
+        // Update order
         orderItem.status = "Canceled";
         orderItem.cancelReason = cancelReason;
+
+        // Check if all products are now cancelled
+        const allProductsCancelled = order.products.every(product => product.status === 'Canceled');
+        if (allProductsCancelled) {
+            order.totalAmount = 0;
+            order.couponDiscount = 0;
+        }
 
         // Save the updated order
         await order.save();
 
-        // Calculate overall status
-        const overallStatus = order.products.every(product => product.status === 'Canceled') ? 'Canceled' : 'Pending';
-
-        res.json({ success: true, overallStatus });
+        res.json({ success: true, refundAmount });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error.message });

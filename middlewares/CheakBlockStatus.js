@@ -1,20 +1,20 @@
 const User = require('../model/UserModel');
 
-const checkBlockedStatus = async(req,res,next) =>{
-    if(req.session.userId){
-        const user = await User.findById(req.session.userData._id);
-        if(user && user.is_blocked){
-            req.session.destroy((err)=>{
-                if(err){
-                    return res.status(500).json({error : 'failed to log out'});
+const checkBlockedStatus = async (req, res, next) => {
+    if (req.session.user) {
+        const user = await User.findById(req.session.user);
+        if (user && user.is_blocked) {
+            req.session.destroy((err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Failed to log out' });
                 }
-                return res.status(40).json({ error : 'Your account has been blocked'})
+                return res.redirect('/');
             });
-        }else{
-            next()
+        } else {
+            next();
         }
-    }else{
-        next()
+    } else {
+        next();
     }
 };
 

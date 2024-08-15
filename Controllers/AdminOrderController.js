@@ -46,28 +46,10 @@ const loadViewPage = async (req,res) =>{
         res.status(500).send('Internal Server Error');
     }
 }
+
 const updateStatus = async (req, res) => {
     try {
         const { productId, status, orderId } = req.body;
-        
-        console.log("productId :", productId);
-        console.log("orderId :", orderId);
-        console.log("status :", status);
-        
-        // Define allowed status transitions
-        const allowedTransitions = {
-            'Pending': ['Dispatched'],
-            'Dispatched': ['Out For Delivery'],
-            'Out For Delivery': ['Delivered'],
-            'Delivered': []
-        };
-
-        const allowedReturnTransitions = {
-            'Return Confirmed': ['Return Processing'],
-            'Return Processing': ['Ready to Pickup'],
-            'Ready to Pickup': ['Return Completed'],
-            'Return Completed': []
-        };
 
         const order = await Order.findById(orderId).populate('userId');
 
@@ -82,31 +64,33 @@ const updateStatus = async (req, res) => {
         }
 
         const currentStatus = productItem.status;
-        
-        // Determine the valid transitions based on the current status
-        let validTransitions;
-        if (currentStatus in allowedTransitions) {
-            validTransitions = allowedTransitions[currentStatus];
-        } else if (currentStatus in allowedReturnTransitions) {
-            validTransitions = allowedReturnTransitions[currentStatus];
-        } else {
-            return res.status(400).json({ message: `Invalid current status ${currentStatus}` });
-        }
+        const currentReturnStatus = productItem.returnStatus;
 
-        // Check if the new status is a valid transition
-        if (!validTransitions.includes(status)) {
-            return res.status(400).json({ message: `Invalid status transition from ${currentStatus} to ${status}` });
-        }
+        // Define allowed status transitions
+        const allowedTransitions = {
+            'Pending': ['Dispatched', 'Cancelled'],
+            'Dispatched': ['Out For Delivery', 'Cancelled'],
+            'Out For Delivery': ['Delivered', 'Cancelled'],
+            'Delivered': []
+        };
 
-        productItem.status = status;
-
-        // If status is changed to "Return Completed", refund the amount to the user's wallet
-        if (status === 'Return Completed') {
+        // Function to handle refund
+        const handleRefund = async (reason) => {
             const userId = order.userId;
-            const refundAmount = order.totalAmount * (productItem.price * productItem.quantity) / order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+            
+            // Calculate the total order value before coupon discount
+            const totalOrderValue = order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+            
+            // Calculate the proportion of this product's value to the total order value
+            const productProportion = (productItem.price * productItem.quantity) / totalOrderValue;
+            
+            // Calculate the coupon discount applied to this product
+            const productCouponDiscount = order.couponDiscount * productProportion;
+            
+            // Calculate the refund amount (product price minus its share of coupon discount)
+            const refundAmount = (productItem.price * productItem.quantity) - productCouponDiscount;
 
             let wallet = await Wallet.findOne({ user: userId });
-
             if (!wallet) {
                 wallet = new Wallet({
                     user: userId,
@@ -114,22 +98,69 @@ const updateStatus = async (req, res) => {
                     transactions: []
                 });
             }
-
             wallet.balance += refundAmount;
             wallet.transactions.push({
                 amount: refundAmount,
                 type: 'credit',
-                entry: `Refund for order ${order.orderId}, product ${productItem.productId}`,
+                entry: `Refund for ${reason}: order ${order.orderId}, product ${productItem.productId}`,
                 date: new Date()
             });
-
             await wallet.save();
+
+            // Update the order's total amount and coupon discount
+            // order.totalAmount = Math.max(0, order.totalAmount - refundAmount);
+            // order.couponDiscount = Math.max(0, order.couponDiscount - productCouponDiscount);
+        };
+
+        // Handle return request
+        if (currentReturnStatus === 'Requested') {
+            if (status === 'Return Confirmed') {
+                productItem.status = 'Returned';
+                productItem.returnStatus = 'Return Confirmed';
+                await handleRefund('return acceptance');
+            } else if (status === 'Rejected') {
+                productItem.status = 'Rejected';
+                productItem.returnStatus = 'Rejected';
+            } else {
+                return res.status(400).json({ message: `Invalid status transition from Requested to ${status}` });
+            }
+        } else {
+            // Check normal status transitions
+            if (!(currentStatus in allowedTransitions) || !allowedTransitions[currentStatus].includes(status)) {
+                return res.status(400).json({ message: `Invalid status transition from ${currentStatus} to ${status}` });
+            }
+
+            // Handle cancellation
+            if (status === 'Cancelled') {
+                await handleRefund('order cancellation');
+            } else {
+                productItem.status = status;
+                productItem.returnStatus = undefined;
+            }
+        }
+
+        // Check if all products are now cancelled or returned
+        // const allProductsCancelledOrReturned = order.products.every(product => 
+        //     product.status === 'Cancelled' || product.status === 'Returned'
+        // );
+        // if (allProductsCancelledOrReturned) {
+        //     order.totalAmount = 0;
+        //     order.couponDiscount = 0;
+        // }
+
+        
+        // Check if all products are now delivered
+        const allDelivered = order.products.every(product => product.status === 'Delivered');
+        if (allDelivered) {
+            order.paymentStatus = 'Paid';
         }
 
         await order.save();
 
-        res.status(200).json({ message: 'Status updated successfully' });
 
+        await order.save();
+
+        res.status(200).json({ message: 'Status updated successfully' });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });

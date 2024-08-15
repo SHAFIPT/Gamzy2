@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
  
 app.set('views', path.join(__dirname, 'view', 'user'));
        
-                        
+                         
 // Middleware for parsing JSON and urlencoded data 
 app.use(express.json());    
 app.use(express.urlencoded({ extended: true }));       

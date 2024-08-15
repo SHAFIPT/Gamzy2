@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const userMiddleware = require('../middlewares/usermiddleware');
+const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
 const session = require('express-session');
 const config = require('../config/confisg'); // Double-check your path here
 const connectDB = require('../config/database'); // Adjust the path as needed
@@ -18,6 +19,7 @@ const orderController     = require('../Controllers/OrderController');
 const productsController = require('../Controllers/userproductShowcontroller');
 const userCouponController = require('../Controllers/usercouponController');
 const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
+const { appendFile } = require('fs');
 
 
 const checkOrderStatus = (req, res, next) => {
@@ -26,7 +28,6 @@ const checkOrderStatus = (req, res, next) => {
     }
     next();
 };
-
 
 // Apply express-session middleware first
 router.use(session({
@@ -39,6 +40,11 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 router.use(nocache());
+
+// Apply the checkBlockedStatus middleware globally for all routes
+router.use(checkBlockedStatus);
+
+
 
 // Google OAuth routes
 router.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
@@ -131,6 +137,9 @@ router.get('/wishlist',myaccountController.loadWishList)
 router.get("/order",userMiddleware.isLogin,orderController.loadOrderPage);
 router.post("/place-order",userMiddleware.isLogin,orderController.orderSummory);
 
+//retry payment
+router.get('/retry-payment/:orderId',userMiddleware.isLogin,orderController.retryPayment)
+router.post('/update-payment-status',userMiddleware.isLogin,orderController.updateStatus)
 
 //keybord page
 router.get('/keyboard',productsController.loadKeyboardPage);

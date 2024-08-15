@@ -118,5 +118,9 @@ admin_route.get('/getCategories',adminOfferController.getCategories)
 //sales Report
 admin_route.get('/salesReport',adminSaleController.loadSalesReport)
  
+//pdf 
+admin_route.get('/sales-report-pdf',adminSaleController.salesPdf);
+//Excel
+admin_route.get('/sales-report-excel',adminSaleController.salesExl)
 
 module.exports = admin_route;

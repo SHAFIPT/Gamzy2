@@ -29,7 +29,8 @@ const orderSchema = new Schema({
         returnStatus: { type: String }   // Add this field for return status
     }],
     totalAmount: { type: Number, required: true },
-    orderDate: { type: Date, required: true }
+    orderDate: { type: Date, required: true },
+    paymentStatus :  {type : String }
 });
 
 const Order = mongoose.model('Order', orderSchema);

@@ -68,8 +68,6 @@ const orderSummory = async (req, res) => {
 
         const { PaymentMethod, addressId, offerDiscount, couponDiscount, shippingCharge } = req.body;
 
-        console.log("This is the offer discounted : ", offerDiscount);
-
         if (!PaymentMethod || !addressId || offerDiscount === undefined || couponDiscount === undefined || shippingCharge === undefined) {
             return res.status(400).json({ success: false, message: "Missing required fields" });
         }
@@ -79,7 +77,6 @@ const orderSummory = async (req, res) => {
             return res.status(404).json({ success: false, message: "Address not found" });
         }
 
-       
         const products = await Promise.all(cart.products.map(async cartItem => {
             let discountPrice = cartItem.productId.price;
             const activeOffer = await Offer.findOne({ 
@@ -92,8 +89,6 @@ const orderSummory = async (req, res) => {
             if (activeOffer) {
                 discountPrice -= offerDiscount;
             }
-
-            console.log("this is discountedPrice :", discountPrice);
 
             return {
                 productId: cartItem.productId._id,
@@ -145,6 +140,7 @@ const orderSummory = async (req, res) => {
             },
             products,
             totalAmount,
+            paymentStatus: "Pending",
             orderDate: new Date()
         };
 
@@ -188,13 +184,17 @@ const orderSummory = async (req, res) => {
 
                 return res.json({ success: true, razorpayOrder });
             } catch (error) {
-                return res.status(500).json({ success: false, message: error.message });
+                const order = new Order(orderData);
+                await order.save();
+
+                return res.status(500).json({ success: true, message: "Razorpay order creation failed" });
             }
         } else {
             return res.status(400).json({ success: false, message: "Invalid payment method" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error placing order:", error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
 
@@ -211,8 +211,62 @@ const loadViewPage = async (req,res) =>{
     }
 }
 
+const retryPayment = async(req,res) =>{
+    const { orderId } = req.params;
+
+    try {
+        // Fetch the order details
+        const order = await Order.findById(orderId);
+
+        if (!order) {
+            return res.status(404).send('Order not found');
+        }
+
+        // Create a new Razorpay order
+        const razorpayOrder = await razerpay.orders.create({
+            amount: order.totalAmount * 100, // Amount in paise
+            currency: 'INR',
+            receipt: order._id.toString(),
+            payment_capture: 1
+        });
+
+        // Send the new order details to the client
+        res.json({
+            success: true,
+            razorpayOrder
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to create Razorpay order' });
+    }
+};
+
+
+const updateStatus = async (req,res)=>{
+
+    const { orderId, paymentId} = req.body;
+
+    try {
+    // Find the order and update the payment status
+    const order = await Order.findById(orderId);
+    if (!order) {
+        return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    order.paymentStatus = 'Paid';
+    await order.save();
+
+    res.json({ success: true });
+} catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to update payment status' });
+}
+};
+
 module.exports ={
     loadOrderPage,
     orderSummory,
-    loadViewPage
+    loadViewPage,
+    retryPayment,
+    updateStatus
 }

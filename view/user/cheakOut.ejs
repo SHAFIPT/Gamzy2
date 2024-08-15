@@ -1802,9 +1802,29 @@ document.addEventListener("DOMContentLoaded", function() {
                         },
                         theme: {
                             color: '#3399cc'
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Payment Failed',
+                                    text: 'Your payment has failed. Your order is placed with a pending payment status. Please try again.'
+                                }).then(() => {
+                                    window.location.href = "/user/order";
+                                });
+                            }
                         }
                     };
                     const rzp = new Razorpay(options);
+                    rzp.on('payment.failed', function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment Failed',
+                            text: 'Your payment has failed. Your order is placed with a pending payment status. Please try again.'
+                        }).then(() => {
+                            window.location.href = "/user/order";
+                        });
+                    });
                     rzp.open();
                 }
             } else {
@@ -1828,6 +1848,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
 
 <script>
 
