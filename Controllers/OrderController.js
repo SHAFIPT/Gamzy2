@@ -51,7 +51,6 @@ const razerpay = new Razorpay({
     key_id: process.env.key_id,
     key_secret: process.env.key_secret
 });
-
 const orderSummory = async (req, res) => {
     try {
         const userId = req.session.user;
@@ -68,6 +67,12 @@ const orderSummory = async (req, res) => {
 
         const { PaymentMethod, addressId, offerDiscount, couponDiscount, shippingCharge } = req.body;
 
+        console.log("This is PaymentMethod:", PaymentMethod);
+        console.log("This is addressId:", addressId);
+        console.log("This is offerDiscount:", offerDiscount);
+        console.log("This is couponDiscount:", couponDiscount);
+        console.log("This is shippingCharge:", shippingCharge);
+
         if (!PaymentMethod || !addressId || offerDiscount === undefined || couponDiscount === undefined || shippingCharge === undefined) {
             return res.status(400).json({ success: false, message: "Missing required fields" });
         }
@@ -78,7 +83,10 @@ const orderSummory = async (req, res) => {
         }
 
         const products = await Promise.all(cart.products.map(async cartItem => {
-            let discountPrice = cartItem.productId.price;
+            const totalProductPrice = cartItem.productId.price * cartItem.quantity;
+            let discountPrice = totalProductPrice;
+            console.log("Total product price:", totalProductPrice);
+
             const activeOffer = await Offer.findOne({ 
                 applicableToProducts: cartItem.productId._id,
                 active: true,
@@ -87,14 +95,17 @@ const orderSummory = async (req, res) => {
             });
 
             if (activeOffer) {
-                discountPrice -= offerDiscount;
+                // Apply the discount but ensure it does not exceed the total product price
+                const applicableDiscount = Math.min(offerDiscount, totalProductPrice);
+                discountPrice -= applicableDiscount;
             }
+            console.log("Discount price after applying offer discount:", discountPrice);
 
             return {
                 productId: cartItem.productId._id,
                 variantId: cartItem.variantId,
                 quantity: cartItem.quantity,
-                price: discountPrice,
+                price: discountPrice < 0 ? 0 : discountPrice, // Ensure price is not negative
                 status: "Pending",
             };
         }));
@@ -116,8 +127,17 @@ const orderSummory = async (req, res) => {
             }
         }
 
-        const orderSubtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const orderSubtotal = products.reduce((total, item) => total + (item.price), 0);
+        console.log("Order subtotal:", orderSubtotal);
+
         const totalAmount = orderSubtotal - couponDiscount + shippingCharge;
+
+        console.log("Total amount:", totalAmount);
+
+        // Check if the total amount is above 1000 and payment method is COD
+        if (PaymentMethod === 'Cashondelivary' && totalAmount > 1000) {
+            return res.status(400).json({ success: false, message: "Cash on Delivery is only available for orders below 1000" });
+        }
 
         // Generate the order ID
         const orderId = generateOrderId();
@@ -254,6 +274,12 @@ const updateStatus = async (req,res)=>{
     }
 
     order.paymentStatus = 'Paid';
+
+    // Update the status of each product to 'Delivered'
+    order.products.forEach(product => {
+        product.status = 'Delivered';
+    });
+
     await order.save();
 
     res.json({ success: true });

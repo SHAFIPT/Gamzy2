@@ -6,7 +6,8 @@ const Productcontroller = require('../Controllers/ProductController');
 const adminOrderController = require('../Controllers/AdminOrderController');
 const adminCouponController = require("../Controllers/AdmincouponController");
 const adminOfferController = require('../Controllers/AdminOfferController');
-const adminSaleController = require('../Controllers/AdminSalesController')
+const adminSaleController = require('../Controllers/AdminSalesController');
+const adminDashboardController = require('../Controllers/AdminDashBoard') 
 const nocache = require('nocache') 
 const upload = require('../middlewares/multer')
 const checkBlockedStatus = require('../middlewares/CheakBlockStatus')
@@ -123,4 +124,7 @@ admin_route.get('/sales-report-pdf',adminSaleController.salesPdf);
 //Excel
 admin_route.get('/sales-report-excel',adminSaleController.salesExl)
 
+admin_route.get('/order-stats',auth.isLogin,adminSaleController.orderStatus);
+
+admin_route.get('/top-selling-products',auth.isLogin,adminDashboardController.topSellingProducts)
 module.exports = admin_route;

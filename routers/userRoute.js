@@ -85,24 +85,24 @@ router.post('/resetPassword', userMiddleware.isLogout, userController.updatePass
 router.get('/LogOut',userController.logOut)
 
 // Shop page
-router.get('/ShopPage', userListcontroller.LoadShopage);
+router.get('/ShopPage',userMiddleware.isLogin, userListcontroller.LoadShopage);
 
 // Product Details page
-router.get('/productDetails/product/:productId/variant/:variantId', userListcontroller.loadProductDetails);
+router.get('/productDetails/product/:productId/variant/:variantId',userMiddleware.isLogin, userListcontroller.loadProductDetails);
 
 
 //Product cart page
-router.get('/productCart',userMiddleware.isLogin,userListcontroller.loadProductCart);
-router.post('/addToCart',userListcontroller.addToCart)
+router.get('/productCart',userMiddleware.isLogin,userMiddleware.isLogin,userListcontroller.loadProductCart);
+router.post('/addToCart',userMiddleware.isLogin,userListcontroller.addToCart)
 
-router.post('/cartUpdate',userListcontroller.updateCart );
-router.post('/productCart/remove',userListcontroller.removeCart)
+router.post('/cartUpdate',userMiddleware.isLogin,userListcontroller.updateCart );
+router.post('/productCart/remove',userMiddleware.isLogin,userListcontroller.removeCart)
 
 //CheakOut page
-router.get('/cheakOut',cheakoutController.loadCheakoutPage);
+router.get('/cheakOut',userMiddleware.isLogin,cheakoutController.loadCheakoutPage);
 
 //cartPage breadcubs
-router.get('/cartPage',cheakoutController.breadCrumbCart)
+router.get('/cartPage',userMiddleware.isLogin,cheakoutController.breadCrumbCart)
 
 //userAccount
 router.get('/myaccount',userMiddleware.isLogin,myaccountController.loadMyAccount);
@@ -129,12 +129,12 @@ router.post('/cancel-order/:orderId', myaccountController.orderCancel);
 router.post('/return-order/:orderId', myaccountController.orderReturn)
 
 //userAccount wallet
-router.get('/wallet',myaccountController.loadWalletPage);
+router.get('/wallet',userMiddleware.isLogin,myaccountController.loadWalletPage);
 //userAccount wishlist
-router.get('/wishlist',myaccountController.loadWishList)
+router.get('/wishlist',userMiddleware.isLogin,myaccountController.loadWishList)
 
 //order page
-router.get("/order",userMiddleware.isLogin,orderController.loadOrderPage);
+router.get("/order",userMiddleware.isLogin,userMiddleware.isLogin,orderController.loadOrderPage);
 router.post("/place-order",userMiddleware.isLogin,orderController.orderSummory);
 
 //retry payment

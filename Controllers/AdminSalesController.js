@@ -50,7 +50,7 @@ const loadSalesReport = async (req, res) => {
                     finalAmount += productTotal - productDiscount;
                 }
 
-                if (product.status === 'Return Completed') {
+                if (product.status === 'Returned') {
                     refundedTotal += productTotal - productDiscount;
                 }
             });
@@ -167,11 +167,40 @@ const salesExl = async (req,res) => {
             res.end();
         });
 };
+const orderStatus = async (req, res) => {
+    try {
+        const now = new Date();
+        
+        // Helper function to get start of week, month, and year
+        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
 
+        const weekOrders = await Order.countDocuments({ orderDate: { $gte: startOfWeek } });
+        const monthOrders = await Order.countDocuments({ orderDate: { $gte: startOfMonth } });
+        const yearOrders = await Order.countDocuments({ orderDate: { $gte: startOfYear } });
 
+        // Count orders based on their status
+        const deliveredCount = await Order.countDocuments({ 'products.status': 'Delivered' });
+        const returnedCount = await Order.countDocuments({ 'products.returnStatus': 'Return Confirmed' });
+        const canceledCount = await Order.countDocuments({ 'products.status': 'Canceled' });
+
+        res.json({
+            weekly: weekOrders,
+            monthly: monthOrders,
+            yearly: yearOrders,
+            delivered: deliveredCount,
+            returned: returnedCount,
+            canceled: canceledCount
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
+    }
+};
 
 module.exports = {
     loadSalesReport,
     salesPdf,
-    salesExl
+    salesExl,
+    orderStatus
 };
