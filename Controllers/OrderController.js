@@ -202,8 +202,11 @@ const orderSummory = async (req, res) => {
                 // Clear the cart after placing the order
                 await Cart.deleteOne({ userId });
 
-                return res.json({ success: true, razorpayOrder });
+                return res.json({ success: true, razorpayOrder, order_id: order._id });
             } catch (error) {
+                console.log("this orderData :",orderData);
+                
+                // orderData.paymentStatus = "Failed";
                 const order = new Order(orderData);
                 await order.save();
 
@@ -266,9 +269,17 @@ const updateStatus = async (req,res)=>{
 
     const { orderId, paymentId} = req.body;
 
+    console.log("This is orederId :",orderId);
+
+    console.log("This is paymentId :",paymentId);
+    
+    
+
     try {
     // Find the order and update the payment status
     const order = await Order.findById(orderId);
+    console.log('order: ', order);
+    
     if (!order) {
         return res.status(404).json({ success: false, message: 'Order not found' });
     }
@@ -276,9 +287,9 @@ const updateStatus = async (req,res)=>{
     order.paymentStatus = 'Paid';
 
     // Update the status of each product to 'Delivered'
-    order.products.forEach(product => {
-        product.status = 'Delivered';
-    });
+    // order.products.forEach(product => {
+    //     product.status = 'Pending';
+    // });
 
     await order.save();
 

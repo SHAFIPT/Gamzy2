@@ -85,14 +85,14 @@ router.post('/resetPassword', userMiddleware.isLogout, userController.updatePass
 router.get('/LogOut',userController.logOut)
 
 // Shop page
-router.get('/ShopPage',userMiddleware.isLogin, userListcontroller.LoadShopage);
+router.get('/ShopPage', userListcontroller.LoadShopage);
 
 // Product Details page
 router.get('/productDetails/product/:productId/variant/:variantId',userMiddleware.isLogin, userListcontroller.loadProductDetails);
 
 
 //Product cart page
-router.get('/productCart',userMiddleware.isLogin,userMiddleware.isLogin,userListcontroller.loadProductCart);
+router.get('/productCart',userMiddleware.isLogin,userListcontroller.loadProductCart);
 router.post('/addToCart',userMiddleware.isLogin,userListcontroller.addToCart)
 
 router.post('/cartUpdate',userMiddleware.isLogin,userListcontroller.updateCart );

@@ -1,5 +1,5 @@
 <%- include('../layouts/userheader') %>
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
 <style>
   :root {
     --bs-light-blue: #add8e6;
@@ -223,6 +223,59 @@
 
 
 
+
+.product-name a {
+    font-family: 'Arial', sans-serif; /* Change to a preferred font-family */
+    font-size: 12px; /* Adjust the font size */
+    color: #333; /* Change the color */
+    font-weight: 600; /* Semi-bold */
+    display: block; /* Ensures ellipsis works correctly */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    max-width: 250px; /* Limit the width to a fixed value */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Add text shadow */
+    transition: color 0.3s ease; /* Add transition for hover effect */
+}
+
+.product-name a:hover {
+    color: #007bff; /* Change color on hover */
+    text-decoration: none; /* Remove underline on hover */
+}
+
+.product-name a:visited {
+    color: #333; /* Maintain the same color for visited links */
+}
+
+.product-name a:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.7); /* Add custom focus effect */
+}
+
+.card-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+}
+
+.product-name {
+    margin-bottom: 0.5rem; /* Space between product name and price */
+    font-family: 'Roboto', sans-serif; /* Apply the new font family */
+    font-size: 1.3rem; /* Adjust font size for better visibility */
+    font-weight: 700; /* Bold font weight for emphasis */
+    color: #000; /* Set text color to black */
+    text-transform: none; /* Remove uppercase transformation */
+}
+
+.item-price {
+    font-size: 1.2rem; /* Slightly smaller font size */
+    font-weight: 500; /* Medium font weight */
+    color: #333; /* Dark color for better readability */
+    font-family: 'Arial', sans-serif; /* Clean and readable font family */
+    text-transform: none; /* Remove uppercase transformation */
+    display: block; /* Ensure it occupies its own space */
+    margin-top: 0.2rem; /* Add a small margin above the price */
+}
 
 
 
@@ -506,12 +559,14 @@
                                             <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
                                         </div>
                                     </div>
-                                    <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                                        <h3 class="card-title text-uppercase">
-                                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= product.productname %></a>
-                                        </h3>
-                                        <span class="item-price text-primary">$<%= product.price %></span>
-                                    </div>
+                                    <div class="card-detail pt-3">
+                                      <h3 class="card-title text-uppercase product-name mb-1">
+                                          <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>">
+                                               <span class="product-name-text"><%= product.productname %></span>
+                                          </a>
+                                      </h3>
+                                      <span class="item-price">₹<%= product.price %></span>
+                                  </div>
                                 </div>
                             </div>
                         <% }) %>
@@ -525,113 +580,51 @@
     <div class="swiper-pagination position-absolute text-center"></div>
 </section>
 
-  <section id="smart-watches" class="product-store padding-large position-relative">
-    <div class="container">
-      <div class="row">
-        <div class="display-header d-flex justify-content-between pb-3">
-          <h2 class="display-7 text-dark text-uppercase">More Selling Products</h2>
-          <div class="btn-right">
-            <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
-          </div>
+ <!-- New Section: More Selling Products -->
+<section id="more-selling-products" class="product-store position-relative padding-large no-padding-top">
+  <div class="container">
+    <div class="row">
+      <div class="display-header d-flex justify-content-between pb-3">
+        <h2 class="display-7 text-dark text-uppercase">More Selling Products</h2>
+        <div class="btn-right">
+          <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
         </div>
-        <div class="swiper product-watch-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/Teclado retroiluminado con control de voz.jpg" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
+      </div>
+      <div class="swiper product-swiper">
+        <div class="swiper-wrapper">
+          <% if (moreProducts && moreProducts.length > 0) { %>
+              <% moreProducts.forEach(product => { %>
+                  <div class="swiper-slide">
+                      <div class="product-card position-relative">
+                          <div class="image-holder">
+                              <img src="/uploads/<%= product.variants[0].images[0] %>" alt="product-item" class="img-fluid">
+                          </div>
+                          <div class="cart-concern position-absolute">
+                              <div class="cart-button d-flex">
+                                  <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
+                              </div>
+                          </div>
+                          <div class="card-detail pt-3">
+                            <h3 class="card-title text-uppercase product-name mb-1">
+                              <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>">
+                                <span class="product-name-text"><%= truncateDescription(product.productname, 20) %></span>
+                              </a>
+                            </h3>
+                            <span class="item-price">₹<%= product.price %></span>
+                          </div>
+                      </div>
                   </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">Gaming Keyboard</a>
-                  </h3>
-                  <span class="item-price text-primary">$870</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="/uploads/1720870495496-YOWU headset.jpeg" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">HeadSets</a>
-                  </h3>
-                  <span class="item-price text-primary">$680</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/earphone.jpg" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">EarPhones</a>
-                  </h3>
-                  <span class="item-price text-primary">$750</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/download (5).jpg" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">Mouse</a>
-                  </h3>
-                  <span class="item-price text-primary">$650</span>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <div class="product-card position-relative">
-                <div class="image-holder">
-                  <img src="images/headset1.jpg" alt="product-item" class="img-fluid">
-                </div>
-                <div class="cart-concern position-absolute">
-                  <div class="cart-button d-flex">
-                    <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
-                  </div>
-                </div>
-                <div class="card-detail d-flex justify-content-between pt-3">
-                  <h3 class="card-title text-uppercase">
-                    <a href="#">HeadSets</a>
-                  </h3>
-                  <span class="item-price text-primary">$750</span>
-                </div>
-              </div>
-            </div>
-          </div>
+              <% }) %>
+          <% } else { %>
+              <p>No additional products available.</p>
+          <% } %>
         </div>
       </div>
     </div>
-    <div class="swiper-pagination position-absolute text-center"></div>
-  </section>
+  </div>
+  <div class="swiper-pagination position-absolute text-center"></div>
+</section>
+
   <section id="yearly-sale" class="bg-light-blue overflow-hidden mt-5 padding-xlarge position-relative">
     <div class="container">
       <div class="row d-flex flex-wrap align-items-center">
@@ -653,7 +646,6 @@
   
   
   
-  
   <section id="latest-blog" class="padding-large">
     <div class="container">
       <div class="row">
@@ -664,58 +656,35 @@
           </div>
         </div>
         <div class="post-grid d-flex flex-wrap justify-content-between">
-          <div class="col-lg-4 col-sm-12">
-            <div class="card border-none me-3">
-              <div class="card-image">
-                <img src="images/controller.jpg" alt="" class="img-fluid">
+          <% if (controllers && controllers.length > 0) { %>
+            <% controllers.forEach(product => { %>
+              <div class="col-lg-4 col-sm-12">
+                <div class="card border-none me-3">
+                  <div class="card-image">
+                    <img src="/uploads/<%= product.variants[0].images[0] %>" alt="" class="img-fluid">
+                  </div>
+                </div>
+                <div class="card-body text-uppercase">
+                  <div class="card-meta text-muted">
+                    <span class="meta-date"><%= new Date(product.date).toDateString() %></span>
+                    <span class="meta-category"><%= product.productCategory %></span>
+                  </div>
+                  <h3 class="card-title">
+                    <a href="#"> <%= product.productname %></a>
+                  </h3>
+                </div>
               </div>
-            </div>
-            <div class="card-body text-uppercase">
-              <div class="card-meta text-muted">
-                <span class="meta-date"></span>
-                <span class="meta-category"></span>
-              </div>
-              <h3 class="card-title">
-                <a href="#">Xbox Wireless Controller – Dream Vapor Special Edition</a>
-              </h3>
-            </div>
-          </div>
-          <div class="col-lg-4 col-sm-12">
-            <div class="card border-none me-3">
-              <div class="card-image">
-                <img src="images/white.jpg" alt="" class="img-fluid">
-              </div>
-            </div>
-            <div class="card-body text-uppercase">
-              <div class="card-meta text-muted">
-                <span class="meta-date"></span>
-                <span class="meta-category"></span>
-              </div>
-              <h3 class="card-title">
-                <a href="#">Xbox Wireless Controller – Arctic Camo Special Edition</a>
-              </h3>
-            </div>
-          </div>
-          <div class="col-lg-4 col-sm-12">
-            <div class="card border-none me-3">
-              <div class="card-image">
-                <img src="images/black.jpg" alt="" class="img-fluid">
-              </div>
-            </div>
-            <div class="card-body text-uppercase">
-              <div class="card-meta text-muted">
-                <span class="meta-date"></span>
-                <span class="meta-category"></span>
-              </div>
-              <h3 class="card-title">
-                <a href="#">Xbox Wireless Controller - Lunar Shift Special Edition</a>
-              </h3>
-            </div>
-          </div>
+            <% }) %>
+          <% } else { %>
+            <p>No controllers available at the moment.</p>
+          <% } %>
         </div>
       </div>
     </div>
   </section>
+
+
+
   <section id="testimonials" class="position-relative">
     <div class="container">
       <div class="row">

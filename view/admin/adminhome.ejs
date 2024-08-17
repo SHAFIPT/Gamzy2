@@ -119,7 +119,6 @@
         </div>
     </div>
 </div>
-
 <div class="col-12 tm-block-col">
     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
         <h2 class="tm-block-title">Top Selling Products</h2>
@@ -141,7 +140,46 @@
         </div>
     </div>
 </div>
-        <footer class="tm-footer row tm-mt-small">
+
+<div class="col-12 tm-block-col">
+    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+        <h2 class="tm-block-title">Top Selling Categories</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Category</th>
+                        <th>Quantity Sold</th>
+                    </tr>
+                </thead>
+                <tbody id="topCategoriesTableBody">
+                    <!-- Table rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 tm-block-col">
+    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+        <h2 class="tm-block-title">Top Selling Brands</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Brand</th>
+                        <th>Quantity Sold</th>
+                    </tr>
+                </thead>
+                <tbody id="topBrandsTableBody">
+                    <!-- Table rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>    <footer class="tm-footer row tm-mt-small">
             <div class="col-12 font-weight-light">
                 <p class="text-center text-white mb-0 px-4 small">
                     Copyright &copy; <b>2018</b> All rights reserved. 
@@ -230,37 +268,92 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    fetchTopSellingProducts();
-});
-
-function fetchTopSellingProducts() {
-    fetch('/admin/top-selling-products')
-        .then(response => response.json())
-        .then(products => {
-            updateTopProductsTable(products);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-function updateTopProductsTable(products) {
-    const tableBody = document.getElementById('topProductsTableBody');
-    tableBody.innerHTML = ''; // Clear existing rows
-
-    products.forEach((product, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${product.productName}</td>
-        <td class="py-1">
-    <img src="/uploads/${product.image}" class="mr-2" alt="product image" style="width: 50px; height: 50px;">
-</td>
-            <td>${product.quantitySold}</td>
-            <td>${product.category}</td>
-        `;
-        tableBody.appendChild(row);
+        fetchTopSellingProducts();
+        fetchTopSellingCategories();
+        fetchTopSellingBrands();
     });
-}
+
+    function fetchTopSellingProducts() {
+        fetch('/admin/top-selling-products')
+            .then(response => response.json())
+            .then(products => {
+                updateTopProductsTable(products);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function fetchTopSellingCategories() {
+        fetch('/admin/top-selling-categories')
+            .then(response => response.json())
+            .then(categories => {
+                updateTopCategoriesTable(categories);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function fetchTopSellingBrands() {
+        fetch('/admin/top-selling-brands')
+            .then(response => response.json())
+            .then(brands => {
+                updateTopBrandsTable(brands);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function updateTopProductsTable(products) {
+        const tableBody = document.getElementById('topProductsTableBody');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        products.forEach((product, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${product.productName}</td>
+                <td class="py-1">
+                    <img src="/uploads/${product.image}" class="mr-2" alt="product image" style="width: 50px; height: 50px;">
+                </td>
+                <td>${product.quantitySold}</td>
+                <td>${product.category}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function updateTopCategoriesTable(categories) {
+        const tableBody = document.getElementById('topCategoriesTableBody');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        categories.forEach((category, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${category.categoryName}</td>
+                <td>${category.quantitySold}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function updateTopBrandsTable(brands) {
+        const tableBody = document.getElementById('topBrandsTableBody');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        brands.forEach((brand, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${brand.brandName}</td>
+                <td>${brand.quantitySold}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
 </script>
     
     <script>

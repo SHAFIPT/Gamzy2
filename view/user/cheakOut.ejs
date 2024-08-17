@@ -1705,30 +1705,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const shippingChargeElement = document.getElementById("shippingCharge");
     const totalElement = document.getElementById("total");
 
-    console.log('This is placeOrderButton :',placeOrderButton);
-    console.log('This is paymentMethods :',paymentMethods);
-    console.log('This is addressRadios :',addressRadios);
-    console.log('This is offerDiscountElement :',offerDiscountElement);
-    console.log('This is couponDiscountElement :',couponDiscountElement);
-
-    
-
-
-
-
     paymentMethods.forEach(method => {
         method.addEventListener("change", function() {
-            // Deselect all other payment methods
             paymentMethods.forEach(otherMethod => {
                 if (otherMethod !== method) {
                     otherMethod.checked = false;
                 }
             });
-            // Enable/disable the place order button
             placeOrderButton.disabled = !Array.from(paymentMethods).some(method => method.checked);
         });
     });
-
 
     placeOrderButton.addEventListener("click", function() {
         const selectedAddress = Array.from(addressRadios).find(radio => radio.checked)?.value;
@@ -1757,9 +1743,6 @@ document.addEventListener("DOMContentLoaded", function() {
             totalAmount
         };
 
-        console.log("This is orderData :",orderData);
-        
-
         fetch("/user/place-order", {
             method: "POST",
             headers: {
@@ -1780,73 +1763,70 @@ document.addEventListener("DOMContentLoaded", function() {
                     });
                 } else if (selectedPaymentMethod === 'razerpay') {
                     const options = {
-                        key: 'rzp_test_qPtwviU68jrUXP', // Replace with your actual Razorpay key
+                        key: 'rzp_test_qPtwviU68jrUXP',
                         amount: data.razorpayOrder.amount,
                         currency: data.razorpayOrder.currency,
                         name: 'Your Company Name',
                         description: 'Order Payment',
                         order_id: data.razorpayOrder.id,
                         handler: function (response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Payment Successful',
-                                text: 'Your order has been placed successfully!'
-                            }).then(() => {
-                                window.location.href = "/user/order";
+                            fetch('/user/update-payment-status', {
+                                method: 'POST',
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({ orderId: data.order_id, paymentId: response.razorpay_payment_id }) // using actual order ID
+                            })
+                            .then(res => res.json())
+                            .then(result => {
+                                if (result.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Payment Successful',
+                                        text: 'Your order has been placed and payment is successful!'
+                                    }).then(() => {
+                                        window.location.href = "/user/order";
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Payment Failed',
+                                        text: 'There was an issue updating the payment status. Please contact support.'
+                                    });
+                                }
                             });
                         },
                         prefill: {
-                            name: 'Customer Name',
-                            email: 'customer@example.com',
-                            contact: 'Customer Phone Number'
+                            name: 'Your Name',
+                            email: 'your_email@example.com',
+                            contact: '1234567890'
                         },
                         theme: {
                             color: '#3399cc'
-                        },
-                        modal: {
-                            ondismiss: function() {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Payment Failed',
-                                    text: 'Your payment has failed. Your order is placed with a pending payment status. Please try again.'
-                                }).then(() => {
-                                    window.location.href = "/user/order";
-                                });
-                            }
                         }
                     };
                     const rzp = new Razorpay(options);
-                    rzp.on('payment.failed', function (response) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Payment Failed',
-                            text: 'Your payment has failed. Your order is placed with a pending payment status. Please try again.'
-                        }).then(() => {
-                            window.location.href = "/user/order";
-                        });
-                    });
                     rzp.open();
                 }
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Order Failed',
-                    text: data.message || 'Failed to place order. Please try again.'
-                }).then(() => {
-                    window.location.href = "/user/productCart";
+                    text: data.message || 'There was an issue placing your order. Please try again.'
                 });
             }
         })
         .catch(error => {
-            console.error("Error:", error);
+            console.error("Error placing order:", error);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred. Please try again.'
+                text: 'An error occurred while placing your order. Please try again.'
             });
         });
     });
 });
+
 </script>
 
 

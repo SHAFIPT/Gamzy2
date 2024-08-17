@@ -127,4 +127,6 @@ admin_route.get('/sales-report-excel',adminSaleController.salesExl)
 admin_route.get('/order-stats',auth.isLogin,adminSaleController.orderStatus);
 
 admin_route.get('/top-selling-products',auth.isLogin,adminDashboardController.topSellingProducts)
+admin_route.get('/top-selling-categories',auth.isLogin,adminDashboardController.topSellingCategories);
+admin_route.get('/top-selling-brands',auth.isLogin,adminDashboardController.topSellingBrands);
 module.exports = admin_route;

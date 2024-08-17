@@ -1,5 +1,6 @@
 const User = require('../model/UserModel');
 const Product = require("../model/productModel")
+const Category = require("../model/catogoriesModel")
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
@@ -45,11 +46,21 @@ const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
 };
 
+
+
+const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+        return description.substring(0, maxLength) + '...';
+    }
+    return description;
+};
 const loadhome = async (req, res) => {
     try {
         const userId = req.session.user;
         let user = null;
         let products = []; // Initialize products
+        let moreProducts = []; // Initialize products for the second section
+        let controllers = []; // Initialize controllers
 
         if (userId) {
             user = await User.findById(userId);
@@ -58,13 +69,27 @@ const loadhome = async (req, res) => {
         // Fetch products if user is logged in
         products = await Product.find({ is_Listed: true }).limit(5); // Adjust the query as needed
 
-        res.render('home', { user, products });
+        // Fetch additional products for the second section
+        moreProducts = await Product.find({ is_Listed: true }).skip(14).limit(5); // Skipping first 5 products
+
+        // Find the category ID for "Controllers"
+        const controllerCategory = await Category.findOne({ name: "CONTORLLER" });
+        if (controllerCategory) {
+            const controllerCategoryId = controllerCategory._id;
+
+            // Fetch controllers from the "Controllers" category
+            controllers = await Product.find({ 
+                is_Listed: true, 
+                productCategory: controllerCategoryId 
+            }).limit(3); // Fetch 3 controllers for the blog section
+        }
+
+        res.render('home', { user, products, moreProducts, controllers, truncateDescription });
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
-};
-// const loadlogin = async (req, res) => {
+};// const loadlogin = async (req, res) => {
 //     try {
 
 //         const name = await User.find({name : name})
