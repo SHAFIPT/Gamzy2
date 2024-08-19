@@ -29,35 +29,51 @@ const loadSalesReport = async (req, res) => {
         })
         .populate('userId', 'name')
         .populate('products.productId', 'productname');
-
         let salesCount = 0;
         let orderAmount = 0;
         let totalDiscount = 0;
         let refundedTotal = 0;
         let finalAmount = 0;
-
+        
         orders.forEach(order => {
+            const totalOrderValue = order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+            console.log("This is Total orderValue :", totalOrderValue);
+            
             const shippingChargePerProduct = order.shippingCharge / order.products.length;
             
             order.products.forEach(product => {
+                const productProportion = (product.price * product.quantity) / totalOrderValue;
+                console.log("This is productProportion :", productProportion);
+                
+                const productCouponDiscount = order.couponDiscount * productProportion;
+                console.log("This productCouponDiscount :", productCouponDiscount);
+                
                 const productTotal = product.price * product.quantity + shippingChargePerProduct;
-                const productDiscount = (order.offerDiscount / order.products.length) + (order.couponDiscount / order.products.length);
-
+                console.log("This is productTotal :", productTotal);
+                
+                // Only consider coupon discount, as offer discount is already applied to product price
+                const productDiscount = productCouponDiscount;
+                console.log("This is productDiscount :", productDiscount);
+                
                 if (product.status === 'Delivered' || product.status === 'Returned' || product.returnStatus === 'Requested') {
                     salesCount++;
                     orderAmount += productTotal;
                     totalDiscount += productDiscount;
-                    finalAmount += productTotal - productDiscount;
-                }
-
-                if (product.status === 'Returned') {
-                    refundedTotal += productTotal - productDiscount;
+                    
+                    if (product.status === 'Returned') {
+                        const refundAmount = productTotal - productDiscount;
+                        refundedTotal += refundAmount;
+                        // Don't add to finalAmount for returned products
+                    } else {
+                        finalAmount += productTotal - productDiscount;
+                    }
                 }
             });
         });
-
-        finalAmount -= refundedTotal;
-
+        
+        // No need to subtract refundedTotal here, as we've already excluded it from finalAmount
+        // finalAmount -= refundedTotal;
+        
         const summaryData = {
             salesCount,
             orderAmount: orderAmount.toFixed(2),
@@ -65,7 +81,7 @@ const loadSalesReport = async (req, res) => {
             refundedTotal: refundedTotal.toFixed(2),
             finalAmount: finalAmount.toFixed(2)
         };
-
+        
         res.render('adminSalesReport', { orders, summaryData, startDate, endDate });
         
     } catch (error) {

@@ -721,6 +721,59 @@ rel="stylesheet">
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
 }
+
+
+
+
+.checkout__order {
+    padding: 20px;
+    /* background: #fff; */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.checkout__order__products {
+    margin-bottom: 10px;
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.checkout__total__products {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.checkout__total__products li {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.product-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-quantity {
+    flex: 0 0 50px;
+    text-align: center;
+}
+
+.product-total {
+    flex: 0 0 100px;
+    text-align: right;
+}
 </style>
 
 <body>
@@ -811,9 +864,9 @@ rel="stylesheet">
                                     <% if (cart && cart.products.length > 0) { %>
                                         <% cart.products.forEach(product => { %>
                                             <li>
-                                                <span class="product-name"><%= product.productId.productname %></span> 
-                                                <span class="product-quantity">x <%= product.quantity %></span> 
-                                                <span>₹<%= (product.discountedPrice * product.quantity).toFixed(2) %></span>
+                                                <span class="product-name"><%= product.productId.productname.substring(0, 20) %><%= product.productId.productname.length > 20 ? '...' : '' %></span>
+                                                <span class="product-quantity">x <%= product.quantity %></span>
+                                                <span class="product-total">₹<%= (product.discountedPrice * product.quantity).toFixed(2) %></span>
                                             </li>
                                         <% }) %>
                                     <% } else { %>
@@ -1803,6 +1856,17 @@ document.addEventListener("DOMContentLoaded", function() {
                         },
                         theme: {
                             color: '#3399cc'
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Payment Cancelled',
+                                    text: 'You payment has been faild. Please try again later.'
+                                }).then(() => {
+                                    window.location.href = "/user/Userorders";
+                                });
+                            }
                         }
                     };
                     const rzp = new Razorpay(options);
@@ -1826,7 +1890,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
 </script>
 
 

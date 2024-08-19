@@ -3750,9 +3750,9 @@
 .icon-local_gas_station:before {
   content: "\e546";
 }
-.icon-shopping_cart:before {
+/* .icon-shopping_cart:before {
   content: "\e8cc";
-}
+} */
 .icon-local_hospital:before {
   content: "\e548";
 }

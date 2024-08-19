@@ -234,6 +234,9 @@ const addToCart = async (req, res) => {
 
         const { productId, variantId, quantity , price} = req.body;
 
+        console.log("This is the price for productDetails page ",price );
+        console.log("This is the productId for productDetails page ",productId );
+        console.log("This is the variantId for productDetails page ",variantId );
         // console.log("This is the price for productDetails page ",price );
         
         const userId = req.session.user; // Assuming you have authenticated user stored in req.session.user
@@ -357,6 +360,28 @@ const removeCart = async (req,res)=>{
 }
 
 
+const getQuantity = async(req,res)=>{
+    try {
+        if (!req.session.user) {
+            return res.status(401).json({ error: 'User not logged in' });
+        }
+
+        const userId = req.session.user;
+        const cart = await Cart.findOne({ userId });
+
+        if (!cart) {
+            return res.json({ quantity: 0 });
+        }
+
+        const quantity = cart.products.reduce((sum, product) => sum + product.quantity, 0);
+
+        res.json({ quantity });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 module.exports = {
     LoadShopage,
     loadProductDetails,
@@ -364,4 +389,5 @@ module.exports = {
     addToCart,
     updateCart,
     removeCart,
+    getQuantity
 }

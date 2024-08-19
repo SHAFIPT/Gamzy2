@@ -3,6 +3,13 @@ const  Address = require('../model/addressShema');
 const Cart = require('../model/cartShema');
 const  Offer = require('../model/offerModal')
 
+const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+        return description.substring(0, maxLength) + '...';
+    }
+    return description;
+};
+
 const loadCheakoutPage = async (req, res) => {
     try {
         if (req.session.user) {
@@ -72,7 +79,8 @@ const loadCheakoutPage = async (req, res) => {
                 subtotal: subtotal.toFixed(2),
                 totalDiscount: totalDiscount.toFixed(2),
                 shippingCharge: shippingCharge.toFixed(2),
-                total: total.toFixed(2)
+                total: total.toFixed(2),
+                truncateDescription
             });
         } else {
             res.redirect('/login'); // Redirect to login if user is not authenticated

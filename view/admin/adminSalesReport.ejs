@@ -287,6 +287,7 @@
                     </thead>
                     <tbody>
                         <% orders.forEach(order => { %>
+                            <% const totalOrderValue = order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0); %>
                             <% const shippingChargePerProduct = order.shippingCharge / order.products.length; %>
                             <% order.products.forEach(product => { %>
                                 <% if (product.status === 'Delivered' || product.status === 'Returned' || product.status === 'Return Complete' || product.returnStatus === 'Requested') { %>
@@ -306,18 +307,20 @@
                                         <td><%= product.quantity %></td>
                                         <td>
                                             <% 
-                                            const discountPercentage = (order.offerDiscount / order.products.reduce((sum, p) => sum + p.price * p.quantity, 0)) * 100;
-                                            const discountedUnitPrice = product.price * (1 - discountPercentage / 100);
+                                            const productProportion = (product.price * product.quantity) / totalOrderValue;
+                                            const productCouponDiscount = order.couponDiscount * productProportion;
+                                            // No need to calculate offer discount as it's already applied to product price
+                                            const discountedUnitPrice = product.price - (productCouponDiscount / product.quantity);
                                             const unitPriceWithShipping = discountedUnitPrice + (shippingChargePerProduct / product.quantity);
                                             %>
                                             ₹<%= unitPriceWithShipping.toFixed(2) %>
                                         </td>
                                         <td>
                                             <% 
-                                            const totalPrice = (discountedUnitPrice * product.quantity) + shippingChargePerProduct - (order.couponDiscount / order.products.length);
+                                            const totalPrice = (discountedUnitPrice * product.quantity) + shippingChargePerProduct;
                                             %>
                                             ₹<%= totalPrice.toFixed(2) %>
-                                            <% if (product.status === 'Return Completed') { %>
+                                            <% if (product.status === 'Returned') { %>
                                                 (Refunded)
                                             <% } %>
                                         </td>

@@ -113,6 +113,23 @@ body {
 }
 
 
+
+
+.password-container {
+    position: relative;
+}
+
+.input {
+    padding-right: 30px; /* Adjust this padding to make room for the eye icon */
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -139,10 +156,13 @@ body {
         <div class="error"></div>
     </div>
     <div class="group">
-        <label for="password" class="label">Password</label>
-        <input id="password" type="password" name="password" class="input">
-        <div class="error"></div>
-    </div>
+      <label for="password" class="label">Password</label>
+      <div class="password-container">
+          <input id="password" type="password" name="password" class="input">
+          <span id="togglePassword" class="eye-icon">👁️‍🗨️</span>
+          <div class="error"></div>
+      </div>
+  </div>
     <br>
     <div class="group">
         <input type="submit" class="button" value="Sign In">
@@ -165,7 +185,16 @@ body {
   </div>
 </div>
 
+<script>
+  document.getElementById('togglePassword').addEventListener('click', function () {
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
 
+      // Toggle the eye / eye slash icon
+      this.textContent = type === 'password' ? '👁️‍🗨️' : '👁️';
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

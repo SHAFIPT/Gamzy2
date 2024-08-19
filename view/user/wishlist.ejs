@@ -274,23 +274,25 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                       <!-- Wishlist Page -->
+<!-- Wishlist Page -->
 <tbody>
-    <% if (wishlist && wishlist.products.length > 0) { %>
+    <% if (wishlist && wishlist.products && wishlist.products.length > 0) { %>
         <% wishlist.products.forEach(item => { %>
             <tr>
                 <td>
-                    <% if (item.variants && item.variants.images && item.variants.images.length > 0) { %>
-                        <img src="/uploads/<%= item.variants[0].images[0]  %>" alt="Product Image">
+                    <% if (item.product && item.product.variants && item.product.variants.length > 0 && item.product.variants[0].images && item.product.variants[0].images.length > 0) { %>
+                        <img src="/uploads/<%= item.product.variants[0].images[0] %>" alt="Product Image" class="wishlist-image">
                     <% } else { %>
-                        <img src="/uploads/default-image.jpg" alt="Default Image">
+                        <img src="/uploads/default-image.jpg" alt="Default Image" class="wishlist-image">
                     <% } %>
                 </td>
                 <td><%= item.product.productname %></td>
                 <td>₹<%= item.product.price %></td>
-                <td><%= item.variant && item.variant.quantity < 1? 'In Stock' : 'Out of Stock' %></td>
+                <td><%= item.variant && item.variant.quantity < 1 ? 'Out of Stock' : 'In Stock' %></td>
                 <td class="actions">
-                    <button class="btn add-to-cart" data-product-id="<%= item.product._id %>" data-variant-id="<%= item.variant._id %>">Add to Cart</button>
+                    <button class="btn add-to-cart" data-product-id="<%= item.product._id %>" data-variant-id="<%= item.variant._id %>">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
                     <button class="btn delete"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
@@ -313,75 +315,159 @@
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-migrate-3.0.1.min.js"></script>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', async function(event) {
-      event.preventDefault(); // Prevent default link behavior
-
-      // Get product ID and variant ID from data attributes
-      const productId = this.getAttribute('data-product-id');
-      const variantId = this.getAttribute('data-variant-id');
-
-      console.log("product", productId);
-      console.log("variant",variantId);
-      
-      
-
-      const data = {
-        productId: productId,
-        variantId: variantId,
-        quantity: 1 // You can set a default quantity or get it from somewhere
-      };
-
-      try {
-        const response = await fetch('/user/addToCart', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+        // Add to Cart Button
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', async function(event) {
+                event.preventDefault(); // Prevent default link behavior
+    
+                // Get product ID and variant ID from data attributes
+                const productId = this.getAttribute('data-product-id');
+                const variantId = this.getAttribute('data-variant-id');
+    
+                console.log("product", productId);
+                console.log("variant", variantId);
+    
+                const data = {
+                    productId: productId,
+                    variantId: variantId,
+                    quantity: 1 // You can set a default quantity or get it from somewhere
+                };
+    
+                try {
+                    const response = await fetch('/user/addToCart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+    
+                    const result = await response.json(); 
+    
+                    if (response.status === 401) {
+                        Swal.fire({
+                            title: 'Login Required',
+                            text: result.error,
+                            icon: 'warning',
+                            confirmButtonText: 'Login'
+                        }).then(() => {
+                            window.location.href = '/user/login';
+                        });
+                    } else if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+    
+                        // Remove item from wishlist
+                        await fetch('/user/removeFromWishlist', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                productId: productId,
+                                variantId: variantId
+                            })
+                        });
+    
+                        // Refresh the page or update the wishlist UI
+                        location.reload(); // Reloads the page to reflect changes
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.error || 'An error occurred. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
         });
-
-        const result = await response.json(); 
-        
-        if (response.status === 401) {
-          Swal.fire({
-            title: 'Login Required',
-            text: result.error,
-            icon: 'warning',
-            confirmButtonText: 'Login'
-          }).then(() => {
-            window.location.href = '/user/login';
-          });
-        } else if (response.ok) {
-          Swal.fire({
-            title: 'Success',
-            text: result.message,
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-        } else {
-          Swal.fire({
-            title: 'Error',
-            text: result.error || 'An error occurred. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-        }
-      } catch (error) {
-        console.error('Error during fetch:', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'An error occurred. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK'
+    
+        // Delete Button
+        document.querySelectorAll('.delete').forEach(button => {
+            button.addEventListener('click', async function(event) {
+                event.preventDefault(); // Prevent default link behavior
+    
+                // Get product ID and variant ID from data attributes
+                const productId = this.getAttribute('data-product-id');
+                const variantId = this.getAttribute('data-variant-id');
+    
+                try {
+                    const response = await fetch('/user/removeFromWishlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            productId: productId,
+                            variantId: variantId
+                        })
+                    });
+    
+                    const result = await response.json();
+    
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Deleted',
+                            text: 'Item removed from wishlist.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+    
+                        // Refresh the page or update the wishlist UI
+                        location.reload(); // Reloads the page to reflect changes
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.error || 'An error occurred. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
         });
-      }
     });
-  });
-});
+    </script>
 
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+    var currentLocation = window.location.href;
+    var menuItem = document.querySelectorAll(".sidebar-options li a");
+
+    // Loop through all sidebar items
+    menuItem.forEach(function(item) {
+        // Check if the href attribute of the link matches the current URL
+        if (item.href === currentLocation) {
+            // Add 'active' class to the parent <li> element
+            item.parentElement.classList.add("active");
+        } else {
+            // Remove 'active' class if it's not the current URL
+            item.parentElement.classList.remove("active");
+        }
+    });
+});
 </script>
     

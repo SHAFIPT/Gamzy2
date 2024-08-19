@@ -59,21 +59,21 @@ const orderSummory = async (req, res) => {
             return res.status(401).json({ success: false, message: "User not authenticated" });
         }
 
-        const cart = await Cart.findOne({ userId }).populate("products.productId");
+        const cart = await Cart.findOne({ userId }).populate({
+            path: 'products.productId',
+            populate: [
+                { path: 'variants' },
+                { path: 'productCategory' }
+            ]
+        });
 
         if (!cart) {
             return res.status(404).json({ success: false, message: "Cart not found" });
         }
 
-        const { PaymentMethod, addressId, offerDiscount, couponDiscount, shippingCharge } = req.body;
+        const { PaymentMethod, addressId, couponDiscount } = req.body;
 
-        console.log("This is PaymentMethod:", PaymentMethod);
-        console.log("This is addressId:", addressId);
-        console.log("This is offerDiscount:", offerDiscount);
-        console.log("This is couponDiscount:", couponDiscount);
-        console.log("This is shippingCharge:", shippingCharge);
-
-        if (!PaymentMethod || !addressId || offerDiscount === undefined || couponDiscount === undefined || shippingCharge === undefined) {
+        if (!PaymentMethod || !addressId || couponDiscount === undefined) {
             return res.status(400).json({ success: false, message: "Missing required fields" });
         }
 
@@ -82,33 +82,39 @@ const orderSummory = async (req, res) => {
             return res.status(404).json({ success: false, message: "Address not found" });
         }
 
-        const products = await Promise.all(cart.products.map(async cartItem => {
-            const totalProductPrice = cartItem.productId.price * cartItem.quantity;
-            let discountPrice = totalProductPrice;
-            console.log("Total product price:", totalProductPrice);
+        // Fetch all active offers
+        const offers = await Offer.find({ active: true });
 
-            const activeOffer = await Offer.findOne({ 
-                applicableToProducts: cartItem.productId._id,
-                active: true,
-                activeDate: { $lte: new Date() },
-                expireDate: { $gte: new Date() }
+        let totalDiscount = 0;
+        const products = cart.products.map(cartItem => {
+            const product = cartItem.productId;
+            let highestDiscount = 0;
+
+            // Check if any offers apply to the product or its category
+            offers.forEach(offer => {
+                if (offer.applicableToProducts.includes(product._id) || 
+                    offer.applicableToCategories.includes(product.productCategory._id)) {
+                    highestDiscount = Math.max(highestDiscount, offer.discount);
+                }
             });
 
-            if (activeOffer) {
-                // Apply the discount but ensure it does not exceed the total product price
-                const applicableDiscount = Math.min(offerDiscount, totalProductPrice);
-                discountPrice -= applicableDiscount;
-            }
-            console.log("Discount price after applying offer discount:", discountPrice);
+            // Calculate discounted price
+            const originalPrice = product.price * cartItem.quantity;
+            const discountAmount = originalPrice * (highestDiscount / 100);
+            const discountedPrice = originalPrice - discountAmount;
+
+            totalDiscount += discountAmount;
 
             return {
-                productId: cartItem.productId._id,
+                productId: product._id,
                 variantId: cartItem.variantId,
                 quantity: cartItem.quantity,
-                price: discountPrice < 0 ? 0 : discountPrice, // Ensure price is not negative
+                originalPrice: product.price,
+                price: discountedPrice / cartItem.quantity, // Store per-unit price
+                discount: highestDiscount,
                 status: "Pending",
             };
-        }));
+        });
 
         // Check stock availability
         for (const cartItem of cart.products) {
@@ -127,27 +133,27 @@ const orderSummory = async (req, res) => {
             }
         }
 
-        const orderSubtotal = products.reduce((total, item) => total + (item.price), 0);
-        console.log("Order subtotal:", orderSubtotal);
+        const subtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        console.log("This is subtotal :",subtotal);
+        
+        const shippingCharge = subtotal < 500 ? 50 : 0;
+        const totalAmount = subtotal - couponDiscount + shippingCharge;
+        console.log("This is the totalAmount yhy:",totalAmount);
+        
 
-        const totalAmount = orderSubtotal - couponDiscount + shippingCharge;
 
-        console.log("Total amount:", totalAmount);
-
-        // Check if the total amount is above 1000 and payment method is COD
         if (PaymentMethod === 'Cashondelivary' && totalAmount > 1000) {
             return res.status(400).json({ success: false, message: "Cash on Delivery is only available for orders below 1000" });
         }
 
-        // Generate the order ID
         const orderId = generateOrderId();
 
         const orderData = { 
             userId,
-            orderId: orderId,
+            orderId,
             PaymentMethod,
             shippingCharge,
-            offerDiscount,
+            offerDiscount: totalDiscount,
             couponDiscount,
             address: {
                 name: `${address.Firstname} ${address.Lastname}`,
@@ -159,6 +165,7 @@ const orderSummory = async (req, res) => {
                 Landmark: address.Landmark,
             },
             products,
+            subtotal,
             totalAmount,
             paymentStatus: "Pending",
             orderDate: new Date()

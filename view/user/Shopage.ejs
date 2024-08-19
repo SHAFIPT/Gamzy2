@@ -553,6 +553,64 @@
     text-transform: uppercase; /* Makes text uppercase */
 }
 
+
+
+.img-prod {
+    position: relative;
+}
+
+.wishlist-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border-radius: 50%;
+    z-index: 10;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.wishlist-icon i {
+    color: #ff0000; /* Red color for the heart icon */
+    font-size: 18px;
+}
+
+
+.img-prod-container {
+    position: relative;
+}
+
+.img-prod-container .wishlist-icon {
+    display: none; /* Hide by default */
+}
+
+.img-prod-container:hover .wishlist-icon {
+    display: block; /* Show when hovering */
+}
+
+.img-prod-container .wishlist-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.img-prod-container .wishlist-icon i {
+    color: #ff6f61; /* Initial color for heart icon */
+}
+
+.img-prod-container .wishlist-icon.added i {
+    color: #ff0000; /* Color for heart icon when added to wishlist */
+}
+
+/* .img-prod:hover .wishlist-icon {
+    background: rgba(255, 0, 0, 0.8);
+} */
+
 </style>
 
 </head>
@@ -575,7 +633,12 @@
               <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
               <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
               <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-              <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"<span class="icon-shopping_cart"><i class="fa fa-shopping-cart"></i></span>[0]</a></li>
+              <li class="nav-item cta cta-colored">
+                <a href="/user/productCart" class="nav-link">
+                    <span class="icon-shopping_cart"><i class="fa fa-shopping-cart"></i></span>
+                    <span id="cart-quantity">[0]</span>
+                </a>
+            </li>
           </ul>
       </div>
       </div>
@@ -616,61 +679,61 @@
           <div class="row">
             <!-- Products -->
             <% products.forEach(product => { %>
-              <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
-                <div class="product d-flex flex-column">
-                  <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
-                    <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
-                    <div class="overlay"></div>
-        
-                    <% if (product.variants[0].quantity < 1) { %>
-                      <div class="out-of-stock-btn">Out of stock</div>
-                    <% } else { %>
-                      <% let maxDiscount = 0; %>
-                      <% offers.forEach(offer => { %>
-                        <% if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) { %>
-                          <% if (offer.discount > maxDiscount) { %>
-                            <% maxDiscount = offer.discount; %>
-                            <div class="offer-badges"><%= offer.name %> - <%= offer.discount %>% Off</div>
-                          <% } %>
+                <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
+                    <div class="product d-flex flex-column">
+                        <div class="img-prod-container">
+                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
+                                <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
+                                <div class="overlay"></div>
+                            </a>
+                            <div class="wishlist-icon" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>" onclick="toggleWishlistIcon(this)">
+                                <i class="far fa-heart" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <% if (product.variants[0].quantity < 1) { %>
+                            <div class="out-of-stock-btn">Out of stock</div>
+                        <% } else { %>
+                            <% let maxDiscount = 0; %>
+                            <% offers.forEach(offer => { %>
+                                <% if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) { %>
+                                    <% if (offer.discount > maxDiscount) { %>
+                                        <% maxDiscount = offer.discount; %>
+                                        <div class="offer-badges"><%= offer.name %> - <%= offer.discount %>% Off</div>
+                                    <% } %>
+                                <% } %>
+                            <% }) %>
                         <% } %>
-                      <% }) %>
-                    <% } %>
-                  </a>
-                  
-                  
-                  <div class="text py-3 pb-4 px-3">
-                    <div class="d-flex">
-                      <div class="cat">
-                        <span><%= product.category %></span>
-                      </div>
-                    </div> 
-                    <h3 class="product-name"><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= truncateDescription(product.productname,70) %></a></h3>
-                    <div class="pricing">
-                      <% if (product.highestDiscount > 0) { %>
-                        <p class="price product-price">
-                          <span style="text-decoration: line-through; color: red;">₹<%= product.price.toFixed(2) %></span>
-                          <span> ₹<%= product.discountedPrice.toFixed(2) %></span>
-                        </p>
-                      <% } else { %>
-                        <p class="price product-price"><span>₹<%= product.price.toFixed(2) %></span></p>
-                      <% } %>
-                      <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
+                        <div class="text py-3 pb-4 px-3">
+                            <div class="d-flex">
+                                <div class="cat">
+                                    <span><%= product.category %></span>
+                                </div>
+                            </div> 
+                            <h3 class="product-name"><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= truncateDescription(product.productname,70) %></a></h3>
+                            <div class="pricing">
+                                <% if (product.highestDiscount > 0) { %>
+                                    <p class="price product-price">
+                                        <span style="text-decoration: line-through; color: red;">₹<%= product.price.toFixed(2) %></span>
+                                        <span> ₹<%= product.discountedPrice.toFixed(2) %></span>
+                                    </p>
+                                <% } else { %>
+                                    <p class="price product-price"><span>₹<%= product.price.toFixed(2) %></span></p>
+                                <% } %>
+                                <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
+                            </div>
+                            <p class="bottom-area d-flex px-3">
+                                <a class="add-to-cart text-center py-2 mr-1" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>"><span>Add to cart</span></a>
+                                <% if (product.variants[0].quantity < 1) { %>
+                                    <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
+                                <% } else { %>
+                                    <a href="#" class="buy-now text-center py-2 wishlist-btn" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>">Wishlist<span></span></a>
+                                <% } %>
+                            </p>
+                        </div>
                     </div>
-                    <p class="bottom-area d-flex px-3">
-            
-                        <a  class="add-to-cart text-center py-2 mr-1 " data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>"><span>Add to cart</span></a>
-
-                      <% if (product.variants[0].quantity < 1) { %>
-                        <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
-                      <% } else { %>
-                        <a href="#" class="buy-now text-center py-2 wishlist-btn" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>">Wishlist<span></span></a>
-                      <% } %>
-                    </p>
-                  </div>
                 </div>
-              </div>
             <% }) %>
-          </div>
+        </div>
   
           <!-- Pagination -->
           <div class="pagination-container">
@@ -860,50 +923,75 @@
 <script src="/js/google-map.js"></script>
 <script src="/js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!-- <script>
+ function toggleWishlistIcon(element) {
+    const icon = element.querySelector('i');
+    if (icon.classList.contains('far')) {
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+    } else {
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+    }
+}
+</script> -->
 <script>
-  document.querySelectorAll('.wishlist-btn').forEach(button => {
-      button.addEventListener('click', async (event) => {
-          event.preventDefault();
-          const productId = button.getAttribute('data-product-id');
-          const variantId = button.getAttribute('data-variant-id');
+ document.querySelectorAll('.wishlist-icon').forEach(button => {
+    button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation(); // Prevent navigation
 
-          try {
-              const response = await fetch('/user/add-to-wishlist', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ productId, variantId })
-              });
-              const result = await response.json();
+        const productId = button.getAttribute('data-product-id');
+        const variantId = button.getAttribute('data-variant-id');
 
-              if (response.ok) {
-                  Swal.fire({
-                      title: 'Success!',
-                      text: result.message,
-                      icon: 'success',
-                      confirmButtonText: 'OK'
-                  });
-              } else {
-                  Swal.fire({
-                      title: 'Error!',
-                      text: result.error || 'Something went wrong.',
-                      icon: 'error',
-                      confirmButtonText: 'OK'
-                  });
-              }
-          } catch (error) {
-              console.error('Error:', error);
-              Swal.fire({
-                  title: 'Error!',
-                  text: 'An error occurred. Please try again.',
-                  icon: 'error',
-                  confirmButtonText: 'OK'
-              });
-          }
-      });
-  });
+        try {
+            const response = await fetch('/user/add-to-wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId, variantId })
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: result.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                
+                // Toggle the heart icon state
+                const icon = button.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    button.classList.add('filled');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    button.classList.remove('filled');
+                }
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: result.error || 'Something went wrong.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+});
 </script>
 <script>
   
@@ -999,5 +1087,20 @@ window.onclick = function(event) {
 }
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      fetch('/user/cartQuantity')
+          .then(response => response.json())
+          .then(data => {
+              if (data.quantity !== undefined) {
+                  const cartQuantityElement = document.getElementById('cart-quantity');
+                  cartQuantityElement.textContent = `[${data.quantity}]`;
+              }
+          })
+          .catch(error => {
+              console.error('Error fetching cart quantity:', error);
+          });
+  });
+</script>
 
 <%- include('../layouts/footer') %>

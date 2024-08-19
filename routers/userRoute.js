@@ -93,8 +93,9 @@ router.get('/productDetails/product/:productId/variant/:variantId',userMiddlewar
 
 //Product cart page
 router.get('/productCart',userMiddleware.isLogin,userListcontroller.loadProductCart);
-router.post('/addToCart',userMiddleware.isLogin,userListcontroller.addToCart)
-
+router.post('/addToCart',userListcontroller.addToCart)
+//cartQuantity find
+router.get('/cartQuantity',userListcontroller.getQuantity)
 router.post('/cartUpdate',userMiddleware.isLogin,userListcontroller.updateCart );
 router.post('/productCart/remove',userMiddleware.isLogin,userListcontroller.removeCart)
 
@@ -131,7 +132,8 @@ router.post('/return-order/:orderId', myaccountController.orderReturn)
 //userAccount wallet
 router.get('/wallet',userMiddleware.isLogin,myaccountController.loadWalletPage);
 //userAccount wishlist
-router.get('/wishlist',userMiddleware.isLogin,myaccountController.loadWishList)
+router.get('/wishlist',userMiddleware.isLogin,myaccountController.loadWishList);
+router.post('/removeFromWishlist',userMiddleware.isLogin,myaccountController.removeWishList)
 
 //order page
 router.get("/order",userMiddleware.isLogin,userMiddleware.isLogin,orderController.loadOrderPage);

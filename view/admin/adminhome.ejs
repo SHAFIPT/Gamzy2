@@ -103,10 +103,15 @@
                 </div>
             </div>
 <!-- row -->
- <div class="row tm-content-row">
+<div class="row tm-content-row">
     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
         <div class="tm-bg-primary-dark tm-block">
             <h2 class="tm-block-title">Sales Overview</h2>
+            <div>
+                <button id="weeklyBtn" class="btn btn-primary">Weekly</button>
+                <button id="monthlyBtn" class="btn btn-primary">Monthly</button>
+                <button id="yearlyBtn" class="btn btn-primary">Yearly</button>
+            </div>
             <canvas id="deliveryChart"></canvas>
         </div>
     </div>
@@ -119,6 +124,7 @@
         </div>
     </div>
 </div>
+
 <div class="col-12 tm-block-col">
     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
         <h2 class="tm-block-title">Top Selling Products</h2>
@@ -197,73 +203,87 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/tooplate-scripts.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            fetch('/admin/order-stats')
-                .then(response => response.json())
-                .then(data => {
-                    // Create Delivery Chart
-                    const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
-                    new Chart(deliveryCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Weekly', 'Monthly', 'Yearly'],
-                            datasets: [{
-                                label: 'Orders Delivered',
-                                data: [data.weekly, data.monthly, data.yearly],
-                                backgroundColor: ['rgba(75, 192, 192, 0.2)'],
-                                borderColor: ['rgba(75, 192, 192, 1)'],
-                                borderWidth: 1
-                            }]
+       document.addEventListener('DOMContentLoaded', (event) => {
+    let deliveryChart;
+
+    fetch('/admin/order-stats')
+        .then(response => response.json())
+        .then(data => {
+            const createDeliveryChart = (period) => {
+                const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+                if (deliveryChart) {
+                    deliveryChart.destroy();
+                }
+                deliveryChart = new Chart(deliveryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [period],
+                        datasets: [{
+                            label: 'Orders',
+                            data: [data[period.toLowerCase()]],
+                            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                            borderColor: ['rgba(75, 192, 192, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            };
+
+            // Initial chart (Weekly by default)
+            createDeliveryChart('Weekly');
+
+            // Event listeners for buttons
+            document.getElementById('weeklyBtn').addEventListener('click', () => createDeliveryChart('Weekly'));
+            document.getElementById('monthlyBtn').addEventListener('click', () => createDeliveryChart('Monthly'));
+            document.getElementById('yearlyBtn').addEventListener('click', () => createDeliveryChart('Yearly'));
+
+            // Create Pie Chart (unchanged)
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Delivered', 'Returned', 'Canceled'],
+                    datasets: [{
+                        data: [data.delivered, data.returned, data.canceled],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
                         },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `${tooltipItem.label}: ${tooltipItem.raw}`;
                                 }
                             }
                         }
-                    });
-    
-                    // Create Pie Chart
-                    const pieCtx = document.getElementById('pieChart').getContext('2d');
-                    new Chart(pieCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: ['Delivered', 'Returned', 'Canceled'],
-                            datasets: [{
-                                data: [data.delivered, data.returned, data.canceled],
-                                backgroundColor: [
-                                    'rgba(75, 192, 192, 0.2)',
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)'
-                                ],
-                                borderColor: [
-                                    'rgba(75, 192, 192, 1)',
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(255, 159, 64, 1)'
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(tooltipItem) {
-                                            return `${tooltipItem.label}: ${tooltipItem.raw}`;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                })
-                .catch(error => console.error('Error fetching order stats:', error));
-        });
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching order stats:', error));
+});
     </script>
 
 <script>

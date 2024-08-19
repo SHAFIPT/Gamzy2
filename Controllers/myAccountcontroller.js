@@ -164,6 +164,7 @@ const loadOrderDetails = async (req, res) => {
 
         const ordersCount = await Order.countDocuments({ userId });
         const orders = await Order.find({ userId })
+            .sort({ orderDate: -1 }) // Sort orders by orderDate in descending order
             .skip(skip)
             .limit(limit)
             .populate({
@@ -432,7 +433,7 @@ const loadWalletPage = async (req, res) => {
 };
 const loadWishList = async (req, res) => {
     try {
-        const userId = req.session.user; // Assuming user is logged in and user ID is available in req.user
+        const userId = req.session.user; // Assuming user is logged in and user ID is available in req.session.user
         const wishlist = await Wishlist.findOne({ user: userId }).populate('products.product');
 
         if (wishlist) {
@@ -445,7 +446,7 @@ const loadWishList = async (req, res) => {
             }
         }
 
-        res.render('wishlist', { wishlist });
+        res.render('wishlist', { wishlist, currentPage: 'wishlist' }); // Pass wishlist to the template
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });
@@ -475,6 +476,32 @@ const addWishList = async (req,res)=>{
     }
 };
 
+const removeWishList = async (req,res)=>{
+    try {
+        const { productId, variantId } = req.body;
+
+        // Find the user's wishlist
+        const wishlist = await Wishlist.findOne({ user: req.session.user });
+
+        if (!wishlist) {
+            return res.status(404).json({ error: 'Wishlist not found' });
+        }
+
+        // Remove the item from the wishlist
+        wishlist.products = wishlist.products.filter(item =>
+            !(item.product._id.equals(productId) && item.variant._id.equals(variantId))
+        );
+
+        await wishlist.save();
+
+        res.status(200).json({ message: 'Item removed from wishlist' });
+    } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
 module.exports = {
     loadMyAccount,
     loadaddress,
@@ -489,5 +516,6 @@ module.exports = {
     updatePassword,
     loadWalletPage,
     loadWishList,
-    addWishList
+    addWishList,
+    removeWishList
 }
