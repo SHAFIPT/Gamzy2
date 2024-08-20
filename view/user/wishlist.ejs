@@ -257,7 +257,7 @@
                         <li><a href="/user/Userorders">Orders</a></li>
                         <li><a href="/user/address">Address</a></li>
                         <li><a href="/user/wallet">Wallet</a></li>
-                        <li><a href="/user/signout">Signout</a></li>
+                        <li><a href="/user/LogOut">Signout</a></li>
                     </ul>
                 </div>
             </div>
@@ -293,7 +293,9 @@
                     <button class="btn add-to-cart" data-product-id="<%= item.product._id %>" data-variant-id="<%= item.variant._id %>">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
-                    <button class="btn delete"><i class="fas fa-trash"></i></button>
+                    <button class="btn delete" data-product-id="<%= item.product._id %>" data-variant-id="<%= item.variant._id %>">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </td>
             </tr>
         <% }); %>
@@ -405,6 +407,9 @@
                 // Get product ID and variant ID from data attributes
                 const productId = this.getAttribute('data-product-id');
                 const variantId = this.getAttribute('data-variant-id');
+
+                console.log("This is delete product", productId);
+                console.log("This is delete variant", variantId);
     
                 try {
                     const response = await fetch('/user/removeFromWishlist', {

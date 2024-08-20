@@ -595,6 +595,43 @@
 .order-summary-footer .status-pending {
     color: gray !important;
 }
+
+
+
+
+
+.download-pdf-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.btn-download-pdf {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-download-pdf i {
+    margin-right: 8px;
+}
+
+.btn-download-pdf:hover {
+    background-color: #c0392b;
+}
+
+.btn-download-pdf:active {
+    background-color: #a83227;
+    transform: translateY(1px);
+}
+
    </style>
      <!-- Navbar section -->
      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -647,7 +684,8 @@
                         <li><a href="/user/Userorders">Orders</a></li>
                         <li><a href="/user/address">Address</a></li>
                         <li><a href="/user/wallet">Wallet</a></li>
-                        <li><a href="/user/signout">Signout</a></li>
+                        <li><a href="/user/wishlist">WishList</a></li>
+                        <li><a href="/user/LogOut">Signout</a></li>
                     </ul>
                 </div>
             </div>
@@ -658,7 +696,8 @@
                     </div>
                 <% } else { %>
                     <% orders.forEach(order => { %>
-                    <div class="order-summary">
+
+         <div class="order-summary">
                         <div class="order-details">
                             <div class="order-info">
                                 <p><strong class="order-summary-label">Order ID:</strong> <span class="order-summary-text"><%= order.orderId %></span></p>
@@ -760,6 +799,13 @@
                                 <% }); %>
                             </tbody>
                         </table>
+
+             
+                        <div class="download-pdf-container">
+    <a href="/user/download-orders-pdf/<%= order._id %>" class="btn-download-pdf">
+        <i class="fas fa-file-pdf"></i> Download PDF
+    </a>
+</div>   
                      
                     </div>
                     <% }); %>

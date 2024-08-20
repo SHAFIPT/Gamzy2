@@ -524,8 +524,6 @@
   }
 
 
-
-
   /* General style for offer badges */
 .offer-badges {
     position: absolute;
@@ -611,6 +609,66 @@
     background: rgba(255, 0, 0, 0.8);
 } */
 
+
+
+.small-modal {
+        width: 300px !important;
+        font-size: 0.8em !important;
+    }
+    .small-modal .swal2-title {
+        font-size: 1.5em !important;
+    }
+    .small-modal .swal2-content {
+        font-size: 1em !important;
+    }
+    .small-modal .swal2-confirm {
+        font-size: 0.9em !important;
+        padding: 0.5em 1em !important;
+    }
+
+
+
+
+    .search-results {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.no-results-img {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.no-results-message {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.no-results-submessage {
+  font-size: 1rem;
+  color: #666;
+  max-width: 600px;
+}
+
+
+
+
+
+
+
 </style>
 
 </head>
@@ -668,15 +726,35 @@
           <div class="search-box">
             <form method="get" action="/user/ShopPage" class="search-form" id="search-form">
               <input type="text" name="search" id="search-input" placeholder="Search..." value="<%= search || '' %>" autocomplete="off" />
+              
+              <!-- Hidden inputs to preserve filters and sorting in search -->
+              <input type="hidden" name="subcategory" value="<%= subcategory %>" />
+              <input type="hidden" name="category" value="<%= category %>" />
+              <input type="hidden" name="price_from" value="<%= price_from %>" />
+              <input type="hidden" name="price_to" value="<%= price_to %>" />
+              <input type="hidden" name="sort" value="<%= sort %>" />
+              <input type="hidden" name="brand" value="<%= brand %>" />
+        
               <button type="submit" id="search-button">Search</button>
             </form>
           </div>
         </div>
+        
       </div>
   
       <div class="row">
         <div class="col-md-8 col-lg-10 order-md-last">
           <div class="row">
+
+                  <!-- Check if products array is empty -->
+          <% if (products.length === 0) { %>
+            <div class="col-12 text-center no-results">
+              <!-- <h2>Oops! No products found</h2> -->
+              <img src="/image/product not found.webp" alt="No products found" style="max-width: 200px; height: auto;" class="img-fluid">
+              <h3 class="no-results-message">Sorry, we couldn't find any products matching your search.</h3>
+              <p class="no-results-submessage">Try adjusting your search criteria or browsing our categories for more options.</p>
+            </div>
+          <% } else { %>
             <!-- Products -->
             <% products.forEach(product => { %>
                 <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
@@ -719,6 +797,17 @@
                                 <% } else { %>
                                     <p class="price product-price"><span>₹<%= product.price.toFixed(2) %></span></p>
                                 <% } %>
+
+                                <p class="rating">
+                                  <!-- You can replace this with any number of stars based on your need -->
+                                  <i class="fas fa-star" style="color: gold;"></i>
+                                  <i class="fas fa-star" style="color: gold;"></i>
+                                  <i class="fas fa-star" style="color: gold;"></i>
+                                  <i class="fas fa-star" style="color: gold;"></i>
+                                  <i class="fas fa-star-half-alt" style="color: gold;"></i>
+                              </p>
+
+
                                 <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
                             </div>
                             <p class="bottom-area d-flex px-3">
@@ -731,22 +820,23 @@
                             </p>
                         </div>
                     </div>
-                </div>
-            <% }) %>
-        </div>
+                  </div>
+                  <% }) %>
+                <% } %>
+              </div>
   
           <!-- Pagination -->
           <div class="pagination-container">
             <% if (currentPage > 1) { %>
-              <a href="/user/ShopPage?page=<%= currentPage - 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link">Previous</a>
+              <a href="/user/ShopPage?page=<%= currentPage - 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>" class="pagination-link">Previous</a>
             <% } %>
             
             <% for (let i = 1; i <= totalPages; i++) { %>
-              <a href="/user/ShopPage?page=<%= i %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+              <a href="/user/ShopPage?page=<%= i %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>" class="pagination-link <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
             <% } %>
             
             <% if (currentPage < totalPages) { %>
-              <a href="/user/ShopPage?page=<%= currentPage + 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>" class="pagination-link">Next</a>
+              <a href="/user/ShopPage?page=<%= currentPage + 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>" class="pagination-link">Next</a>
             <% } %>
           </div>
         </div>
@@ -761,8 +851,8 @@
                   <span class="dropdown-icon" onclick="toggleDropdown()">&#9660;</span>
                 </h2>
                 <div id="subcategory-dropdown" class="dropdown-content">
-                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>">Wired</a>
-                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>">Wireless</a>
+                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">Wired</a>
+                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">Wireless</a>
                 </div>
               </div>
   
@@ -773,10 +863,10 @@
               <div class="sidebar-box-2">
                 <h2 class="heading">Sort By</h2>
                 <div class="form-group">
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc&brand=<%= brand %>" class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc&brand=<%= brand %>" class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc&brand=<%= brand %>" class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc&brand=<%= brand %>" class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
+                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
                 </div>
               </div>
             </div>
@@ -788,7 +878,7 @@
                   <ul class="list">
                     <% categories.forEach(categoryItem => { %>
                       <li>
-                        <a href="/user/ShopPage?category=<%= categoryItem._id %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>">
+                        <a href="/user/ShopPage?category=<%= categoryItem._id %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">
                           <%= categoryItem.name %>
                         </a>
                       </li>
@@ -851,7 +941,7 @@
           <ul class="list">
             <% brands.forEach(brandItem => { %>
               <li>
-                <a href="/user/ShopPage?brand=<%= brandItem %>&category=<%= category %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>">
+                <a href="/user/ShopPage?brand=<%= brandItem %>&category=<%= category %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>">
                   <%= brandItem %>
                 </a>
               </li>
@@ -936,63 +1026,87 @@
 }
 </script> -->
 <script>
- document.querySelectorAll('.wishlist-icon').forEach(button => {
-    button.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation(); // Prevent navigation
-
-        const productId = button.getAttribute('data-product-id');
-        const variantId = button.getAttribute('data-variant-id');
-
-        try {
-            const response = await fetch('/user/add-to-wishlist', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ productId, variantId })
-            });
-            const result = await response.json();
-
-            if (response.ok) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: result.message,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-                
-                // Toggle the heart icon state
-                const icon = button.querySelector('i');
-                if (icon.classList.contains('far')) {
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    button.classList.add('filled');
-                } else {
-                    icon.classList.remove('fas');
-                    icon.classList.add('far');
-                    button.classList.remove('filled');
-                }
-            } else {
-                Swal.fire({
-                    title: 'Error!',
-                    text: result.error || 'Something went wrong.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            Swal.fire({
-                title: 'Error!',
-                text: 'An error occurred. Please try again.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    });
-});
-</script>
+  document.querySelectorAll('.wishlist-icon, .wishlist-btn').forEach(button => {
+     button.addEventListener('click', async (event) => {
+         event.preventDefault();
+         event.stopPropagation(); // Prevent navigation
+ 
+         const productId = button.getAttribute('data-product-id');
+         const variantId = button.getAttribute('data-variant-id');
+ 
+         try {
+             const response = await fetch('/user/add-to-wishlist', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ productId, variantId })
+             });
+ 
+             const result = await response.json();
+ 
+             if (response.status === 401) {
+                 Swal.fire({
+                     title: 'Please Log In',
+                     text: 'You need to be logged in to add items to your wishlist.',
+                     icon: 'warning',
+                     confirmButtonText: 'Log In',
+                     customClass: {
+                        popup: 'small-modal'
+                    }
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         window.location.href = '/user/login'; // Redirect to login page
+                     }
+                 });
+             } else if (response.ok) {
+                 Swal.fire({
+                     title: 'Success!',
+                     text: result.message,
+                     icon: 'success',
+                     confirmButtonText: 'OK',
+                     customClass: {
+                        popup: 'small-modal'
+                    }
+                 });
+                 
+                 // Toggle the heart icon state
+                 const icon = button.querySelector('i');
+                 if (icon.classList.contains('far')) {
+                     icon.classList.remove('far');
+                     icon.classList.add('fas');
+                     button.classList.add('filled');
+                 } else {
+                     icon.classList.remove('fas');
+                     icon.classList.add('far');
+                     button.classList.remove('filled');
+                 }
+             } else {
+                 Swal.fire({
+                     title: 'Error!',
+                     text: result.error || 'Something went wrong.',
+                     icon: 'error',
+                     confirmButtonText: 'OK',
+                     customClass: {
+                        popup: 'small-modal'
+                    }
+                 });
+             }
+         } catch (error) {
+             console.error('Error:', error);
+             Swal.fire({
+                 title: 'Error!',
+                 text: 'An error occurred. Please try again.',
+                 icon: 'error',
+                 confirmButtonText: 'OK',
+                 customClass: {
+                        popup: 'small-modal'
+                    }
+             });
+         }
+     });
+ });
+ </script>
 <script>
   
   document.addEventListener('DOMContentLoaded', function() {
@@ -1031,7 +1145,10 @@
             title: 'Login Required',
             text: result.error,
             icon: 'warning',
-            confirmButtonText: 'Login'
+            confirmButtonText: 'Login',
+            customClass: {
+                popup: 'small-modal'
+           }
           }).then(() => {
             window.location.href = '/user/login';
           });
@@ -1040,14 +1157,22 @@
             title: 'Success',
             text: result.message,
             icon: 'success',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
+            customClass: {
+                        popup: 'small-modal'
+                    }
           });
+          location.reload();
+          
         } else {
           Swal.fire({
             title: 'Error',
             text: result.error || 'An error occurred. Please try again.',
             icon: 'error',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
+            customClass: {
+                        popup: 'small-modal'
+                    }
           });
         }
       } catch (error) {
@@ -1056,7 +1181,10 @@
           title: 'Error',
           text: 'An error occurred. Please try again.',
           icon: 'error',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
+          customClass: {
+                        popup: 'small-modal'
+                    }
         });
       }
     });

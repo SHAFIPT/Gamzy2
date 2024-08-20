@@ -132,7 +132,7 @@ router.post('/return-order/:orderId', myaccountController.orderReturn)
 //userAccount wallet
 router.get('/wallet',userMiddleware.isLogin,myaccountController.loadWalletPage);
 //userAccount wishlist
-router.get('/wishlist',userMiddleware.isLogin,myaccountController.loadWishList);
+router.get('/wishlist',myaccountController.loadWishList);
 router.post('/removeFromWishlist',userMiddleware.isLogin,myaccountController.removeWishList)
 
 //order page
@@ -159,7 +159,9 @@ router.get('/getCart',userCouponController.getCart)
 
 
 //addtowishlist
-router.post('/add-to-wishlist',myaccountController.addWishList)
+router.post('/add-to-wishlist',myaccountController.addWishList);
+
+router.get('/download-orders-pdf/:orderId',myaccountController.downloadOrderPdf)
 
 router.get('/home2',userCouponController.loadHomePage)
 

@@ -30,8 +30,15 @@ const LoadShopage = async (req, res) => {
         }
 
         if (search) {
-            query.productname = { $regex: search, $options: 'i' }; // Case-insensitive search
+            const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
+            query.$or = [
+                { productname: searchRegex },
+                { brand: searchRegex },
+                { 'productCategory.name': searchRegex }, // Assuming category name is stored in productCategory
+                { subCategory: searchRegex }
+            ];
         }
+
 
         if (category) {
             query.productCategory = category;

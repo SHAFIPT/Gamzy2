@@ -89,12 +89,12 @@ admin_route.post('/block-user', Admincontroller.blockuser);
 
 //orderslist
 admin_route.get('/OrderList',auth.isLogin,adminOrderController.loadOrderPage);
-admin_route.get('/viewOrder/:OrderId',auth.isLogin,adminOrderController.loadViewPage);
+admin_route.get('/viewOrder/:OrderId',auth.isLogin,auth.isLogin,adminOrderController.loadViewPage);
 admin_route.post('/update-status',adminOrderController.updateStatus);
 
 //couponManagement
-admin_route.get('/couponManage',adminCouponController.loadCouponPage);
-admin_route.get('/addCoupon',adminCouponController.addCoupon);
+admin_route.get('/couponManage',auth.isLogin,adminCouponController.loadCouponPage);
+admin_route.get('/addCoupon',auth.isLogin,adminCouponController.addCoupon);
 admin_route.post('/addCoupon',adminCouponController.addCouponPage);
 //editCoupon
 admin_route.get('/editCoupon/:id',adminCouponController.loadEditPage);
@@ -102,10 +102,9 @@ admin_route.post('/editCoupon/:id',adminCouponController.updateCoupon);
 //deleteCoupon
 admin_route.delete('/deleteCoupon/:id',adminCouponController.removeCoupon)
 
-
 //OfferManagement
-admin_route.get('/offerManage',adminOfferController.loadOfferPage);
-admin_route.get('/addOffer',adminOfferController.addOffer);
+admin_route.get('/offerManage',auth.isLogin,adminOfferController.loadOfferPage);
+admin_route.get('/addOffer',auth.isLogin,adminOfferController.addOffer);
 admin_route.post('/addOffer',adminOfferController.addOfferDetails)
 admin_route.post('/toggleOfferStatus/:id',adminOfferController.offerStatus)
 admin_route.delete('/deleteOffer/:id',adminOfferController.deleteOffer);
@@ -117,10 +116,10 @@ admin_route.get('/getProducts',adminOfferController.getProducts);
 admin_route.get('/getCategories',adminOfferController.getCategories)
 
 //sales Report
-admin_route.get('/salesReport',adminSaleController.loadSalesReport)
+admin_route.get('/salesReport',auth.isLogin,adminSaleController.loadSalesReport)
  
 //pdf 
-admin_route.get('/sales-report-pdf',adminSaleController.salesPdf);
+admin_route.get('/sales-report-pdf',auth.isLogin,adminSaleController.salesPdf);
 //Excel
 admin_route.get('/sales-report-excel',adminSaleController.salesExl)
 
@@ -129,4 +128,6 @@ admin_route.get('/order-stats',auth.isLogin,adminSaleController.orderStatus);
 admin_route.get('/top-selling-products',auth.isLogin,adminDashboardController.topSellingProducts)
 admin_route.get('/top-selling-categories',auth.isLogin,adminDashboardController.topSellingCategories);
 admin_route.get('/top-selling-brands',auth.isLogin,adminDashboardController.topSellingBrands);
+
+
 module.exports = admin_route;

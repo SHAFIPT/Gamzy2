@@ -5,6 +5,10 @@ const Order = require('../model/ordreModel');
 const Wishlist = require('../model/wishlistShema')
 const Wallet = require('../model/walletSchema')
 const Product = require('../model/productModel');
+// const PDFDocument = require('pdfkit');
+const PDFDocument = require('pdfkit-table');
+const fs = require('fs');
+const path = require('path');
 const bcrypt = require('bcrypt');
 
 const loadMyAccount = async (req,res) =>{
@@ -433,6 +437,12 @@ const loadWalletPage = async (req, res) => {
 };
 const loadWishList = async (req, res) => {
     try {
+
+        if (!req.session.user) {
+            return res.status(401).json({ error: 'Please log in to add products to your cart.' });
+        }
+
+
         const userId = req.session.user; // Assuming user is logged in and user ID is available in req.session.user
         const wishlist = await Wishlist.findOne({ user: userId }).populate('products.product');
 
@@ -455,6 +465,12 @@ const loadWishList = async (req, res) => {
 
 const addWishList = async (req,res)=>{
     try {
+
+        if (!req.session.user) {
+            return res.status(401).json({ error: 'Please log in to add products to your cart.' });
+        }
+
+
         const { productId, variantId } = req.body;
         const userId = req.session.user; // Assuming user is logged in and user ID is available in req.user
 
@@ -480,6 +496,15 @@ const removeWishList = async (req,res)=>{
     try {
         const { productId, variantId } = req.body;
 
+        console.log("This is productId :",productId);
+        console.log("This is variantId :",variantId);
+
+
+        const userId = req.session.user
+        
+        console.log("This is user :",userId);
+        
+
         // Find the user's wishlist
         const wishlist = await Wishlist.findOne({ user: req.session.user });
 
@@ -501,6 +526,107 @@ const removeWishList = async (req,res)=>{
     }
 };
 
+const downloadOrderPdf = async (req,res)=>{
+    const order = await Order.findOne({ _id: req.params.orderId }).populate('products.productId');
+
+    if (!order) {
+        return res.status(404).send('Order not found');
+    }
+
+    const doc = new PDFDocument({ margin: 50 });
+    const filename = `Order_${order.orderId}.pdf`;
+
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+    res.setHeader('Content-Type', 'application/pdf');
+
+    doc.pipe(res);
+
+    // Helper function to create a table
+    const createTable = (headers, rows) => {
+        const table = {
+            headers: headers,
+            rows: rows
+        };
+
+        doc.table(table, {
+            prepareHeader: () => doc.font('Helvetica-Bold').fontSize(10),
+            prepareRow: (row, i) => doc.font('Helvetica').fontSize(10)
+        });
+    };
+
+    // Add company name (replace with your own)
+    doc.fontSize(20).text('GAMZY', 50, 57)
+    //    .fontSize(10).text('123 Business Street, City, Country', 50, 80)
+       .text('Phone: +91 9876546788 | Email: Gamzy@gamil.com', 50, 95);
+
+    doc.moveDown();
+
+    // Order Summary
+    doc.fontSize(16).text('Order Summary', { underline: true });
+    doc.moveDown();
+
+    createTable(
+        ['Order ID', 'Order Date', 'Total Amount', 'Payment Status'],
+        [[
+            order.orderId,
+            new Date(order.orderDate).toLocaleDateString(),
+            `₹${order.totalAmount.toFixed(2)}`,
+            order.paymentStatus
+        ]]
+    );
+
+    doc.moveDown();
+
+    // Shipping Address
+    doc.fontSize(16).text('Shipping Address', { underline: true });
+    doc.moveDown();
+
+    doc.fontSize(10).text(`${order.address.name}`);
+    doc.text(`${order.address.address},`);
+    doc.text(`${order.address.Landmark},`);
+    doc.text(`${order.address.city}, ${order.address.state} - ${order.address.pincode}`);
+    doc.text(`Phone: +${order.address.number}`);
+
+    doc.moveDown();
+
+    // Product Details
+    doc.fontSize(16).text('Products', { underline: true });
+    doc.moveDown();
+
+    const productRows = order.products.map(product => {
+        const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
+        return [
+            `${product.productId.productname} (${variant.color})`,
+            product.quantity,
+            `₹${product.price.toFixed(2)}`,
+            `₹${(product.price * product.quantity).toFixed(2)}`
+        ];
+    });
+
+    createTable(
+        ['Product', 'Quantity', 'Unit Price', 'Total'],
+        productRows
+    );
+
+    doc.moveDown();
+
+    // Total
+    doc.fontSize(12).text(`Grand Total: ₹${order.totalAmount.toFixed(2)}`, { align: 'right' });
+
+    // Footer
+    const pageCount = doc.bufferedPageRange().count;
+    for (let i = 0; i < pageCount; i++) {
+        doc.switchToPage(i);
+        doc.fontSize(8).text(
+            `Page ${i + 1} of ${pageCount}`,
+            50,
+            doc.page.height - 50,
+            { align: 'center' }
+        );
+    }
+
+    doc.end();
+};
 
 module.exports = {
     loadMyAccount,
@@ -517,5 +643,6 @@ module.exports = {
     loadWalletPage,
     loadWishList,
     addWishList,
-    removeWishList
+    removeWishList,
+    downloadOrderPdf
 }
