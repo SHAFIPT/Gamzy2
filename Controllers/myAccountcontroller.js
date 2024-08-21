@@ -462,42 +462,48 @@ const loadWishList = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
-
-const addWishList = async (req,res)=>{
+const addWishList = async (req, res) => {
     try {
-
         if (!req.session.user) {
-            return res.status(401).json({ error: 'Please log in to add products to your cart.' });
+            return res.status(401).json({ error: 'Please log in to add products to your wishlist.' });
         }
 
-
         const { productId, variantId } = req.body;
-        const userId = req.session.user; // Assuming user is logged in and user ID is available in req.user
+        const userId = req.session.user; // Assuming user is logged in and user ID is available in req.session.user
 
         let wishlist = await Wishlist.findOne({ user: userId });
         if (!wishlist) {
             wishlist = new Wishlist({ user: userId, products: [] });
         }
 
-        const existingProductIndex = wishlist.products.findIndex(p => p.product.toString() === productId && p.variant.toString() === variantId);
-        if (existingProductIndex === -1) {
-            wishlist.products.push({ product: productId, variant: variantId });
+        // Check if the product is already in the wishlist
+        const existingProductIndex = wishlist.products.findIndex(
+            p => p.product.toString() === productId && p.variant.toString() === variantId
+        );
+
+        if (existingProductIndex !== -1) {
+            // Product is already in the wishlist
+            return res.status(200).json({ message: 'Product is already in your wishlist.' });
         }
 
+        // Product is not in the wishlist, add it
+        wishlist.products.push({ product: productId, variant: variantId });
         await wishlist.save();
-        res.status(200).json({ message: 'Product added to wishlist' });
+
+        res.status(200).json({ message: 'Product added to wishlist.' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });
     }
 };
-
 const removeWishList = async (req,res)=>{
     try {
         const { productId, variantId } = req.body;
 
         console.log("This is productId :",productId);
         console.log("This is variantId :",variantId);
+
+
 
 
         const userId = req.session.user

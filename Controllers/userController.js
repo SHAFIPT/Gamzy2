@@ -89,30 +89,10 @@ const loadhome = async (req, res) => {
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
-};// const loadlogin = async (req, res) => {
-//     try {
-
-//         const name = await User.find({name : name})
-
-//         console.log("Rendering login page");
-//         res.render('login'  , {name  : name});
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
-
+};
 
 const loadlogin = async (req, res) => {
     try {
-
-
-
-
-
-
-
-
-
         const name = req.session.userName || null; // Retrieve name from session if available
         console.log("Rendering login page");
         res.render('login', { name: name });

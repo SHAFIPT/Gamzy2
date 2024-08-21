@@ -37,31 +37,38 @@ rel="stylesheet">
 
 <style>
 
-   
-/* Navbar Styles */
-.navbar {
-    height: 100px;
+ /* Navbar Styles */
+ .navbar {
+    background-color: #343a40; /* Dark background */
+    padding: 1rem 1rem; /* Padding */
 }
 
-.navbar .navbar-brand .logoname {
-    font-family: 'Poppins', sans-serif;
-    font-size: 54px;
-    color: #fff;
+.navbar-brand h1 {
+    color: #ffffff; /* White text for the brand name */
+    font-size: 2rem; /* Adjust as needed */
 }
 
-.navbar .nav-link {
-    color: #fff !important;
+.navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* White text for nav links */
+    margin-right: 1rem; /* Spacing between links */
 }
 
-.navbar .nav-item.cta a {
-    background-color: #82ae46;
-    border-radius: 30px;
-    padding: 5px 15px;
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow text on hover */
 }
 
-.navbar .nav-item.cta a .icon-shopping_cart {
-    margin-right: 5px;
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffc107; /* Yellow text for the active link */
 }
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
+}
+
 
 .shopping__cart__table img {
     width: 80px; /* Adjust as needed */
@@ -122,6 +129,189 @@ input[type="number"] {
     margin-top: 10px; /* Optional, to add some space above the message */
 }
 
+
+
+
+
+
+.logo-name {
+  font-size: 36px !important; /* Ensure the font size is applied */
+  font-weight: bold; /* Make the logo bold */
+  color: #f1c40f !important; /* Force the color to apply */
+}
+
+.ftco-footer-widget p {
+  font-size: 18px !important; /* Ensure the paragraph font size is applied */
+  color: #ccc !important; /* Force the color to apply */
+}
+
+.ftco-footer {
+  background: #2b2b2b;
+  color: #fff;
+  padding: 60px 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.ftco-footer .logo-text {
+  font-size: 30px;
+  font-weight: bold;
+  color: #f1c40f; /* Gold color for GAMZY */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ftco-footer h2 {
+  font-size: 22px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.ftco-footer .ftco-heading-2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ftco-footer-widget p {
+  color: #bbb;
+  font-size: 14px;
+}
+
+.ftco-footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ftco-footer ul li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: #bbb;
+}
+
+.ftco-footer ul li span.icon {
+  margin-right: 15px;
+  font-size: 18px;
+  color: #f1c40f;
+}
+
+.ftco-footer ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.ftco-footer ul li a:hover {
+  color: #f1c40f;
+}
+
+.ftco-footer .text-center p {
+  font-size: 14px;
+  color: #bbb;
+  margin: 0;
+}
+
+.ftco-footer .text-center i.icon-heart {
+  color: #e74c3c;
+}
+
+.ftco-footer .text-center a {
+  color: #f1c40f;
+}
+
+.ftco-footer .text-center a:hover {
+  color: #fff;
+}
+
+.ftco-footer .container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 15px;
+}
+
+@media (max-width: 768px) {
+  .ftco-footer .logo-text {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .ftco-footer .row {
+    text-align: center;
+  }
+}
+
+
+
+
+.block-23 ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.block-23 ul li {
+  display: flex;
+  align-items: center; /* Align icons and text vertically */
+  margin-bottom: 10px;
+}
+
+.block-23 ul li span.fas {
+  font-size: 18px;  /* Adjust icon size */
+  color: #f1c40f; /* Gold color for the icon */
+  margin-right: 15px; /* Add space between icon and text */
+}
+
+.block-23 ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.block-23 ul li a:hover {
+  color: #f1c40f;
+}
+
+.block-23 ul li span.text {
+  font-size: 16px; /* Adjust text size */
+  color: #bbb; /* Light gray color for text */
+}
+
+/* Style for the remove button */
+.remove-btn {
+    background-color: transparent; /* Remove default button styling */
+    border: none; /* Remove border */
+    cursor: pointer; /* Show pointer on hover */
+    padding: 0;
+}
+
+/* Style for the close icon */
+.remove-btn i.fa-close {
+    font-size: 20px; /* Adjust size */
+    color: #ff4d4d; /* Red color for the cross */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover */
+}
+
+/* Hover effect for the icon */
+.remove-btn:hover i.fa-close {
+    color: #ff1a1a; /* Darker red on hover */
+    transform: scale(1.2); /* Enlarge slightly on hover */
+}
+
+
+
+.small-modal {
+      width: 300px !important;
+      font-size: 0.8em !important;
+    }
+
+    .small-modal .swal2-title {
+      font-size: 1.5em !important;
+    }
+
+    .small-modal .swal2-content {
+      font-size: 1em !important;
+    }
+
+    .small-modal .swal2-confirm {
+      font-size: 0.9em !important;
+      padding: 0.5em 1em !important;
+    }
 </style>
 
 <body>
@@ -160,26 +350,24 @@ input[type="number"] {
 </div>
 <!-- Offcanvas Menu End -->
 
- 
-<!-- Navbar section -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <!-- Navbar section -->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="oi oi-menu"></span> Menu
+            <span class="fas fa-bars"></span> Menu
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+              
+                <li class="nav-item"><a href="/user/ShopPage" class="nav-link">Shop</a></li>
+                <li class="nav-item"><a href="/user/wishlist" class="nav-link">WishList</a></li>
                 <li class="nav-item dropdown active">
-                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false"><span class="fas fa-shopping-cart"></span></a>
                     <!-- Add dropdown content if needed -->
                 </li>
-                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
             </ul>
         </div>
     </div>
@@ -267,7 +455,9 @@ input[type="number"] {
                                                 <form id="removeProduct">
                                                     <input type="hidden" name="productId" value="<%= product.productId._id %>">
                                                     <input type="hidden" name="variantId" value="<%= product.variantId %>">
-                                                    <button onclick="removeCart(event, '<%= product.productId._id %>', '<%= product.variantId %>')"><i class="fa fa-close"></i></button>
+                                                    <button class="remove-btn" onclick="removeCart(event, '<%= product.productId._id %>', '<%= product.variantId %>')">
+                                                        <i class="fa fa-close"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -283,7 +473,7 @@ input[type="number"] {
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="#">Continue Shopping</a>
+                            <a href="/user/ShopPage">Continue Shopping</a>
                         </div>
                     </div>
                    
@@ -312,68 +502,43 @@ input[type="number"] {
     </div>
 </section>
 
-
-<!-- Footer Section Begin -->
-<footer class="footer">
+ <!-- Footer Section Begin -->
+ <footer class="ftco-footer ftco-section">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="footer__about">
-                    <div class="footer__logo">
-                        <a href="#"><img src="img/footer-logo.png" alt=""></a>
-                    </div>
-                    <p>The customer is at the heart of our unique business model, which includes design.</p>
-                    <a href="#"><img src="img/payment.png" alt=""></a>
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2 logo-name">GAMZY</h2>
+                    <p>Your one-stop shop for gaming accessories.</p>
                 </div>
             </div>
-            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                <div class="footer__widget">
-                    <h6>Shopping</h6>
-                    <ul>
-                        <li><a href="#">Clothing Store</a></li>
-                        <li><a href="#">Trending Shoes</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Sale</a></li>
-                    </ul>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Have a Question?</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li>
+                      <span class="fas fa-map-marker-alt"></span>
+                      <span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span>
+                    </li>
+                    <li>
+                      <a href="#"><span class="fas fa-phone-alt"></span><span class="text">+2 392 3929 210</span></a>
+                    </li>
+                    <li>
+                      <a href="#"><span class="fas fa-envelope"></span><span class="text">info@yourdomain.com</span></a>
+                    </li>
+                  </ul>
                 </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6">
-                <div class="footer__widget">
-                    <h6>Shopping</h6>
-                    <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Payment Methods</a></li>
-                        <li><a href="#">Delivary</a></li>
-                        <li><a href="#">Return & Exchanges</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                <div class="footer__widget">
-                    <h6>NewLetter</h6>
-                    <div class="footer__newslatter">
-                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                        <form action="#">
-                            <input type="text" placeholder="Your email">
-                            <button type="submit"><span class="icon_mail_alt"></span></button>
-                        </form>
-                    </div>
-                </div>
+              </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="footer__copyright__text">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <p>Copyright ©
-                        <script>
-                            document.write(new Date().getFullYear());
-                        </script>2020
-                        All rights reserved | This template is made with <i class="fa fa-heart-o"
-                        aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                    </p>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </div>
+            <div class="col-md-12 text-center">
+                <p>
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved |
+                    This template is made with <i class="fas fa-heart color-danger" aria-hidden="true"></i> by 
+                    <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                </p>
             </div>
         </div>
     </div>
@@ -470,7 +635,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     title : 'Success',
                     text : datas.message,
                     icon : 'success',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    customClass: {
+                    popup: 'small-modal'
+                  }
                     }).then(() => {
                         window.location.href = '/user/productCart';
                     });
@@ -479,7 +647,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: 'Error',
                         text: datas.message,
                         icon: 'error',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        customClass: {
+                    popup: 'small-modal'
+                  }
                     });
                 }
            
@@ -588,7 +759,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Error',
                 text: 'Something went wrong. Please try again.',
                 icon: 'error',
-                confirmButtonText: 'OK'
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'small-modal'
+                  }
             });
         }
     }

@@ -5,8 +5,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
     rel="stylesheet">
 
+    
+
     <!-- Css Styles -->
-    <link rel="stylesheet" href="/css/bootstrap11.min.css" type="text/css">
+    <!-- <link rel="stylesheet" href="/css/bootstrap11.min.css" type="text/css"> -->
     <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css">
@@ -54,32 +56,37 @@ a {
 a:hover {
     color: #0056b3;
 }
-
-/* Navbar Styles */
-.navbar {
-    height: 100px;
+ /* Navbar Styles */
+ .navbar {
+    background-color: #343a40; /* Dark background */
+    padding: 1rem 1rem; /* Padding */
 }
 
-.navbar .navbar-brand .logoname {
-    font-family: 'Poppins', sans-serif;
-    font-size: 54px;
-    color: #fff;
+.navbar-brand h1 {
+    color: #ffffff; /* White text for the brand name */
+    font-size: 2rem; /* Adjust as needed */
 }
 
-.navbar .nav-link {
-    color: #fff !important;
+.navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* White text for nav links */
+    margin-right: 1rem; /* Spacing between links */
 }
 
-.navbar .nav-item.cta a {
-    background-color: #82ae46;
-    border-radius: 30px;
-    padding: 5px 15px;
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow text on hover */
 }
 
-.navbar .nav-item.cta a .icon-shopping_cart {
-    margin-right: 5px;
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffc107; /* Yellow text for the active link */
 }
 
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
+}
 
 /* Product Details Styles */
 .product__details__pic {
@@ -239,11 +246,17 @@ footer a:hover {
 }
 
 .stock-message {
-        margin-top: 10px;
-        color: red;
-    }
-
-
+    margin-top: 10px;
+    color: #f3efee; /* Bootstrap's red color or use any shade of red you prefer */
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: bold; /* Make the text bold for emphasis */
+    background-color: #f30303; /* Light red background for contrast */
+    border: 1px solid #f5c6cb; /* Border to define the area */
+    padding: 10px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Center align text */
+    display: inline-block; /* Make the message inline-block to fit its content */
+}
 
     .breadcrumbs {
     margin: 30px 0; /* Spacing around breadcrumbs */
@@ -266,32 +279,260 @@ footer a:hover {
     color: #333; /* Darker color for current item */
     font-weight: 500; /* Slightly bolder for emphasis */
 }
+
+
+
+
+
+
+.logo-name {
+  font-size: 36px !important; /* Ensure the font size is applied */
+  font-weight: bold; /* Make the logo bold */
+  color: #f1c40f !important; /* Force the color to apply */
+}
+
+.ftco-footer-widget p {
+  font-size: 18px !important; /* Ensure the paragraph font size is applied */
+  color: #ccc !important; /* Force the color to apply */
+}
+
+.ftco-footer {
+  background: #2b2b2b;
+  color: #fff;
+  padding: 60px 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.ftco-footer .logo-text {
+  font-size: 30px;
+  font-weight: bold;
+  color: #f1c40f; /* Gold color for GAMZY */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ftco-footer h2 {
+  font-size: 22px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.ftco-footer .ftco-heading-2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ftco-footer-widget p {
+  color: #bbb;
+  font-size: 14px;
+}
+
+.ftco-footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ftco-footer ul li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: #bbb;
+}
+
+.ftco-footer ul li span.icon {
+  margin-right: 15px;
+  font-size: 18px;
+  color: #f1c40f;
+}
+
+.ftco-footer ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.ftco-footer ul li a:hover {
+  color: #f1c40f;
+}
+
+.ftco-footer .text-center p {
+  font-size: 14px;
+  color: #bbb;
+  margin: 0;
+}
+
+.ftco-footer .text-center i.icon-heart {
+  color: #e74c3c;
+}
+
+.ftco-footer .text-center a {
+  color: #f1c40f;
+}
+
+.ftco-footer .text-center a:hover {
+  color: #fff;
+}
+
+.ftco-footer .container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 15px;
+}
+
+@media (max-width: 768px) {
+  .ftco-footer .logo-text {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .ftco-footer .row {
+    text-align: center;
+  }
+}
+
+
+
+.block-23 ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.block-23 ul li {
+  display: flex;
+  align-items: center; /* Align icons and text vertically */
+  margin-bottom: 10px;
+}
+
+.block-23 ul li span.fas {
+  font-size: 18px;  /* Adjust icon size */
+  color: #f1c40f; /* Gold color for the icon */
+  margin-right: 15px; /* Add space between icon and text */
+}
+
+.block-23 ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.block-23 ul li a:hover {
+  color: #f1c40f;
+}
+
+.block-23 ul li span.text {
+  font-size: 16px; /* Adjust text size */
+  color: #bbb; /* Light gray color for text */
+}
+
+
+
+
+
+
+.related {
+  margin-top: 0; /* Remove top margin */
+  padding-top: 0; /* Remove top padding */
+}
+
+.related-title {
+  margin-top: 0; /* Remove top margin for the title */
+}
+
+.related .container {
+  padding-top: 0;
+}
+
+.related .row {
+  margin-top: 0;
+}
+
+
+
+
+
+/* .product__item__pic {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+} */
+
+.product__item__pic--hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.product__item__pic:hover .product__item__pic--hover {
+    opacity: 1;
+}
+
+
+
+
+/* .product__hover {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+} */
+
+.product__hover li {
+    margin-right: 10px;
+    background-color: white; /* Set background color to white */
+    border-radius: 50%; /* Optional: to create circular backgrounds */
+    padding: 5px; /* Adjust padding to fit the icons */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Optional: to add a shadow for better visibility */
+}
+
+.product__hover a {
+    color: black; /* Set icon color to black */
+    font-size: 20px; /* Adjust size as needed */
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition for color and background */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center icons within the background */
+
+}
+
+.product__hover a:hover {   
+    color: #f0f0f0; /* Change icon color on hover */
+    background-color: #333; /* Optional: change background color on hover */
+}
     </style>
 
 
 
 
 <body>
-    
- 
-<!-- Navbar section -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <!-- Navbar section -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="oi oi-menu"></span> Menu
+            <span class="fas fa-bars"></span> Menu
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                 <li class="nav-item dropdown active">
-                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
+                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Product Details</a>
                     <!-- Add dropdown content if needed -->
                 </li>
-                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="/user/ShopPage" class="nav-link">Shop</a></li>
+                <li class="nav-item"><a href="/user/wishlist" class="nav-link">WishList</a></li>
+             
+                <!-- <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li> -->
                 <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
             </ul>
         </div>
@@ -400,144 +641,17 @@ footer a:hover {
                         <div class="quantity">
                             <input type="number" id="quantity" name="quantity" value="1" min="1" max="5">
                         </div>
-                        <button type="submit" class="primary-btn">Add to Cart</button>
-                        <div id="stockMessage" class="stock-message"></div>
+                        <% if ( variant.quantity > 0) { %> <!-- Assuming `product.stock` is the field that determines availability -->
+                            <button type="submit" class="primary-btn">Add to Cart</button>
+                        <% } else { %>
+                            <div id="stockMessage" class="stock-message">Out of Stock</div>
+                        <% } %>
                     </form>
                 </div>
 
 
                                     <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-                                <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-                            </div>
-                            <div class="product__details__last__option">
-                                <h5><span>Guaranteed Safe Checkout</span></h5>
-                                <img src="img/shop-details/details-payment.png" alt="">
-                                <ul>
-                                    <li><span>SKU:</span> 3812912</li>
-                                    <li><span>Categories:</span> Clothes</li>
-                                    <li><span>Tag:</span> Clothes, Skin, Body</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__details__tab">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                    role="tab">Description</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-                                    Previews(5)</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
-                                    information</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tabs-5" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note"> fgfgNam tempus turpis at metus scelerisque placerat nulla deumantos
-                                            solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                            ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                            <p>As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-6" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                            <p>As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-7" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note"> heloov Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                            solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                            ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                            <p>As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -547,219 +661,92 @@ footer a:hover {
     </section>
     <!-- Shop Details Section End -->
 
-    <!-- Related Section Begin -->
-    <section class="related spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="related-title">Related Product</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                            <span class="label">New</span>
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$67.24</h5>
-                            <div class="product__color__select">
-                                <label for="pc-1">
-                                    <input type="radio" id="pc-1">
-                                </label>
-                                <label class="active black" for="pc-2">
-                                    <input type="radio" id="pc-2">
-                                </label>
-                                <label class="grey" for="pc-3">
-                                    <input type="radio" id="pc-3">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$67.24</h5>
-                            <div class="product__color__select">
-                                <label for="pc-4">
-                                    <input type="radio" id="pc-4">
-                                </label>
-                                <label class="active black" for="pc-5">
-                                    <input type="radio" id="pc-5">
-                                </label>
-                                <label class="grey" for="pc-6">
-                                    <input type="radio" id="pc-6">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <span class="label">Sale</span>
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Multi-pocket Chest Bag</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$43.48</h5>
-                            <div class="product__color__select">
-                                <label for="pc-7">
-                                    <input type="radio" id="pc-7">
-                                </label>
-                                <label class="active black" for="pc-8">
-                                    <input type="radio" id="pc-8">
-                                </label>
-                                <label class="grey" for="pc-9">
-                                    <input type="radio" id="pc-9">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Diagonal Textured Cap</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$60.9</h5>
-                            <div class="product__color__select">
-                                <label for="pc-10">
-                                    <input type="radio" id="pc-10">
-                                </label>
-                                <label class="active black" for="pc-11">
-                                    <input type="radio" id="pc-11">
-                                </label>
-                                <label class="grey" for="pc-12">
-                                    <input type="radio" id="pc-12">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!-- Related Section Begin -->
+<section class="related spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="related-title">Related Products</h3>
             </div>
         </div>
-    </section>
-    <!-- Related Section End -->
+        <div class="row">
+            <% relatedProducts.forEach(product => { %>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="product__item-link">
+                        <div class="product__item">
+                            <!-- Directly set the background image -->
+                            <div class="product__item__pic" style="background-image: url('/uploads/<%= product.variants[0].images[0] %>'); background-size: cover; background-position: center;">
+                                <div class="product__item__pic--hover" style="background-image: url('/uploads/<%= product.variants[0].images[1] %>'); background-size: cover; background-position: center;"></div>
+
+                                <% if (product.discountedPrice) { %>
+                                    <span class="label">Sale</span>
+                                <% } else { %>
+                                    <span class="label" style="background-color: #000; color: #fff;">New</span>
+                                <% } %>
+                                <ul class="product__hover">
+                                    <li><a href="#"><i class="fas fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="fas fa-exchange-alt"></i> <span>Compare</span></a></li>
+                                    <li><a href="#"><i class="fas fa-search"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6><%= product.productname %></h6>
+                                <p class="rating">
+                                    <!-- You can replace this with any number of stars based on your need -->
+                                    <i class="fas fa-star" style="color: gold;"></i>
+                                    <i class="fas fa-star" style="color: gold;"></i>
+                                    <i class="fas fa-star" style="color: gold;"></i>
+                                    <i class="fas fa-star" style="color: gold;"></i>
+                                    <i class="fas fa-star-half-alt" style="color: gold;"></i>
+                                </p>
+                                <h5>₹<%= product.discountedPrice || product.price %></h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+<!-- Related Section End -->
 
     <!-- Footer Section Begin -->
-    <footer class="footer">
+    <footer class="ftco-footer ftco-section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="#"><img src="img/footer-logo.png" alt=""></a>
-                        </div>
-                        <p>The customer is at the heart of our unique business model, which includes design.</p>
-                        <a href="#"><img src="img/payment.png" alt=""></a>
+                <div class="col-md">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2 logo-name">GAMZY</h2>
+                        <p>Your one-stop shop for gaming accessories.</p>
                     </div>
                 </div>
-                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Clothing Store</a></li>
-                            <li><a href="#">Trending Shoes</a></li>
-                            <li><a href="#">Accessories</a></li>
-                            <li><a href="#">Sale</a></li>
-                        </ul>
+                <div class="col-md">
+                  <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">Have a Question?</h2>
+                    <div class="block-23 mb-3">
+                      <ul>
+                        <li>
+                          <span class="fas fa-map-marker-alt"></span>
+                          <span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span>
+                        </li>
+                        <li>
+                          <a href="#"><span class="fas fa-phone-alt"></span><span class="text">+2 392 3929 210</span></a>
+                        </li>
+                        <li>
+                          <a href="#"><span class="fas fa-envelope"></span><span class="text">info@yourdomain.com</span></a>
+                        </li>
+                      </ul>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Delivary</a></li>
-                            <li><a href="#">Return & Exchanges</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>NewLetter</h6>
-                        <div class="footer__newslatter">
-                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                            <form action="#">
-                                <input type="text" placeholder="Your email">
-                                <button type="submit"><span class="icon_mail_alt"></span></button>
-                            </form>
-                        </div>
-                    </div>
+                  </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="footer__copyright__text">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright ©
-                            <script>
-                                document.write(new Date().getFullYear());
-                            </script>2020
-                            All rights reserved | This template is made with <i class="fa fa-heart-o"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
+                <div class="col-md-12 text-center">
+                    <p>
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved |
+                        This template is made with <i class="fas fa-heart color-danger" aria-hidden="true"></i> by 
+                        <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -775,17 +762,18 @@ footer a:hover {
             </form>
         </div>
     </div>
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-
-    <script src="path/to/jquery.min.js"></script>
-    <script src="path/to/jquery.elevatezoom.js"></script>
-    
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!-- Popper.js for Bootstrap's dropdowns -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+   
     <script>
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -945,7 +933,7 @@ footer a:hover {
 
     <!-- Js Plugins -->
     <script src="/js/jquery-3.4.1.min.js"></script>
-    <script src="/js/bootstrap11.min.js"></script>
+    <!-- <script src="/js/bootstrap11.min.js"></script> -->
     <script src="/js/jquery.nice-select.min.js"></script>
     <script src="/js/jquery.nicescroll.min.js"></script>
     <script src="/js/jquery.magnific-popup.min.js"></script>

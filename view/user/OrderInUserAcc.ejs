@@ -2,138 +2,98 @@
 
 
 <style>
-       /* Navbar Styles */
-       .navbar {
-        background-color: #343a40; /* Dark background */
-        padding: 1rem 1rem; /* Padding */
-    }
+/* Navbar Styles */
+.navbar {
+    background-color: #343a40; /* Dark background */
+    padding: 0.5rem; /* Adjust padding for smaller screens */
+}
 
-    .navbar-brand h1 {
-        color: #ffffff; /* White text for the brand name */
-        font-size: 2rem; /* Adjust as needed */
-    }
+.navbar-brand h1 {
+    color: #ffffff; /* White text for the brand name */
+    font-size: 1.5rem; /* Smaller font size for mobile */
+}
 
-    .navbar-nav .nav-item .nav-link {
-        color: #ffffff; /* White text for nav links */
-        margin-right: 1rem; /* Spacing between links */
-    }
+.navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* White text for nav links */
+    margin-right: 0.5rem; /* Less spacing between links on mobile */
+}
 
-    .navbar-nav .nav-item .nav-link:hover {
-        color: #ffc107; /* Yellow text on hover */
-    }
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow text on hover */
+}
 
-    .navbar-nav .nav-item.active .nav-link {
-        color: #ffc107; /* Yellow text for the active link */
-    }
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+}
 
-    .navbar-toggler {
-        border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
-    }
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
+}
 
-    .navbar-toggler .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml;...");
-    }
+/* Breadcrumb Section Styles */
+.breadcrumb-option {
+    background: #f8f9fa; /* Light background */
+    padding: 2rem 1rem; /* Adjust padding for smaller screens */
+}
 
-    /* Breadcrumb Section Styles */
-    .breadcrumb-option {
-        background: #f8f9fa; /* Light background */
-        padding: 3.5rem 0; /* Padding */
-        margin-bottom: 70px; /* Adjust the margin as needed */
-    }
+.breadcrumb__text h4 {
+    text-align: center; /* Center the text */
+    font-size: 1.5rem; /* Adjust font size for mobile */
+    color: #333333; /* Dark text color */
+}
 
-    .breadcrumb__text h4 {
-        text-align: center; /* Center the text */
-        margin: 0; /* Remove margin */
-        font-size: 40px; /* Adjust as needed */
-        color: #333333; /* Dark text color */
-    }
+.breadcrumb__links {
+    text-align: center; /* Center the breadcrumb links */
+    font-size: 0.875rem; /* Smaller font size for mobile */
+}
 
-    .breadcrumb__links {
-        text-align: center; /* Center the breadcrumb links */
-        font-size: 1rem; /* Adjust as needed */
-        color: #777777; /* Light grey color */
-    }
+.breadcrumb__links a {
+    color: #007bff; /* Primary color for links */
+}
 
-    /* Ensure breadcrumb links have some margin and are styled correctly */
-    .breadcrumb__links a {
-        color: #007bff; /* Primary color for links */
-        text-decoration: none; /* Remove underline */
-    }
+.breadcrumb__links a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
 
-    .breadcrumb__links a:hover {
-        text-decoration: underline; /* Underline on hover */
-    }
+.breadcrumb__links span {
+    color: #333; /* Dark color for current page */
+}
 
-    .breadcrumb__links span {
-        color: #333; /* Dark color for current page */
-    }
-   
-   .bg-black {
-       background-color: #000000;
-   }
-   
-   .topper {
-       color: #ffffff;
-   }
-   
-   .topper .icon {
-       font-size: 18px;
-       color: #ffffff;
-   }
-   
-   .topper .text {
-       color: #ffffff;
-   }
-   
-   .hero-wrap {
-       padding: 60px 0;
-       color: #ffffff;
-       text-align: center;
-   }
-   
-   .bread {
-       font-size: 36px;
-       margin-bottom: 0;
-   }
-   .left-sidebar {
-     background: #f8f9fa;
-     padding: 20px;
-     border-radius: 5px;
-     margin-bottom: 30px;
-   }
-   
-   .sidebar-options {
-     list-style: none;
-     padding: 0;
-     margin: 0;
-   }
-   
-   .sidebar-options li {
-     margin-bottom: 15px;
-   }
-   
-   .sidebar-options li a {
-     text-decoration: none;
-     color: #333;
-     font-size: 16px;
-     display: block;
-     padding: 10px 15px;
-     border-radius: 5px;
-     transition: background 0.3s, color 0.3s;
-   }
-   
-   .sidebar-options li.active a,
-   .sidebar-options li a:hover {
-     background: #007bff;
-     color: #fff;
-   }
+/* General Utility Classes */
+.bg-black {
+    background-color: #000000;
+}
 
-   /* Sidebar Styling */
+.topper {
+    color: #ffffff;
+}
+
+.topper .icon {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.topper .text {
+    color: #ffffff;
+}
+
+.hero-wrap {
+    padding: 60px 0;
+    color: #ffffff;
+    text-align: center;
+}
+
+.bread {
+    font-size: 36px;
+    margin-bottom: 0;
+}
+
+/* Sidebar Styling */
 .left-sidebar {
     background-color: #f8f9fa;
-    padding: 20px;
+    padding: 1rem;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem; /* Less margin on mobile */
 }
 
 .sidebar-options {
@@ -143,14 +103,14 @@
 }
 
 .sidebar-options li {
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem; /* Less margin on mobile */
 }
 
 .sidebar-options li a {
     color: #333;
     text-decoration: none;
     display: block;
-    padding: 10px;
+    padding: 0.5rem;
     border-radius: 5px;
     transition: background-color 0.3s;
 }
@@ -245,10 +205,9 @@
     padding-right: 30px;
 }
 
-
-
+/* Modal Styling */
 .modal-dialog.modal-lg {
-    /* max-width: 90%; */
+    max-width: 90%;
 }
 
 .modal-content {
@@ -256,34 +215,32 @@
     overflow-y: auto;
 }
 
+/* Container Styling */
 .container {
     padding: 15px;
 }
 
+/* Error and Success Messages */
 .error {
     color: red;
     font-size: 0.875em;
     margin-top: 5px;
-  }
+}
 
-  .success input {
+.success input {
     border-color: green;
-  }
+}
 
-  .error input {
+.error input {
     border-color: red;
-  }
+}
 
-
-  .hero-wrap {
+/* Hero Section */
+.hero-wrap {
     position: relative;
     padding: 1rem 0; /* Reduced padding */
     background-size: cover;
     background-repeat: no-repeat;
-}
-
-.hero-bread .text-center {
-    position: relative;
 }
 
 .add-product-btn {
@@ -304,7 +261,7 @@
     background: #0056b3;
 }
 
-
+/* Section Padding */
 .ftco-section {
     padding: 3rem 0;
 }
@@ -314,39 +271,11 @@
     margin: 0 auto;
 }
 
-/* .left-sidebar {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-}
-
-.sidebar-options {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-options li {
-    margin-bottom: 1rem;
-}
-
-.sidebar-options li a {
-    text-decoration: none;
-    color: #343a40;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.sidebar-options li a:hover,
-.sidebar-options li.active a {
-    color: #007bff;
-} */
-
 .ftco-animate {
     animation: fadeInUp 0.5s both;
 }
 
+/* Addresses List Styling */
 .addresses-list {
     background: #fff;
     padding: 2rem;
@@ -405,6 +334,7 @@
     background: #c82333;
 }
 
+/* Keyframes */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -416,9 +346,7 @@
     }
 }
 
-
-
-
+/* Order Details Styling */
 .order-details {
     display: flex;
     justify-content: space-between;
@@ -451,91 +379,44 @@
     text-align: right;
 }
 
-.address-details p {
-    margin: 0;
-}
-
-
-/* Container Styling */
 .order-summary {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem; /* Less margin on mobile */
 }
 
-/* Flexbox for Order Details */
-.order-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
+.order-details p {
+    font-size: 0.875rem; /* Smaller font size for mobile */
 }
 
-.order-info,
-.address-details {
-    flex: 1;
+.order-summary .order-info p,
+.order-summary .address-details p {
+    margin-bottom: 0.5rem; /* Less margin on mobile */
 }
 
-.order-info {
-    margin-right: 20px;
+.order-summary .order-info span,
+.order-summary .address-details span {
+    display: block; /* Stack address details on mobile */
 }
-
-.order-summary-label {
-    font-weight: bold;
-    color: #333;
-}
-
-.order-summary-text {
-    color: #555;
-}
-
-/* Align Address Details to Right */
-.address-details {
-    text-align: right;
-}
-
-.address-details p {
-    margin: 0;
-}
-
 
 /* Table Styling */
 .table {
     width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
+    margin-bottom: 1rem; /* Adjust spacing for mobile */
 }
 
-.table th,
-.table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
+.table th, .table td {
+    padding: 0.5rem; /* Adjust padding for smaller screens */
+    font-size: 0.875rem; /* Smaller font size for mobile */
 }
 
-.table th {
-    background-color: #343a40;
-    color: #fff;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f2f2f2;
-}
-
-.table-striped tbody tr:hover {
-    background-color: #e9ecef;
-}
-
-/* Image Styling */
-.variant-image {
-    max-width: 60px;
+.table img.variant-image {
+    max-width: 100px; /* Adjust image size for mobile */
     height: auto;
-    border-radius: 4px;
 }
 
+.variant-image {
+    max-width: 80px; /* Adjust image size for mobile */
+    height: auto;
+}
 
 /* Align Status to Right */
 .order-summary-footer .text-right {

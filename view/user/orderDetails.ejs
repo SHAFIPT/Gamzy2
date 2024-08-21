@@ -7,37 +7,41 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <style>
+
  /* Navbar Styles */
  .navbar {
-      background-color: #343a40; /* Dark background */
-      padding: 1rem 1rem; /* Padding */
-  }
+    background-color: #343a40; /* Dark background */
+    padding: 1rem 1rem; /* Padding */
+}
 
-  .navbar-brand h1 {
-      color: #ffffff; /* White text for the brand name */
-      font-size: 2rem; /* Adjust as needed */
-  }
+.navbar-brand h1 {
+    color: #ffffff; /* White text for the brand name */
+    font-size: 2rem; /* Adjust as needed */
+}
 
-  .navbar-nav .nav-item .nav-link {
-      color: #ffffff; /* White text for nav links */
-      margin-right: 1rem; /* Spacing between links */
-  }
+.navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* White text for nav links */
+    margin-right: 1rem; /* Spacing between links */
+}
 
-  .navbar-nav .nav-item .nav-link:hover {
-      color: #ffc107; /* Yellow text on hover */
-  }
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow text on hover */
+}
 
-  .navbar-nav .nav-item.active .nav-link {
-      color: #ffc107; /* Yellow text for the active link */
-  }
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffc107; /* Yellow text for the active link */
+}
 
-  .navbar-toggler {
-      border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
-  }
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Light border for toggler */
+}
 
-  .navbar-toggler .navbar-toggler-icon {
-      background-image: url("data:image/svg+xml;...");
-  }
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;...");
+}
+
+
+
 
   /* Breadcrumb Section Styles */
   .breadcrumb-option {
@@ -142,28 +146,29 @@
 }
 </style>
 <body>
-<!-- Navbar section -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="oi oi-menu"></span> Menu
-    </button>
+ <!-- Navbar section -->
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#"><h1 class="logoname">GAMZY</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fas fa-bars"></span> Menu
+        </button>
 
-    <div class="collapse navbar-collapse" id="ftco-nav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Shop</a>
-        </li>
-        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-        <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-        <li class="nav-item cta cta-colored"><a href="/user/productCart" class="nav-link"><span class="fas fa-shopping-cart"></span></a></li>
-      </ul>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+              
+                <li class="nav-item"><a href="/user/ShopPage" class="nav-link">Shop</a></li>
+                <li class="nav-item"><a href="/user/wishlist" class="nav-link">WishList</a></li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false"><span class="fas fa-shopping-cart"></span></a>
+                    <!-- Add dropdown content if needed -->
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
+<!-- End Navbar section -->
 
 <section class="breadcrumb-option">
   <div class="container">

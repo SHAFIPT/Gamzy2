@@ -1,1019 +1,1312 @@
 <%- include('../layouts/Shopheader') %>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-</head>
-<style>
+  </head>
+
+  <style>
     .image-container {
-  height: 300px; /* Adjust height as needed */
-  width: 100%; /* Ensure full width */
-}
+      height: 300px;
+      /* Adjust height as needed */
+      width: 100%;
+      /* Ensure full width */
+    }
 
-.image-container .img-prod img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover; /* Maintain aspect ratio and cover the container */
-}
+    .image-container .img-prod img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      /* Maintain aspect ratio and cover the container */
+    }
 
-.logoname {
-    font-size: 2.5rem; /* Adjust as needed */
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; /* Example font family */
-    color: #eac90b; 
-    text-transform: uppercase; /* Example text transformation */
-    letter-spacing: 2px; /* Example letter spacing */
-    margin: 0; /* Remove default margin */
-  }
- /* Custom styles for navbar links */
-.custom-nav-link, .navbar-nav .nav-link {
-    color: white !important; /* Change this to your desired color */
-}
+    .logoname {
+      font-size: 2.5rem;
+      /* Adjust as needed */
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      /* Example font family */
+      color: #eac90b;
+      text-transform: uppercase;
+      /* Example text transformation */
+      letter-spacing: 2px;
+      /* Example letter spacing */
+      margin: 0;
+      /* Remove default margin */
+    }
 
-.custom-nav-link:hover, .navbar-nav .nav-link:hover {
-    color: #ff4500 !important; /* Change this to your desired hover color */
-}
+    /* Custom styles for navbar links */
+    .custom-nav-link,
+    .navbar-nav .nav-link {
+      color: white !important;
+      /* Change this to your desired color */
+    }
 
-/* If you want to target the dropdown items specifically */
-.dropdown-item.custom-nav-link, .dropdown-item {
-    color: white !important; /* Change this to your desired color */
-}
+    .custom-nav-link:hover,
+    .navbar-nav .nav-link:hover {
+      color: #ff4500 !important;
+      /* Change this to your desired hover color */
+    }
 
-.dropdown-item.custom-nav-link:hover, .dropdown-item:hover {
-    color: #ff4500 !important; /* Change this to your desired hover color */
-}
-.widgets_inner {
-    margin-top: 20px;
-    font-family: Arial, sans-serif;
-}
+    /* If you want to target the dropdown items specifically */
+    .dropdown-item.custom-nav-link,
+    .dropdown-item {
+      color: white !important;
+      /* Change this to your desired color */
+    }
 
-.widgets_inner ul.list {
-    padding: 0;
-    margin: 0;
-}
+    .dropdown-item.custom-nav-link:hover,
+    .dropdown-item:hover {
+      color: #ff4500 !important;
+      /* Change this to your desired hover color */
+    }
 
-.widgets_inner ul.list li {
-    margin-bottom: 10px;
-    position: relative;
-    padding-left: 20px; /* Space for the bullet dot */
-    list-style: none; /* Remove default list styles */
-}
+    .widgets_inner {
+      margin-top: 20px;
+      font-family: Arial, sans-serif;
+    }
 
-.widgets_inner ul.list li::before {
-    content: '\2022'; /* Bullet dot Unicode character */
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #333;
-}
+    .widgets_inner ul.list {
+      padding: 0;
+      margin: 0;
+    }
 
-.widgets_inner ul.list li a {
-    display: block;
-    padding: 10px 20px;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+    .widgets_inner ul.list li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 20px;
+      /* Space for the bullet dot */
+      list-style: none;
+      /* Remove default list styles */
+    }
 
-.widgets_inner ul.list li a:hover {
-    background-color: #f0f0f0;
-    color: #222;
-}
-.out-of-stock-btn {
-    color: rgb(229, 15, 15); /* Text color */
-    border: 2px solid red; /* Red border */
-    background-color: red; /* Red background */
-    border-radius: 4px; /* Rounded corners */
-    font-weight: bold; /* Bold text */
-    display: inline-block; /* Inline block for sizing */
-    width: 100%; /* Full width (adjust if necessary) */
-    text-align: center; /* Center text */
-    padding: 10px 0; /* Padding */
-    text-decoration: none; /* Remove underline */
-}
+    .widgets_inner ul.list li::before {
+      content: '\2022';
+      /* Bullet dot Unicode character */
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #333;
+    }
 
-.out-of-stock-btn span {
-    /* If you have specific styles for the span element inside the button */
-}
+    .widgets_inner ul.list li a {
+      display: block;
+      padding: 10px 20px;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-.out-of-stock-btn i {
-    color: rgb(231, 20, 20); /* Ensure icons are also white */
-}
+    .widgets_inner ul.list li a:hover {
+      background-color: #f0f0f0;
+      color: #222;
+    }
 
+    .out-of-stock-btn {
+      color: rgb(229, 15, 15);
+      /* Text color */
+      border: 2px solid red;
+      /* Red border */
+      background-color: red;
+      /* Red background */
+      border-radius: 4px;
+      /* Rounded corners */
+      font-weight: bold;
+      /* Bold text */
+      display: inline-block;
+      /* Inline block for sizing */
+      width: 100%;
+      /* Full width (adjust if necessary) */
+      text-align: center;
+      /* Center text */
+      padding: 10px 0;
+      /* Padding */
+      text-decoration: none;
+      /* Remove underline */
+    }
 
+    .out-of-stock-btn span {
+      /* If you have specific styles for the span element inside the button */
+    }
 
-
-/* Ensure proper spacing and styling for the sorting dropdown */
-.sidebar-box-2 .form-group {
-  margin-bottom: 1rem;
-}
-
-.sidebar-box-2 .form-control {
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  border: none;
-  border-radius: 0;
-  padding: 0.75rem 1.25rem;
-}
-
-
-
-/* Custom Dropdown Styling */
-.custom-dropdown {
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #495057;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.custom-dropdown:focus {
-    border-color: #80bdff;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
-}
-
-
-.subcategory-btn {
-    background-color: #dbcc8f;
-    color: white;
-    border: 2px solid transparent;
-    padding: 10px 20px;
-    margin: 5px;
-    cursor: pointer;
-    border-radius: 25px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.subcategory-btn:hover {
-    background-color: white;
-    color: #dbcc8f;
-    border: 2px solid #dbcc8f;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
+    .out-of-stock-btn i {
+      color: rgb(231, 20, 20);
+      /* Ensure icons are also white */
+    }
 
 
 
-/* Pagination container */
-.pagination-container {
-    text-align: center;
-    margin-top: 20px;
-}
 
-.pagination-link {
-    display: inline-block;
-    padding: 8px 16px;
-    margin: 0 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    color: #333;
-    text-decoration: none;
-    background-color: #fff;
-}
+    /* Ensure proper spacing and styling for the sorting dropdown */
+    .sidebar-box-2 .form-group {
+      margin-bottom: 1rem;
+    }
 
-.pagination-link.active {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
+    .sidebar-box-2 .form-control {
+      border-radius: 0;
+      box-shadow: none;
+    }
 
-.pagination-link:hover {
-    background-color: #f8f9fa;
-}
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      border-radius: 0;
+      padding: 0.75rem 1.25rem;
+    }
 
 
 
-.breadcrumbs {
-  
-    font-size: 16px; /* Increase font size for better readability */
-    color: #555; /* Dark gray color for text */
-    font-weight: 400; /* Regular weight for text */
-}
+    /* Custom Dropdown Styling */
+    .custom-dropdown {
+      background-color: #f8f9fa;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #495057;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
 
-.breadcrumbs a {
-    color: #007bff; /* Bootstrap primary color for links */
-    text-decoration: none; /* Remove underline from links */
-}
-
-.breadcrumbs a:hover {
-    text-decoration: underline; /* Add underline on hover for links */
-}
-
-.breadcrumbs span {
-    color: #333; /* Darker color for the current page */
-    font-weight: 500; /* Slightly bolder for emphasis */
-}
+    .custom-dropdown:focus {
+      border-color: #80bdff;
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
 
 
-/* Search Box Styling */
-.search-box {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
+    .subcategory-btn {
+      background-color: #dbcc8f;
+      color: white;
+      border: 2px solid transparent;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 25px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-#search-input {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px 0 0 4px;
-    outline: none;
-    /* width: 80%; */
-}
+    .subcategory-btn:hover {
+      background-color: white;
+      color: #dbcc8f;
+      border: 2px solid #dbcc8f;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
 
-#search-button {
-    padding: 8px 16px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-left: 0;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-#search-button:hover {
-    background-color: #0056b3;
-}
 
-@media (max-width: 768px) {
+    /* Pagination container */
+    .pagination-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pagination-link {
+      display: inline-block;
+      padding: 8px 16px;
+      margin: 0 4px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      color: #333;
+      text-decoration: none;
+      background-color: #fff;
+    }
+
+    .pagination-link.active {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+
+    .pagination-link:hover {
+      background-color: #f8f9fa;
+    }
+
+
+
+    .breadcrumbs {
+
+      font-size: 16px;
+      /* Increase font size for better readability */
+      color: #555;
+      /* Dark gray color for text */
+      font-weight: 400;
+      /* Regular weight for text */
+    }
+
+    .breadcrumbs a {
+      color: #007bff;
+      /* Bootstrap primary color for links */
+      text-decoration: none;
+      /* Remove underline from links */
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+      /* Add underline on hover for links */
+    }
+
+    .breadcrumbs span {
+      color: #333;
+      /* Darker color for the current page */
+      font-weight: 500;
+      /* Slightly bolder for emphasis */
+    }
+
+
+    /* Search Box Styling */
+    .search-box {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
     #search-input {
-        width: 70%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      /* width: 80%; */
     }
-    
+
     #search-button {
-        width: 30%;
+      padding: 8px 16px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-left: 0;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-}
-
-
-.btn {
-  /* Ensure the button styles are correct */
-  display: inline-block; /* Should be visible */
-  background-color: #007bff; /* Example color */
-  color: #fff; /* Example text color */
-  padding: 10px 20px; /* Example padding */
-  border: none; /* Remove border */
-  border-radius: 4px; /* Rounded corners */
-}
-
-
-
-
-/* Styling for the toggle switch */
-.filter-toggle {
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-}
-
-.filter-toggle-checkbox {
-  display: none; /* Hide the default checkbox */
-}
-
-.filter-toggle-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s;
-  position: relative;
-  padding-left: 3rem; /* Space for the toggle switch */
-}
-
-.filter-toggle-slider {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3rem;
-  height: 1.5rem;
-  background-color: #ddd;
-  border-radius: 1rem;
-  transition: background-color 0.3s;
-}
-
-.filter-toggle-slider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0.25rem;
-  transform: translateY(-50%);
-  width: 1rem;
-  height: 1rem;
-  background-color: #fff;
-  border-radius: 50%;
-  transition: transform 0.3s;
-}
-
-.filter-toggle-checkbox:checked + .filter-toggle-label .filter-toggle-slider {
-  background-color: #007bff;
-}
-
-.filter-toggle-checkbox:checked + .filter-toggle-label .filter-toggle-slider::before {
-  transform: translateY(-50%) translateX(1.5rem); /* Adjusted to align with the slider */
-}
-
-.filter-toggle-label:hover {
-  color: #007bff;
-}
-
-/* Dropdown Icon */
-.dropdown-icon {
-  font-size: 14px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* Dropdown Content */
-.dropdown-content {
-  display: none;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
-}
-
-.img-prod {
-  position: relative;
-  display: block;
-}
-
-.outofstock-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #ff0000; /* Adjust the background color as needed */
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 3px;
-  font-size: 12px;
-  font-weight: bold;
-  z-index: 10; /* Ensure it appears above the image */
-}
-
-
-
-
-
-
-
-
-
-/* Container for sorting options */
-.sidebar-box-2 {
-    margin-bottom: 20px;
-}
-
-.sidebar-box-2 .heading {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.form-group a {
-    display: inline-block;
-    padding: 10px 15px;
-    margin-right: 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: #555;
-    font-size: 16px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.form-group a:hover {
-    background-color: #007bff; /* Highlight color */
-    color: #fff;
-}
-
-.form-group a.active {
-    background-color: #007bff; /* Active state color */
-    color: #fff;
-    font-weight: bold;
-}
-
-.form-group span {
-    font-size: 16px;
-    color: #555;
-    margin: 0 5px;
-}
-
-/* Optional: Add a border around the entire sorting box */
-.sidebar-box-2 {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    background-color: #f9f9f9;
-}
-
-
-
-
-
-
-  
-  .offer-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #ff6347; /* Tomato color */
-    color: #fff;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    font-weight: bold;
-    border-radius: 5px;
-    z-index: 10;
-  }
-
-  .out-of-stock-badge {
-    background-color: #dc3545; /* Bootstrap danger color */
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .img-prod:hover .overlay {
-    opacity: 1;
-  }
-
-  .product-name a {
-    color: #333;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .product-name a:hover {
-    color: #ff6347; /* Tomato color */
-  }
-
-  .bottom-area {
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .add-to-cart {
-    background-color: #28a745; /* Bootstrap success color */
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    flex: 1;
-    margin-right: 5px;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-
-  .add-to-cart:hover {
-    background-color: #218838; /* Darker green */
-  }
-
-  .buy-now {
-    background-color: #ffc107; /* Bootstrap warning color */
-    color: #333;
-    padding: 10px;
-    border-radius: 5px;
-    flex: 1;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-
-  .buy-now:hover {
-    background-color: #e0a800; /* Darker yellow */
-  }
-
-  .out-of-stock-btn {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: not-allowed;
-  }
-
-
-  /* General style for offer badges */
-.offer-badges {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #ffd700; /* Gold color */
-    color: black;
-    padding: 5px 10px;
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow */
-    text-transform: uppercase; /* Makes text uppercase */
-}
-
-/* Style for out-of-stock badge */
-.out-of-stock-btn {
-    background-color: red;
-    color: #f0f0f0;
-    padding: 5px 10px;
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase; /* Makes text uppercase */
-}
-
-
-
-.img-prod {
-    position: relative;
-}
-
-.wishlist-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 5px;
-    border-radius: 50%;
-    z-index: 10;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.wishlist-icon i {
-    color: #ff0000; /* Red color for the heart icon */
-    font-size: 18px;
-}
-
-
-.img-prod-container {
-    position: relative;
-}
-
-.img-prod-container .wishlist-icon {
-    display: none; /* Hide by default */
-}
-
-.img-prod-container:hover .wishlist-icon {
-    display: block; /* Show when hovering */
-}
-
-.img-prod-container .wishlist-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.5em;
-    color: #fff;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.img-prod-container .wishlist-icon i {
-    color: #ff6f61; /* Initial color for heart icon */
-}
-
-.img-prod-container .wishlist-icon.added i {
-    color: #ff0000; /* Color for heart icon when added to wishlist */
-}
-
-/* .img-prod:hover .wishlist-icon {
+
+    #search-button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      #search-input {
+        width: 70%;
+      }
+
+      #search-button {
+        width: 30%;
+      }
+    }
+
+
+    .btn {
+      /* Ensure the button styles are correct */
+      display: inline-block;
+      /* Should be visible */
+      background-color: #007bff;
+      /* Example color */
+      color: #fff;
+      /* Example text color */
+      padding: 10px 20px;
+      /* Example padding */
+      border: none;
+      /* Remove border */
+      border-radius: 4px;
+      /* Rounded corners */
+    }
+
+
+
+
+    /* Styling for the toggle switch */
+    .filter-toggle {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+    }
+
+    .filter-toggle-checkbox {
+      display: none;
+      /* Hide the default checkbox */
+    }
+
+    .filter-toggle-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+      padding-left: 3rem;
+      /* Space for the toggle switch */
+    }
+
+    .filter-toggle-slider {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3rem;
+      height: 1.5rem;
+      background-color: #ddd;
+      border-radius: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    .filter-toggle-slider::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0.25rem;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 1rem;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .filter-toggle-checkbox:checked+.filter-toggle-label .filter-toggle-slider {
+      background-color: #007bff;
+    }
+
+    .filter-toggle-checkbox:checked+.filter-toggle-label .filter-toggle-slider::before {
+      transform: translateY(-50%) translateX(1.5rem);
+      /* Adjusted to align with the slider */
+    }
+
+    .filter-toggle-label:hover {
+      color: #007bff;
+    }
+
+    /* Dropdown Icon */
+    .dropdown-icon {
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    /* Dropdown Content */
+    .dropdown-content {
+      display: none;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .img-prod {
+      position: relative;
+      display: block;
+    }
+
+    .outofstock-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #ff0000;
+      /* Adjust the background color as needed */
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 10;
+      /* Ensure it appears above the image */
+    }
+
+
+
+
+
+
+
+
+
+    /* Container for sorting options */
+    .sidebar-box-2 {
+      margin-bottom: 20px;
+    }
+
+    .sidebar-box-2 .heading {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .form-group a {
+      display: inline-block;
+      padding: 10px 15px;
+      margin-right: 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #555;
+      font-size: 16px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .form-group a:hover {
+      background-color: #007bff;
+      /* Highlight color */
+      color: #fff;
+    }
+
+    .form-group a.active {
+      background-color: #007bff;
+      /* Active state color */
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .form-group span {
+      font-size: 16px;
+      color: #555;
+      margin: 0 5px;
+    }
+
+    /* Optional: Add a border around the entire sorting box */
+    .sidebar-box-2 {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+
+
+
+
+
+
+
+    .offer-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #ff6347;
+      /* Tomato color */
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.9em;
+      font-weight: bold;
+      border-radius: 5px;
+      z-index: 10;
+    }
+
+    .out-of-stock-badge {
+      background-color: #dc3545;
+      /* Bootstrap danger color */
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .img-prod:hover .overlay {
+      opacity: 1;
+    }
+
+    .product-name a {
+      color: #333;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .product-name a:hover {
+      color: #ff6347;
+      /* Tomato color */
+    }
+
+    .bottom-area {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .add-to-cart {
+      background-color: #28a745;
+      /* Bootstrap success color */
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      flex: 1;
+      margin-right: 5px;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+      background-color: #218838;
+      /* Darker green */
+    }
+
+    .buy-now {
+      background-color: #ffc107;
+      /* Bootstrap warning color */
+      color: #333;
+      padding: 10px;
+      border-radius: 5px;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .buy-now:hover {
+      background-color: #e0a800;
+      /* Darker yellow */
+    }
+
+    .out-of-stock-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: not-allowed;
+    }
+
+
+    /* General style for offer badges */
+    .offer-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #ffd700;
+      /* Gold color */
+      color: black;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 1;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      /* Adds a subtle shadow */
+      text-transform: uppercase;
+      /* Makes text uppercase */
+    }
+
+    /* Style for out-of-stock badge */
+    .out-of-stock-btn {
+      background-color: red;
+      color: #f0f0f0;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      /* Makes text uppercase */
+    }
+
+
+
+    .img-prod {
+      position: relative;
+    }
+
+    .wishlist-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 5px;
+      border-radius: 50%;
+      z-index: 10;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .wishlist-icon i {
+      color: #ff0000;
+      /* Red color for the heart icon */
+      font-size: 18px;
+    }
+
+
+    .img-prod-container {
+      position: relative;
+    }
+
+    .img-prod-container .wishlist-icon {
+      display: none;
+      /* Hide by default */
+    }
+
+    .img-prod-container:hover .wishlist-icon {
+      display: block;
+      /* Show when hovering */
+    }
+
+    .img-prod-container .wishlist-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5em;
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .img-prod-container .wishlist-icon i {
+      color: #ff6f61;
+      /* Initial color for heart icon */
+    }
+
+    .img-prod-container .wishlist-icon.added i {
+      color: #ff0000;
+      /* Color for heart icon when added to wishlist */
+    }
+
+    /* .img-prod:hover .wishlist-icon {
     background: rgba(255, 0, 0, 0.8);
 } */
 
 
 
-.small-modal {
-        width: 300px !important;
-        font-size: 0.8em !important;
+    .small-modal {
+      width: 300px !important;
+      font-size: 0.8em !important;
     }
+
     .small-modal .swal2-title {
-        font-size: 1.5em !important;
+      font-size: 1.5em !important;
     }
+
     .small-modal .swal2-content {
-        font-size: 1em !important;
+      font-size: 1em !important;
     }
+
     .small-modal .swal2-confirm {
-        font-size: 0.9em !important;
-        padding: 0.5em 1em !important;
+      font-size: 0.9em !important;
+      padding: 0.5em 1em !important;
     }
 
 
 
 
     .search-results {
-  text-align: center;
-  margin: 20px 0;
-}
+      text-align: center;
+      margin: 20px 0;
+    }
 
-.no-results {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
+    .no-results {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
 
-.no-results-img {
-  width: 150px;
-  height: auto;
-  margin-bottom: 20px;
-}
+    .no-results-img {
+      width: 150px;
+      height: auto;
+      margin-bottom: 20px;
+    }
 
-.no-results-message {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 10px;
-}
+    .no-results-message {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
 
-.no-results-submessage {
-  font-size: 1rem;
-  color: #666;
-  max-width: 600px;
-}
+    .no-results-submessage {
+      font-size: 1rem;
+      color: #666;
+      max-width: 600px;
+    }
+
+    .logo-name {
+      font-size: 36px !important;
+      /* Ensure the font size is applied */
+      font-weight: bold;
+      /* Make the logo bold */
+      color: #f1c40f !important;
+      /* Force the color to apply */
+    }
+
+    .ftco-footer-widget p {
+      font-size: 18px !important;
+      /* Ensure the paragraph font size is applied */
+      color: #ccc !important;
+      /* Force the color to apply */
+    }
+
+    .ftco-footer {
+      background: #2b2b2b;
+      color: #fff;
+      padding: 60px 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .ftco-footer .logo-text {
+      font-size: 30px;
+      font-weight: bold;
+      color: #f1c40f;
+      /* Gold color for GAMZY */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .ftco-footer h2 {
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .ftco-footer .ftco-heading-2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .ftco-footer-widget p {
+      color: #bbb;
+      font-size: 14px;
+    }
+
+    .ftco-footer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .ftco-footer ul li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      color: #bbb;
+    }
+
+    .ftco-footer ul li span.icon {
+      margin-right: 15px;
+      font-size: 18px;
+      color: #f1c40f;
+    }
+
+    .ftco-footer ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .ftco-footer ul li a:hover {
+      color: #f1c40f;
+    }
+
+    .ftco-footer .text-center p {
+      font-size: 14px;
+      color: #bbb;
+      margin: 0;
+    }
+
+    .ftco-footer .text-center i.icon-heart {
+      color: #e74c3c;
+    }
+
+    .ftco-footer .text-center a {
+      color: #f1c40f;
+    }
+
+    .ftco-footer .text-center a:hover {
+      color: #fff;
+    }
+
+    .ftco-footer .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 15px;
+    }
+
+    @media (max-width: 768px) {
+      .ftco-footer .logo-text {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .ftco-footer .row {
+        text-align: center;
+      }
+    }
 
 
 
+    .block-23 ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .block-23 ul li {
+      display: flex;
+      align-items: center;
+      /* Align icons and text vertically */
+      margin-bottom: 10px;
+    }
+
+    .block-23 ul li span.fas {
+      font-size: 18px;
+      /* Adjust icon size */
+      color: #f1c40f;
+      /* Gold color for the icon */
+      margin-right: 15px;
+      /* Add space between icon and text */
+    }
+
+    .block-23 ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .block-23 ul li a:hover {
+      color: #f1c40f;
+    }
+
+    .block-23 ul li span.text {
+      font-size: 16px;
+      /* Adjust text size */
+      color: #bbb;
+      /* Light gray color for text */
+    }
 
 
+    .hero-wrap.hero-bread {
+      background-image: url('/img/Gaming.jpg');
+      background-size: cover;
+      /* Ensures the image covers the entire container */
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 400px;
+      /* Set a fixed height for larger screens */
+      position: relative;
+    }
 
+    /* Media query for medium screens (between 768px and 1199px) */
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .hero-wrap.hero-bread {
+        background-image: url('/img/GamingRESPONSIVEBCK.webp');
+      }
+    }
 
-</style>
+    /* Media query for smaller screens (below 768px) */
+    @media (max-width: 767px) {
+      .hero-wrap.hero-bread {
+        background-image: url('/img/GamingRESPONSIVEBCK.webp');
+      }
+    }
+  </style>
+  </head>
 
-</head>
-<body class="goto-here">
-
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+  <body class="goto-here">
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
-        <a class="navbar-brand" href=""> <h1 class="logoname">GAMZY</h1></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="oi oi-menu"></span> Menu
+        <a class="navbar-brand" href="">
+          <h1 class="logoname">GAMZY</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+          aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="fas fa-bars"></span> Menu
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-              <li class="nav-item" ><a href="/" class="nav-link">Home</a></li>
-              <li class="nav-item dropdown active">
-                  <a class="nav-link " href=""  aria-haspopup="true" aria-expanded="false">Shop</a>
-        
-              </li>
-              <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-              <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-              <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-              <li class="nav-item cta cta-colored">
-                <a href="/user/productCart" class="nav-link">
-                    <span class="icon-shopping_cart"><i class="fa fa-shopping-cart"></i></span>
-                    <span id="cart-quantity">[0]</span>
-                </a>
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item dropdown active"><a class="nav-link" href="">Shop</a></li>
+            <li class="nav-item"><a href="/user/wishlist" class="nav-link">WishList</a></li>
+            <li class="nav-item cta cta-colored">
+              <a href="/user/productCart" class="nav-link">
+                <span class="icon-shopping_cart"><i class="fa fa-shopping-cart"></i></span>
+                <span id="cart-quantity">[0]</span>
+              </a>
             </li>
           </ul>
-      </div>
+        </div>
       </div>
     </nav>
-    
-  <div class="hero-wrap hero-bread" style="background-image: url('/img/Gaming.jpg'); background-size: 100% auto; background-position: center; background-repeat: no-repeat;">
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-9 ftco-animate text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
-          <h1 class="mb-0 bread">Shop</h1>
+
+    <div class="hero-wrap hero-bread">
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
+            <h1 class="mb-0 bread">Shop</h1>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  
-  <section class="ftco-section bg-light">
-    <div class="container">
-      <div class="row mb-4">
-        <div class="col-md-6">
-          <p class="breadcrumbs">
-            <a href="/">Home</a> &gt; 
-            <a href="/user/ShopPage">Shop</a>
-          </p>
-        </div>
-        <div class="col-md-6 text-right">
-          <div class="search-box">
-            <form method="get" action="/user/ShopPage" class="search-form" id="search-form">
-              <input type="text" name="search" id="search-input" placeholder="Search..." value="<%= search || '' %>" autocomplete="off" />
-              
-              <!-- Hidden inputs to preserve filters and sorting in search -->
-              <input type="hidden" name="subcategory" value="<%= subcategory %>" />
-              <input type="hidden" name="category" value="<%= category %>" />
-              <input type="hidden" name="price_from" value="<%= price_from %>" />
-              <input type="hidden" name="price_to" value="<%= price_to %>" />
-              <input type="hidden" name="sort" value="<%= sort %>" />
-              <input type="hidden" name="brand" value="<%= brand %>" />
-        
-              <button type="submit" id="search-button">Search</button>
-            </form>
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p class="breadcrumbs">
+              <a href="/">Home</a> &gt;
+              <a href="/user/ShopPage">Shop</a>
+            </p>
           </div>
-        </div>
-        
-      </div>
-  
-      <div class="row">
-        <div class="col-md-8 col-lg-10 order-md-last">
-          <div class="row">
+          <div class="col-md-6 text-right">
+            <div class="search-box">
+              <form method="get" action="/user/ShopPage" class="search-form" id="search-form">
+                <input type="text" name="search" id="search-input" placeholder="Search..." value="<%= search || '' %>"
+                  autocomplete="off" />
 
-                  <!-- Check if products array is empty -->
-          <% if (products.length === 0) { %>
-            <div class="col-12 text-center no-results">
-              <!-- <h2>Oops! No products found</h2> -->
-              <img src="/image/product not found.webp" alt="No products found" style="max-width: 200px; height: auto;" class="img-fluid">
-              <h3 class="no-results-message">Sorry, we couldn't find any products matching your search.</h3>
-              <p class="no-results-submessage">Try adjusting your search criteria or browsing our categories for more options.</p>
+                <!-- Hidden inputs to preserve filters and sorting in search -->
+                <input type="hidden" name="subcategory" value="<%= subcategory %>" />
+                <input type="hidden" name="category" value="<%= category %>" />
+                <input type="hidden" name="price_from" value="<%= price_from %>" />
+                <input type="hidden" name="price_to" value="<%= price_to %>" />
+                <input type="hidden" name="sort" value="<%= sort %>" />
+                <input type="hidden" name="brand" value="<%= brand %>" />
+
+                <button type="submit" id="search-button">Search</button>
+              </form>
             </div>
-          <% } else { %>
-            <!-- Products -->
-            <% products.forEach(product => { %>
-                <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
-                    <div class="product d-flex flex-column">
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-8 col-lg-10 order-md-last">
+            <div class="row">
+        
+              <!-- Check if products array is empty -->
+              <% if (products.length===0) { %>
+                <div class="col-12 text-center no-results">
+                  <!-- <h2>Oops! No products found</h2> -->
+                  <img src="/image/product not found.webp" alt="No products found" style="max-width: 200px; height: auto;"
+                    class="img-fluid">
+                  <h3 class="no-results-message">Sorry, we couldn't find any products matching your search.</h3>
+                  <p class="no-results-submessage">Try adjusting your search criteria or browsing our categories for
+                    more options.</p>
+                </div>
+                <% } else { %>
+                  <!-- Products -->
+                  <% products.forEach(product=> { %>
+                    <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
+                      <div class="product d-flex flex-column">
                         <div class="img-prod-container">
-                            <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>" class="img-prod">
-                                <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
-                                <div class="overlay"></div>
-                            </a>
-                            <div class="wishlist-icon" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>" onclick="toggleWishlistIcon(this)">
-                                <i class="far fa-heart" aria-hidden="true"></i>
-                            </div>
+                          <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"
+                            class="img-prod">
+                            <img class="img-fluid" src="/uploads/<%= product.variants[0].images[0] %>" alt="Product Image">
+                            <div class="overlay"></div>
+                          </a>
+                          <div class="wishlist-icon" data-product-id="<%= product._id %>"
+                            data-variant-id="<%= product.variants[0]._id %>">
+                            <i class="far fa-heart" aria-hidden="true"></i>
+                          </div>
                         </div>
                         <% if (product.variants[0].quantity < 1) { %>
-                            <div class="out-of-stock-btn">Out of stock</div>
-                        <% } else { %>
-                            <% let maxDiscount = 0; %>
-                            <% offers.forEach(offer => { %>
-                                <% if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) { %>
-                                    <% if (offer.discount > maxDiscount) { %>
-                                        <% maxDiscount = offer.discount; %>
-                                        <div class="offer-badges"><%= offer.name %> - <%= offer.discount %>% Off</div>
-                                    <% } %>
-                                <% } %>
-                            <% }) %>
-                        <% } %>
-                        <div class="text py-3 pb-4 px-3">
-                            <div class="d-flex">
-                                <div class="cat">
-                                    <span><%= product.category %></span>
-                                </div>
-                            </div> 
-                            <h3 class="product-name"><a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>"><%= truncateDescription(product.productname,70) %></a></h3>
-                            <div class="pricing">
-                                <% if (product.highestDiscount > 0) { %>
-                                    <p class="price product-price">
-                                        <span style="text-decoration: line-through; color: red;">₹<%= product.price.toFixed(2) %></span>
-                                        <span> ₹<%= product.discountedPrice.toFixed(2) %></span>
-                                    </p>
-                                <% } else { %>
-                                    <p class="price product-price"><span>₹<%= product.price.toFixed(2) %></span></p>
-                                <% } %>
-
-                                <p class="rating">
-                                  <!-- You can replace this with any number of stars based on your need -->
-                                  <i class="fas fa-star" style="color: gold;"></i>
-                                  <i class="fas fa-star" style="color: gold;"></i>
-                                  <i class="fas fa-star" style="color: gold;"></i>
-                                  <i class="fas fa-star" style="color: gold;"></i>
-                                  <i class="fas fa-star-half-alt" style="color: gold;"></i>
-                              </p>
-
-
-                                <p class="description"><span><%= truncateDescription(product.productDescription, 70) %></span></p>
-                            </div>
-                            <p class="bottom-area d-flex px-3">
-                                <a class="add-to-cart text-center py-2 mr-1" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>"><span>Add to cart</span></a>
-                                <% if (product.variants[0].quantity < 1) { %>
-                                    <a href="#" class="out-of-stock-btn" style="background-color: red; color: #f0f0f0;">Out of stock<span></span></a>
-                                <% } else { %>
-                                    <a href="#" class="buy-now text-center py-2 wishlist-btn" data-product-id="<%= product._id %>" data-variant-id="<%= product.variants[0]._id %>">Wishlist<span></span></a>
-                                <% } %>
-                            </p>
-                        </div>
+                          <div class="out-of-stock-btn">Out of stock</div>
+                          <% } else { %>
+                            <% let maxDiscount=0; %>
+                              <% offers.forEach(offer=> { %>
+                                <% if (offer.applicableToProducts.includes(product._id) ||
+                                  offer.applicableToCategories.includes(product.productCategory._id)) { %>
+                                  <% if (offer.discount> maxDiscount) { %>
+                                    <% maxDiscount=offer.discount; %>
+                                      <div class="offer-badges">
+                                        <%= offer.name %> - <%= offer.discount %>% Off
+                                      </div>
+                                      <% } %>
+                                        <% } %>
+                                          <% }) %>
+                                            <% } %>
+                                              <div class="text py-3 pb-4 px-3">
+                                                <div class="d-flex">
+                                                  <div class="cat">
+                                                    <span>
+                                                      <%= product.category %>
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <h3 class="product-name"><a
+                                                    href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>">
+                                                    <%= truncateDescription(product.productname,70) %>
+                                                  </a></h3>
+                                                <div class="pricing">
+                                                  <% if (product.highestDiscount> 0) { %>
+                                                    <p class="price product-price">
+                                                      <span style="text-decoration: line-through; color: red;">₹<%=
+                                                          product.price.toFixed(2) %></span>
+                                                      <span> ₹<%= product.discountedPrice.toFixed(2) %></span>
+                                                    </p>
+                                                    <% } else { %>
+                                                      <p class="price product-price"><span>₹<%= product.price.toFixed(2) %>
+                                                            </span></p>
+                                                      <% } %>
+        
+                                                        <p class="rating">
+                                                          <!-- You can replace this with any number of stars based on your need -->
+                                                          <i class="fas fa-star" style="color: gold;"></i>
+                                                          <i class="fas fa-star" style="color: gold;"></i>
+                                                          <i class="fas fa-star" style="color: gold;"></i>
+                                                          <i class="fas fa-star" style="color: gold;"></i>
+                                                          <i class="fas fa-star-half-alt" style="color: gold;"></i>
+                                                        </p>
+        
+        
+                                                        <p class="description"><span>
+                                                            <%= truncateDescription(product.productDescription, 70) %>
+                                                          </span></p>
+                                                </div>
+                                                <p class="bottom-area d-flex px-3">
+                                                  <a class="add-to-cart text-center py-2 mr-1"
+                                                    data-product-id="<%= product._id %>"
+                                                    data-variant-id="<%= product.variants[0]._id %>"><span>Add to
+                                                      cart</span></a>
+                                                  <% if (product.variants[0].quantity < 1) { %>
+                                                    <a href="#" class="out-of-stock-btn"
+                                                      style="background-color: red; color: #f0f0f0;">Out of
+                                                      stock<span></span></a>
+                                                    <% } else { %>
+                                                      <a href="#" class="buy-now text-center py-2 wishlist-btn"
+                                                        data-product-id="<%= product._id %>"
+                                                        data-variant-id="<%= product.variants[0]._id %>">Wishlist<span></span></a>
+                                                      <% } %>
+                                                </p>
+                                              </div>
+                      </div>
                     </div>
-                  </div>
-                  <% }) %>
+                    <% }) %>
+                      <% } %>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+              <% if (currentPage> 1) { %>
+                <a href="/user/ShopPage?page=<%= currentPage - 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>"
+                  class="pagination-link">Previous</a>
                 <% } %>
-              </div>
-  
-          <!-- Pagination -->
-          <div class="pagination-container">
-            <% if (currentPage > 1) { %>
-              <a href="/user/ShopPage?page=<%= currentPage - 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>" class="pagination-link">Previous</a>
-            <% } %>
-            
-            <% for (let i = 1; i <= totalPages; i++) { %>
-              <a href="/user/ShopPage?page=<%= i %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>" class="pagination-link <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
-            <% } %>
-            
-            <% if (currentPage < totalPages) { %>
-              <a href="/user/ShopPage?page=<%= currentPage + 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>" class="pagination-link">Next</a>
-            <% } %>
+
+                  <% for (let i=1; i <=totalPages; i++) { %>
+                    <a href="/user/ShopPage?page=<%= i %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>"
+                      class="pagination-link <%= i === currentPage ? 'active' : '' %>">
+                      <%= i %>
+                    </a>
+                    <% } %>
+
+                      <% if (currentPage < totalPages) { %>
+                        <a href="/user/ShopPage?page=<%= currentPage + 1 %>&subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>"
+                          class="pagination-link">Next</a>
+                        <% } %>
+            </div>
           </div>
-        </div>
-  
-        <div class="col-md-4 col-lg-2">
-          <form method="get" action="/user/ShopPage" class="colorlib-form-2" id="filter-form">
-            <div class="sidebar">
-            <!-- Subcategories -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">
-                  Subcat
-                  <span class="dropdown-icon" onclick="toggleDropdown()">&#9660;</span>
-                </h2>
-                <div id="subcategory-dropdown" class="dropdown-content">
-                  <a href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">Wired</a>
-                  <a href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">Wireless</a>
+
+          <div class="col-md-4 col-lg-2">
+            <form method="get" action="/user/ShopPage" class="colorlib-form-2" id="filter-form">
+              <div class="sidebar">
+                <!-- Subcategories -->
+                <div class="sidebar-box-2">
+                  <h2 class="heading">
+                    Subcat
+                    <span class="dropdown-icon" onclick="toggleDropdown()">&#9660;</span>
+                  </h2>
+                  <div id="subcategory-dropdown" class="dropdown-content">
+                    <a
+                      href="/user/ShopPage?subcategory=wired&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">Wired</a>
+                    <a
+                      href="/user/ShopPage?subcategory=wireless&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">Wireless</a>
+                  </div>
                 </div>
-              </div>
-  
-   
-              <!-- tommarrow task -->
+
+
+                <!-- tommarrow task -->
 
                 <!-- Sorting Options -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">Sort By</h2>
-                <div class="form-group">
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
-                  <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc&brand=<%= brand %>&search=<%= search %>" class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
+                <div class="sidebar-box-2">
+                  <h2 class="heading">Sort By</h2>
+                  <div class="form-group">
+                    <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=asc&brand=<%= brand %>&search=<%= search %>"
+                      class="<%= sort === 'asc' ? 'active' : '' %>">Price: Low to High</a>
+                    <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=desc&brand=<%= brand %>&search=<%= search %>"
+                      class="<%= sort === 'desc' ? 'active' : '' %>">Price: High to Low</a><br>
+                    <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_asc&brand=<%= brand %>&search=<%= search %>"
+                      class="<%= sort === 'name_asc' ? 'active' : '' %>">A to Z</a>
+                    <a href="/user/ShopPage?subcategory=<%= subcategory %>&category=<%= category %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=name_desc&brand=<%= brand %>&search=<%= search %>"
+                      class="<%= sort === 'name_desc' ? 'active' : '' %>">Z to A</a>
+                  </div>
                 </div>
               </div>
-            </div>
-  
+
               <!-- Categories -->
               <div class="sidebar-box-2">
                 <h2 class="heading">Categories</h2>
                 <div class="widgets_inner">
                   <ul class="list">
-                    <% categories.forEach(categoryItem => { %>
+                    <% categories.forEach(categoryItem=> { %>
                       <li>
-                        <a href="/user/ShopPage?category=<%= categoryItem._id %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">
+                        <a
+                          href="/user/ShopPage?category=<%= categoryItem._id %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&brand=<%= brand %>&search=<%= search %>">
                           <%= categoryItem.name %>
                         </a>
                       </li>
-                    <% }); %>
+                      <% }); %>
                   </ul>
                 </div>
               </div>
-  
-               <!-- Price Range -->
-        <div class="sidebar-box-2">
-          <h2 class="heading">Price Range</h2>
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="form-group">
+
+              <!-- Price Range -->
+              <div class="sidebar-box-2">
+                <h2 class="heading">Price Range</h2>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
                       <label for="price_from">Price from:</label>
                       <div class="form-field">
-                          <i class="icon icon-arrow-down3"></i>
-                          <select name="price_from" id="price_from" class="form-control">
-                              <option value="" <% !price_from ? 'selected' : '' %>>Any</option>
-                              <option value="1" <% price_from == '1' ? 'selected' : '' %>>$1</option>
-                              <option value="20" <% price_from == '20' ? 'selected' : '' %>>$20</option>
-                              <option value="30" <% price_from == '30' ? 'selected' : '' %>>$30</option>
-                              <option value="40" <% price_from == '40' ? 'selected' : '' %>>$40</option>
-                              <option value="300" <% price_from == '300' ? 'selected' : '' %>>$300</option>
-                          </select>
+                        <i class="icon icon-arrow-down3"></i>
+                        <select name="price_from" id="price_from" class="form-control">
+                          <option value="" <% !price_from ? 'selected' : '' %>>Any</option>
+                          <option value="1" <% price_from=='1' ? 'selected' : '' %>>$1</option>
+                          <option value="20" <% price_from=='20' ? 'selected' : '' %>>$20</option>
+                          <option value="30" <% price_from=='30' ? 'selected' : '' %>>$30</option>
+                          <option value="40" <% price_from=='40' ? 'selected' : '' %>>$40</option>
+                          <option value="300" <% price_from=='300' ? 'selected' : '' %>>$300</option>
+                        </select>
                       </div>
+                    </div>
                   </div>
-              </div>
-              <div class="col-md-12">
-                  <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="form-group">
                       <label for="price_to">Price to:</label>
                       <div class="form-field">
-                          <i class="icon icon-arrow-down3"></i>
-                          <select name="price_to" id="price_to" class="form-control">
-                              <option value="" <% !price_to ? 'selected' : '' %>>Any</option>
-                              <option value="90" <% price_to == '90' ? 'selected' : '' %>>$90</option>
-                              <option value="100" <% price_to == '100' ? 'selected' : '' %>>$100</option>
-                              <option value="300" <% price_to == '300' ? 'selected' : '' %>>$300</option>
-                              <option value="600" <% price_to == '600' ? 'selected' : '' %>>$600</option>
-                              <option value="1000" <% price_to == '1000' ? 'selected' : '' %>>$1000</option>
-                              <option value="3000" <% price_to == '3000' ? 'selected' : '' %>>$3000</option>
-                              <option value="6000" <% price_to == '6000' ? 'selected' : '' %>>$6000</option>
-                          </select>
+                        <i class="icon icon-arrow-down3"></i>
+                        <select name="price_to" id="price_to" class="form-control">
+                          <option value="" <% !price_to ? 'selected' : '' %>>Any</option>
+                          <option value="90" <% price_to=='90' ? 'selected' : '' %>>$90</option>
+                          <option value="100" <% price_to=='100' ? 'selected' : '' %>>$100</option>
+                          <option value="300" <% price_to=='300' ? 'selected' : '' %>>$300</option>
+                          <option value="600" <% price_to=='600' ? 'selected' : '' %>>$600</option>
+                          <option value="1000" <% price_to=='1000' ? 'selected' : '' %>>$1000</option>
+                          <option value="3000" <% price_to=='3000' ? 'selected' : '' %>>$3000</option>
+                          <option value="6000" <% price_to=='6000' ? 'selected' : '' %>>$6000</option>
+                        </select>
                       </div>
+                    </div>
                   </div>
-              </div>
-              <div class="col-md-12">
-                  <button type="submit" class="btn btn-primary">Filter</button>
-              </div>
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                  </div>
 
 
+
+                </div>
+              </div>
+
+              <!-- Brand Filter -->
+              <div class="sidebar-box-2">
+                <h2 class="heading">Brands</h2>
+                <div class="widgets_inner">
+                  <ul class="list">
+                    <% brands.forEach(brandItem=> { %>
+                      <li>
+                        <a
+                          href="/user/ShopPage?brand=<%= brandItem %>&category=<%= category %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>">
+                          <%= brandItem %>
+                        </a>
+                      </li>
+                      <% }); %>
+                  </ul>
+                </div>
+              </div>
 
           </div>
-      </div>
-
-       <!-- Brand Filter -->
-       <div class="sidebar-box-2">
-        <h2 class="heading">Brands</h2>
-        <div class="widgets_inner">
-          <ul class="list">
-            <% brands.forEach(brandItem => { %>
-              <li>
-                <a href="/user/ShopPage?brand=<%= brandItem %>&category=<%= category %>&subcategory=<%= subcategory %>&price_from=<%= price_from %>&price_to=<%= price_to %>&sort=<%= sort %>&search=<%= search %>">
-                  <%= brandItem %>
-                </a>
-              </li>
-            <% }); %>
-          </ul>
-        </div>
-      </div>
-  
-            </div>
           </form>
         </div>
       </div>
-    </div>
-  </section>
-      
-      <section class="ftco-gallery">
-     
-   
+      </div>
+    </section>
 
-  <footer class="ftco-footer ftco-section">
-    <div class="container">
-        
-     
-        <div class="col-md">
-          <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Have a Questions?</h2>
-              <div class="block-23 mb-3">
-                <ul>
-                  <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-                  <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-                  <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-                </ul>
+    <section class="ftco-gallery">
+
+
+      <footer class="ftco-footer ftco-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2 logo-name">GAMZY</h2>
+                <p>Your one-stop shop for gaming accessories.</p>
               </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Have a Question?</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li>
+                      <span class="fas fa-map-marker-alt"></span>
+                      <span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span>
+                    </li>
+                    <li>
+                      <a href="#"><span class="fas fa-phone-alt"></span><span class="text">+2 392 3929 210</span></a>
+                    </li>
+                    <li>
+                      <a href="#"><span class="fas fa-envelope"></span><span class="text">info@yourdomain.com</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p>
+                Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script> All rights reserved |
+                This template is made with <i class="fas fa-heart color-danger" aria-hidden="true"></i> by
+                <a href="https://colorlib.com" target="_blank">Colorlib</a>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 text-center">
-
-          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                      </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-  
+      </footer>
 
 
-<!-- loader -->
-<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+      <!-- loader -->
+      <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+          <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+          <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+            stroke="#F96D00" />
+        </svg></div>
 
 
-<script src="/js/jquery.min.js"></script>
-<script src="/js/jquery-migrate-3.0.1.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/jquery.easing.1.3.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
-<script src="/js/owl.carousel.min.js"></script>
-<script src="/js/jquery.magnific-popup.min.js"></script>
-<script src="/js/aos.js"></script>
-<script src="/js/jquery.animateNumber.min.js"></script>
-<script src="/js/bootstrap-datepicker.js"></script>
-<script src="/js/scrollax.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-<script src="/js/google-map.js"></script>
-<script src="/js/main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- <script>
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/js/bootstrap.min.js"></script>
+      <script src="/js/jquery.easing.1.3.js"></script>
+      <script src="/js/jquery.waypoints.min.js"></script>
+      <script src="/js/jquery.stellar.min.js"></script>
+      <script src="/js/owl.carousel.min.js"></script>
+      <script src="/js/jquery.magnific-popup.min.js"></script>
+      <script src="/js/aos.js"></script>
+      <script src="/js/jquery.animateNumber.min.js"></script>
+      <script src="/js/bootstrap-datepicker.js"></script>
+      <script src="/js/scrollax.min.js"></script>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+      <script src="/js/google-map.js"></script>
+      <script src="/js/main.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <!-- <script>
  function toggleWishlistIcon(element) {
     const icon = element.querySelector('i');
     if (icon.classList.contains('far')) {
@@ -1025,210 +1318,212 @@
     }
 }
 </script> -->
-<script>
-  document.querySelectorAll('.wishlist-icon, .wishlist-btn').forEach(button => {
-     button.addEventListener('click', async (event) => {
-         event.preventDefault();
-         event.stopPropagation(); // Prevent navigation
- 
-         const productId = button.getAttribute('data-product-id');
-         const variantId = button.getAttribute('data-variant-id');
- 
-         try {
-             const response = await fetch('/user/add-to-wishlist', {
-                 method: 'POST',
-                 headers: {
-                     'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify({ productId, variantId })
-             });
- 
-             const result = await response.json();
- 
-             if (response.status === 401) {
-                 Swal.fire({
-                     title: 'Please Log In',
-                     text: 'You need to be logged in to add items to your wishlist.',
-                     icon: 'warning',
-                     confirmButtonText: 'Log In',
-                     customClass: {
-                        popup: 'small-modal'
-                    }
-                 }).then((result) => {
-                     if (result.isConfirmed) {
-                         window.location.href = '/user/login'; // Redirect to login page
-                     }
-                 });
-             } else if (response.ok) {
-                 Swal.fire({
-                     title: 'Success!',
-                     text: result.message,
-                     icon: 'success',
-                     confirmButtonText: 'OK',
-                     customClass: {
-                        popup: 'small-modal'
-                    }
-                 });
-                 
-                 // Toggle the heart icon state
-                 const icon = button.querySelector('i');
-                 if (icon.classList.contains('far')) {
-                     icon.classList.remove('far');
-                     icon.classList.add('fas');
-                     button.classList.add('filled');
-                 } else {
-                     icon.classList.remove('fas');
-                     icon.classList.add('far');
-                     button.classList.remove('filled');
-                 }
-             } else {
-                 Swal.fire({
-                     title: 'Error!',
-                     text: result.error || 'Something went wrong.',
-                     icon: 'error',
-                     confirmButtonText: 'OK',
-                     customClass: {
-                        popup: 'small-modal'
-                    }
-                 });
-             }
-         } catch (error) {
-             console.error('Error:', error);
-             Swal.fire({
-                 title: 'Error!',
-                 text: 'An error occurred. Please try again.',
-                 icon: 'error',
-                 confirmButtonText: 'OK',
-                 customClass: {
-                        popup: 'small-modal'
-                    }
-             });
-         }
-     });
- });
- </script>
-<script>
-  
-  document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', async function(event) {
-      event.preventDefault(); // Prevent default link behavior
+      <script>
+        document.addEventListener('click', async (event) => {
+          if (event.target.classList.contains('wishlist-icon') || event.target.classList.contains('wishlist-btn') || event.target.closest('.wishlist-icon') || event.target.closest('.wishlist-btn')) {
+            event.preventDefault();
+            event.stopPropagation();
 
-      // Get product ID and variant ID from data attributes
-      const productId = this.getAttribute('data-product-id');
-      const variantId = this.getAttribute('data-variant-id');
+            const button = event.target.closest('.wishlist-icon, .wishlist-btn');
+            const productId = button.getAttribute('data-product-id');
+            const variantId = button.getAttribute('data-variant-id');
 
-      console.log("product", productId);
-      console.log("variant",variantId);
-      
-      
+            try {
+              const response = await fetch('/user/add-to-wishlist', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId, variantId })
+              });
 
-      const data = {
-        productId: productId,
-        variantId: variantId,
-        quantity: 1 // You can set a default quantity or get it from somewhere
-      };
+              const result = await response.json();
 
-      try {
-        const response = await fetch('/user/addToCart', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+              if (response.status === 401) {
+                Swal.fire({
+                  title: 'Please Log In',
+                  text: 'You need to be logged in to add items to your wishlist.',
+                  icon: 'warning',
+                  confirmButtonText: 'Log In',
+                  customClass: {
+                    popup: 'small-modal'
+                  }
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = '/user/login';
+                  }
+                });
+              } else if (response.ok) {
+                Swal.fire({
+                  title: result.message,
+                  icon: response.message === 'Product is already in your wishlist.' ? 'info' : 'success',
+                  confirmButtonText: 'OK',
+                  customClass: {
+                    popup: 'small-modal'
+                  }
+                });
 
-        const result = await response.json(); 
-        
-        if (response.status === 401) {
-          Swal.fire({
-            title: 'Login Required',
-            text: result.error,
-            icon: 'warning',
-            confirmButtonText: 'Login',
-            customClass: {
-                popup: 'small-modal'
-           }
-          }).then(() => {
-            window.location.href = '/user/login';
-          });
-        } else if (response.ok) {
-          Swal.fire({
-            title: 'Success',
-            text: result.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-            customClass: {
-                        popup: 'small-modal'
-                    }
-          });
-          location.reload();
-          
-        } else {
-          Swal.fire({
-            title: 'Error',
-            text: result.error || 'An error occurred. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-            customClass: {
-                        popup: 'small-modal'
-                    }
-          });
-        }
-      } catch (error) {
-        console.error('Error during fetch:', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'An error occurred. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-          customClass: {
-                        popup: 'small-modal'
-                    }
-        });
-      }
-    });
-  });
-});
-
-
-function toggleDropdown() {
-    var dropdown = document.getElementById('subcategory-dropdown');
-    if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-    } else {
-        dropdown.style.display = 'block';
-    }
-}
-
-// Optional: Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.dropdown-icon')) {
-        var dropdowns = document.getElementsByClassName('dropdown-content');
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === 'block') {
-                openDropdown.style.display = 'none';
-            }
-        }
-    }
-}
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      fetch('/user/cartQuantity')
-          .then(response => response.json())
-          .then(data => {
-              if (data.quantity !== undefined) {
-                  const cartQuantityElement = document.getElementById('cart-quantity');
-                  cartQuantityElement.textContent = `[${data.quantity}]`;
+                // Toggle the heart icon state
+                const icon = button.querySelector('i');
+                if (icon) {
+                  if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    button.classList.add('filled');
+                  } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    button.classList.remove('filled');
+                  }
+                }
+              } else {
+                Swal.fire({
+                  title: 'Error!',
+                  text: result.error || 'Something went wrong.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                  customClass: {
+                    popup: 'small-modal'
+                  }
+                });
               }
-          })
-          .catch(error => {
-              console.error('Error fetching cart quantity:', error);
-          });
-  });
-</script>
+            } catch (error) {
+              console.error('Error:', error);
+              Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'small-modal'
+                }
+              });
+            }
+          }
+        });
+      </script>
+      <script>
 
-<%- include('../layouts/footer') %>
+        document.addEventListener('DOMContentLoaded', function () {
+          document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', async function (event) {
+              event.preventDefault(); // Prevent default link behavior
+
+              // Get product ID and variant ID from data attributes
+              const productId = this.getAttribute('data-product-id');
+              const variantId = this.getAttribute('data-variant-id');
+
+              console.log("product", productId);
+              console.log("variant", variantId);
+
+
+
+              const data = {
+                productId: productId,
+                variantId: variantId,
+                quantity: 1 // You can set a default quantity or get it from somewhere
+              };
+
+              try {
+                const response = await fetch('/user/addToCart', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.status === 401) {
+                  Swal.fire({
+                    title: 'Login Required',
+                    text: result.error,
+                    icon: 'warning',
+                    confirmButtonText: 'Login',
+                    customClass: {
+                      popup: 'small-modal'
+                    }
+                  }).then(() => {
+                    window.location.href = '/user/login';
+                  });
+                } else if (response.ok) {
+                  Swal.fire({
+                    title: 'Success',
+                    text: result.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                      popup: 'small-modal'
+                    }
+                  });
+                  location.reload();
+
+                } else {
+                  Swal.fire({
+                    title: 'Error',
+                    text: result.error || 'An error occurred. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                      popup: 'small-modal'
+                    }
+                  });
+                }
+              } catch (error) {
+                console.error('Error during fetch:', error);
+                Swal.fire({
+                  title: 'Error',
+                  text: 'An error occurred. Please try again.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                  customClass: {
+                    popup: 'small-modal'
+                  }
+                });
+              }
+            });
+          });
+        });
+
+
+        function toggleDropdown() {
+          var dropdown = document.getElementById('subcategory-dropdown');
+          if (dropdown.style.display === 'block') {
+            dropdown.style.display = 'none';
+          } else {
+            dropdown.style.display = 'block';
+          }
+        }
+
+        // Optional: Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+          if (!event.target.matches('.dropdown-icon')) {
+            var dropdowns = document.getElementsByClassName('dropdown-content');
+            for (var i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.style.display === 'block') {
+                openDropdown.style.display = 'none';
+              }
+            }
+          }
+        }
+      </script>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          fetch('/user/cartQuantity')
+            .then(response => response.json())
+            .then(data => {
+              if (data.quantity !== undefined) {
+                const cartQuantityElement = document.getElementById('cart-quantity');
+                cartQuantityElement.textContent = `[${data.quantity}]`;
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching cart quantity:', error);
+            });
+        });
+      </script>
+
+      <%- include('../layouts/footer') %>

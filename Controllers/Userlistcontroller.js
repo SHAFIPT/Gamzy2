@@ -139,9 +139,14 @@ const loadProductDetails = async (req, res) => {
         const productId = req.params.productId;
         const variantId = req.params.variantId;
 
-        const product = await Product.findById(productId).populate('variants').populate('productCategory');
+        // Find the product and its related variants and category
+        const product = await Product.findById(productId)
+            .populate('variants')
+            .populate('productCategory');
+
         const offers = await Offer.find({ active: true });
 
+        // Find the specific variant by ID
         let variant = product.variants.find((variant) => variant._id == variantId);
 
         if (!variant) {
@@ -151,7 +156,7 @@ const loadProductDetails = async (req, res) => {
         const category = product.productCategory;
 
         if (!category) {
-            return res.status(404).send('category is not found...!');
+            return res.status(404).send('Category is not found...!');
         }
 
         // Calculate the highest discount
@@ -164,21 +169,23 @@ const loadProductDetails = async (req, res) => {
             }
         });
 
-        console.log("This is the highest discount:", highestDiscount);
-
-        // Calculate the discounted price
         const discountedPrice = product.price - (product.price * highestDiscount / 100);
 
-        console.log("This is the discounted price:", discountedPrice);
+        // Fetch related products from the same category, excluding the current product
+        const relatedProducts = await Product.find({
+            productCategory: category._id,
+            is_Listed: true,
+            _id: { $ne: product._id }  // Exclude the current product
+        }).limit(4);  // Limit to 4 related products
 
-        res.render('productDetails', { 
-            product, 
-            variant, 
-            category, 
-            discount: highestDiscount, 
-            discountedPrice 
+        res.render('productDetails', {
+            product,
+            variant,
+            category,
+            discount: highestDiscount,
+            discountedPrice,
+            relatedProducts // Pass related products to the template
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
