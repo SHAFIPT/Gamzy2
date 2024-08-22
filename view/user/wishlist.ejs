@@ -205,7 +205,13 @@
         transform: translateY(0);
     }
 }
+.in-stock {
+    color: green;
+}
 
+.out-of-stock {
+    color: red;
+}
 </style>
   <!-- Navbar section -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -288,7 +294,15 @@
                 </td>
                 <td><%= item.product.productname %></td>
                 <td>₹<%= item.product.price %></td>
-                <td><%= item.variant && item.variant.quantity < 1 ? 'Out of Stock' : 'In Stock' %></td>
+              <!-- Check variant quantity -->
+                <td>
+                    <% if (item.product && item.product.variants && item.product.variants.length > 0 && item.product.variants[0].quantity > 0) { %>
+                        <span class="in-stock">In Stock</span>
+                    <% } else { %>
+                        <span class="out-of-stock">Out of Stock</span>
+                    <% } %>
+                </td>
+                
                 <td class="actions">
                     <button class="btn add-to-cart" data-product-id="<%= item.product._id %>" data-variant-id="<%= item.variant._id %>">
                         <i class="fas fa-shopping-cart"></i>

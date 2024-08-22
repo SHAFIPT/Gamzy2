@@ -37,23 +37,18 @@ const loadSalesReport = async (req, res) => {
         
         orders.forEach(order => {
             const totalOrderValue = order.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
-            console.log("This is Total orderValue :", totalOrderValue);
-            
+  
             const shippingChargePerProduct = order.shippingCharge / order.products.length;
             
             order.products.forEach(product => {
                 const productProportion = (product.price * product.quantity) / totalOrderValue;
-                console.log("This is productProportion :", productProportion);
                 
                 const productCouponDiscount = order.couponDiscount * productProportion;
-                console.log("This productCouponDiscount :", productCouponDiscount);
                 
                 const productTotal = product.price * product.quantity + shippingChargePerProduct;
-                console.log("This is productTotal :", productTotal);
                 
                 // Only consider coupon discount, as offer discount is already applied to product price
                 const productDiscount = productCouponDiscount;
-                console.log("This is productDiscount :", productDiscount);
                 
                 if (product.status === 'Delivered' || product.status === 'Returned' || product.returnStatus === 'Requested') {
                     salesCount++;
@@ -70,10 +65,7 @@ const loadSalesReport = async (req, res) => {
                 }
             });
         });
-        
-        // No need to subtract refundedTotal here, as we've already excluded it from finalAmount
-        // finalAmount -= refundedTotal;
-        
+
         const summaryData = {
             salesCount,
             orderAmount: orderAmount.toFixed(2),

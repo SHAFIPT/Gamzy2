@@ -10,7 +10,7 @@ const { findById } = require('../model/productModel');
 
 const successGoogleLogin = async(req,res)=>{
     try {
-        console.log('ethitto')
+
         const name = req.user.name.givenName;
         const email = req.user.email;
         const user = await User.findOne({email}, {});
@@ -94,7 +94,6 @@ const loadhome = async (req, res) => {
 const loadlogin = async (req, res) => {
     try {
         const name = req.session.userName || null; // Retrieve name from session if available
-        console.log("Rendering login page");
         res.render('login', { name: name });
     } catch (error) {
         console.log(error);
@@ -115,7 +114,6 @@ const logOut = async(req,res)=>{
 
 const loadsignUp = async (req, res) => {
     try {
-        console.log('Rendering signUp page');
         res.render('signUp');
     } catch (error) {
         console.log(error);
@@ -125,8 +123,6 @@ const loadsignUp = async (req, res) => {
 const insertSignUp = async (req, res) => {
     try {
         const { name, password, email, phonenumber } = req.body;
-
-        console.log('Received signup data:', { name, password, email, phonenumber });
 
         // Check if the email already exists
         const existingUser = await User.findOne({ email });
@@ -148,11 +144,8 @@ const insertSignUp = async (req, res) => {
             }
         });
         const otp = generateOTP();
-        console.log(otp)
-        
+
         req.session.otp=otp
-        console.log(req.session.otp)
-        console.log(otp);
 
         const mailOptions = {
             from: process.env.email_admin,
@@ -162,7 +155,6 @@ const insertSignUp = async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log('OTP email sent successfully.');
 
           // Save OTP to the database
           const otpEntry = new verifyOtp({
@@ -172,9 +164,6 @@ const insertSignUp = async (req, res) => {
         });
 
         await otpEntry.save();
-        console.log('OTP saved to the database successfully.');
-
-
 
         res.status(200).json({message:'otp send successfully'})
         // Hash the password
@@ -189,23 +178,8 @@ const insertSignUp = async (req, res) => {
             is_blocked: 0
         });
 
-        console.log('Saving user to database...');
         const userData = await user.save();
 
-
-
-        // if (userData) {
-        //     console.log('User saved successfully:', userData);
-
-        //     // Send OTP verification email
-            // await sendOTPverificationEmail(email,req.session);
-
-        //     // Redirect to verifyOTP page
-        //     return res.status(200).json({message:'ready to get otp'})
-        // } else {
-        //     console.log('User registration failed');
-        //     return res.status(500).json({message:'erron sign up '});
-        // }
     } catch (error) {
         console.error('Error saving user:', error.message);
         res.status(200).json({message:'otp send successfully'})
@@ -213,55 +187,6 @@ const insertSignUp = async (req, res) => {
     }
 }; 
 
-// const verifyLogin = async (req, res) => {
-//     try {
-//         const email = req.body.email;
-//         const password = req.body.password;
-
-//         const userData = await User.findOne({ email: email });
-
-//         if (!userData) {
-//             return res.status(500).json({ message: 'Email and password are incorrect' });
-//         }
-
-//         if (userData&&userData.is_blocked) {
-//             return res.status(500).json({ message: 'The user is blocked' });
-//         }else if(userData&&userData.is_blocked===false){
-//             const verifyLogin = async (req, res) => {
-//                 try {
-//                     const email = req.body.email;
-//                     const password = req.body.password;
-            
-//                     const userData = await User.findOne({ email: email });
-            
-//                     if (!userData) {
-//                         return res.status(404).json({ message: 'Email and password are incorrect' });
-//                     }
-            
-//                     if (userData.is_blocked) {
-//                         return res.status(303).json({ message: 'The user is blocked' });
-//                     }
-            
-//                     const passwordMatch = await bcrypt.compare(password, userData.password);
-            
-//                     if (passwordMatch) {
-//                         req.session.userId = userData._id;
-//                         return res.status(200).json({ message: 'Login successful' });
-//                     } else {
-//                         return res.status(500).json({ message: 'Email and password are incorrect' });
-//                     }
-//                 } catch (error) {
-//                     console.error('Error during login:', error);
-//                     return res.status(500).json({ message: 'Internal Server Error' });
-//                 }
-//             }
-            
-//         }
-//     } catch (error) {
-//         console.error('Error during login:', error);
-//         return res.status(500).json({ message: 'Internal Server Error' });
-//     }
-// }
 const verifyLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -282,7 +207,6 @@ const verifyLogin = async (req, res) => {
             req.session.user = userData._id;
             req.session.userName = userData.name; // Store the user's name in the session
 
-            console.log('this is session userId',req.session.user)
             return res.status(200).json({ message: 'Login successful' });
         } else {
             return res.status(404).json({ message: 'Email and password are incorrect' });
@@ -296,7 +220,6 @@ const verifyLogin = async (req, res) => {
 
 const getOTPPage = async (req, res) => {
     try {
-        console.log("Rendering verify OTP page");
         const email = req.session.email;
         res.render('verifyOTP', {email : email}); // Assuming 'verifyOTP' is the name of your view file
     } catch (error) {
@@ -307,16 +230,14 @@ const getOTPPage = async (req, res) => {
 const verifyOTP = async (req, res) => {
     try {
         const { otp } = req.body;
-        console.log('Received OTP:', otp);
-        console.log('Session OTP:', req.session.otp);
 
         if (req.session.otp === otp) {
-            console.log('OTP verified successfully');
+
             await verifyOtp.deleteOne({ Email: req.session.email, otp: otp });
-            console.log('OTP entry deleted from database');
+
             res.status(200).json({ message: "Signup successfully" });
         } else {
-            console.log('OTP is incorrect');
+
             res.status(400).json({ message: 'OTP is incorrect' });
         }
     } catch (error) {
@@ -348,7 +269,7 @@ const resendOTP = async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log('OTP email resent successfully.');
+
         res.status(200).json({ success: true, message: 'OTP resent successfully' });
     } catch (error) {
         console.error('Error resending OTP:', error);
@@ -370,8 +291,6 @@ const updatePassword = async (req,res) =>{
     try {
 
         const {email , password} = req.body;
-        console.log('This is my email:',email);
-        console.log('This is my password:',password);
 
         const user = await User.findOne({email})
 
@@ -380,7 +299,6 @@ const updatePassword = async (req,res) =>{
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-
 
          // Update the password
          user.password = hashedPassword;

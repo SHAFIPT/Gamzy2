@@ -19,19 +19,19 @@ const applyCoupon = async (req, res) => {
         const activationDate = coupon.activationDate;
         const expireDate = coupon.expireDate;
 
-        // if (!coupon.isActive || currentDate < activationDate || currentDate > expireDate) {
-        //     return res.status(400).json({ message: 'Coupon is not active or has expired' });
-        // }
+        if (!coupon.isActive || currentDate < activationDate || currentDate > expireDate) {
+            return res.status(400).json({ message: 'Coupon is not active or has expired' });
+        }
 
         // Check if the coupon usage limit has been reached
-        // if (coupon.limitOfUse <= coupon.usedUsers.length) {
-        //     return res.status(400).json({ message: 'Coupon usage limit has been reached' });
-        // }
+        if (coupon.limitOfUse <= coupon.usedUsers.length) {
+            return res.status(400).json({ message: 'Coupon usage limit has been reached' });
+        }
 
         // Check if the user has already used this coupon
-        // if (coupon.usedUsers.includes(userId)) {
-        //     return res.status(400).json({ message: 'Coupon has already been used by this user' });
-        // }
+        if (coupon.usedUsers.includes(userId)) {
+            return res.status(400).json({ message: 'Coupon has already been used by this user' });
+        }
 
         // Fetch the cart for the specified user
         const cart = await Cart.findOne({ userId }).populate({
@@ -106,8 +106,6 @@ const getCoupons = async (req, res) => {
             expireDate: { $gt: new Date() }
         });
 
-        // console.log('Fetched coupons:', coupons); 
-
         if (!coupons.length) {
             return res.status(404).json({ message: 'No coupons available' });
         }
@@ -166,8 +164,6 @@ const removeCouponFromUser = async (userId, couponCode) => {
 const removeCoupon = async (req, res) => {
     const { couponCode } = req.body;
 
-    console.log("This is the couponCode:", couponCode);
-
     if (!couponCode) {
         return res.status(400).json({ message: 'Coupon code is required.' });
     }
@@ -195,8 +191,6 @@ const removeCoupon = async (req, res) => {
             console.log("Product price:", price, "Quantity:", product.quantity); // Log product details
             return sum + price * product.quantity;
         }, 0);
-
-        console.log("This my subtotal:", subtotal);
 
         const finalTotal = subtotal; // Adjust based on how you handle discounts
 

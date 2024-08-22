@@ -5,7 +5,6 @@ const Order = require('../model/ordreModel');
 const Wishlist = require('../model/wishlistShema')
 const Wallet = require('../model/walletSchema')
 const Product = require('../model/productModel');
-// const PDFDocument = require('pdfkit');
 const PDFDocument = require('pdfkit-table');
 const fs = require('fs');
 const path = require('path');
@@ -15,11 +14,7 @@ const loadMyAccount = async (req,res) =>{
     try {
 
         const userId = req.session.user;
-        // console.log(userId)
         const users = await User.findById( userId);
-
-        // console.log('This in my account userId :', users);
-        
         res.render('Useraccount', {users})
 
     } catch (error) {
@@ -33,19 +28,10 @@ const loadaddress = async (req,res)=>{
 
         if (req.session.user) {
             const userId = req.session.user;
-            // console.log('This address open page userId:', userId);
-
             // Find addresses by user ID
             const addresses = await Address.find({ user: userId });
-
-            // console.log('This address open page addresses for userId:', addresses);
-
             res.render('address', { addresses });
 
-        // const address = await User.findById(userId);
-
-
-        // console.log('This is my address',address );
         }
         
     } catch (error) {
@@ -55,13 +41,10 @@ const loadaddress = async (req,res)=>{
 }
 
 const addAddress = async (req,res)=>{
-
-    // console.log("helowww");
     try {
 
         const {firstname,lastname,state, streetaddress,landmark, city,pincode,number,email} = req.body;
 
-        // console.log('This is my add address Controllers');
 
          // Create a new address instance
          const newAddress = new Address({
@@ -89,13 +72,9 @@ const addAddress = async (req,res)=>{
 
 const getAddressById = async (req, res) => {
     try {
-        // console.log('helowww');
-
         const addressId = req.params.id;
 
         const address = await Address.findById(addressId);
-
-        // console.log('This is my address id : ',addressId);
 
         if (address) {
             res.json({ success: true, address });
@@ -139,8 +118,6 @@ const removeAddress = async (req,res)=>{
     try {
 
         const addressId = req.params.id;
-
-        // console.log('This is Backend address id :',addressId);
 
         const result = await Address.findByIdAndDelete(addressId);
 
@@ -304,14 +281,8 @@ const orderReturn = async (req, res) => {
             return res.status(401).json({ success: false, message: "User not authenticated" });
         }
 
-
-        console.log("This is orderId:", orderId);
-        console.log("This is returnReason:", returnReason);
-
         // Find the order by orderId (note: orderId is a string, not an ObjectId)
         const order = await Order.findOne({ _id: orderId, userId });
-
-        console.log("This is my order:", order);
 
         if (!order) {
             return res.status(404).json({ success: false, message: 'Order not found' });
@@ -325,9 +296,6 @@ const orderReturn = async (req, res) => {
                 product.status = 'Returned'; // Update the product status to 'Returned'
             }
         });
-
-        console.log("Order successfully updated....!");
-
         // Save the updated order
         await order.save();
 
@@ -342,9 +310,6 @@ const orderReturn = async (req, res) => {
 const updateProfile = async (req, res) => {
     try {
         const { name, phoneNumber } = req.body;
-        console.log("user name:", name);
-        console.log("user phoneNumber:", phoneNumber);
-
         const userId = req.session.user;
 
         if (!userId) {
@@ -356,8 +321,6 @@ const updateProfile = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
-
-        console.log('Profile updated successfully');
         res.json({ success: true, message: 'Profile updated successfully' });
     } catch (error) {
         console.error('Error updating profile:', error); // Log error details
@@ -371,10 +334,6 @@ const updatePassword = async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;
 
-        console.log("This is my oldPassword",oldPassword);
-        console.log("This is my newPassword", newPassword);
-        
-        
         const userId = req.session.user;
 
         if (!userId) {
@@ -411,10 +370,6 @@ const loadWalletPage = async (req, res) => {
     try {
         const userId = req.session.user; // Assuming you store user ID in session
         let wallet = await Wallet.findOne({ user: userId });
-
-
-        console.log("this is wallet :",wallet);
-        
 
         if (!wallet) {
             // If wallet doesn't exist, create a new one with zero balance
@@ -499,16 +454,7 @@ const addWishList = async (req, res) => {
 const removeWishList = async (req,res)=>{
     try {
         const { productId, variantId } = req.body;
-
-        console.log("This is productId :",productId);
-        console.log("This is variantId :",variantId);
-
-
-
-
         const userId = req.session.user
-        
-        console.log("This is user :",userId);
         
 
         // Find the user's wishlist

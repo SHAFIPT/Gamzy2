@@ -279,21 +279,80 @@
 }
 
 
+.footer {
+  background-color: #f8f9fa;
+  padding: 40px 0;
+  color: #333;
+}
 
+.footer-top-area {
+  border-bottom: 1px solid #ddd;
+}
+
+.footer-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f1c40f;
+}
+
+.footer-menu p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.social-links ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-icon {
+  margin-right: 15px;
+  display: inline-block;
+}
+
+.social-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: #333;
+}
+
+.footer-divider {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+.footer-bottom {
+  background-color: #343a40;
+  color: #fff;
+  padding: 20px 0;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-bottom a {
+  color: #007bff;
+}
+
+.card-wrap img {
+  margin-right: 10px;
+  height: auto;
+  max-height: 30px;
+}
+
+.shipping, .payment-method {
+  display: flex;
+  align-items: center;
+}
+
+.shipping p, .payment-method p {
+  margin-bottom: 0;
+  margin-right: 10px;
+}
 </style>
-
-<!-- <script>
- document.addEventListener('DOMContentLoaded', function() {
-    const userName = localStorage.getItem('userName');
-    if (userName) {
-        const loginNavItem = document.querySelector('.nav-item a[href="/user/login"]');
-        if (loginNavItem) {
-            loginNavItem.textContent = userName;
-            loginNavItem.href = '#'; // Optionally change the href or add more functionalities
-        }
-    }
-});
-</script> -->
 
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
@@ -451,35 +510,6 @@
                   <a class="nav-link me-4" href="#">Welcome, <%= user.name %></a>
                 </li>
               <% } %>
-              <!-- <li class="nav-item dropdown">
-                <a class="nav-link me-4 dropdown-toggle link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pages</a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="about.html" class="dropdown-item">About</a>
-                  </li>
-                  <li>
-                    <a href="/user/home2" class="dropdown-item">Home2</a>
-                  </li>
-                  <li>
-                    <a href="cart.html" class="dropdown-item">Cart</a>
-                  </li>
-                  <li>
-                    <a href="checkout.html" class="dropdown-item">Checkout</a>
-                  </li>
-                  <li>
-                    <a href="single-post.html" class="dropdown-item">Single Post</a>
-                  </li>
-                  <li>
-                    <a href="single-product.html" class="dropdown-item">Single Product</a>
-                  </li>
-                  <li>
-                    <a href="contact.html" class="dropdown-item">Contact</a>
-                  </li>
-                  <li>
-                    <a href="/user/LogOut" class="dropdown-item">Logout</a>
-                  </li>
-                </ul>
-              </li> -->
               <li class="nav-item">
                 <div class="user-items ps-5">
                   <ul class="d-flex justify-content-end list-unstyled">
@@ -522,7 +552,7 @@
               <div class="col-md-6">
                 <div class="banner-content">
                   <h1 class="display-2 text-uppercase pb-5" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Enhance Your Gaming Experience</h1>
-                  <a href="shop.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
+                  <a href="" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
                 </div>
               </div>
               <div class="col-md-5">
@@ -543,7 +573,7 @@
             <div class="display-header d-flex justify-content-between pb-3">
                 <h2 class="display-7 text-dark text-uppercase">Gaming Products</h2>
                 <div class="btn-right">
-                    <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
+                    <a href="/user/ShopPage" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
                 </div>
             </div>
             <div class="swiper product-swiper">
@@ -652,9 +682,9 @@
       <div class="row">
         <div class="display-header d-flex justify-content-between pb-3">
           <h2 class="display-7 text-dark text-uppercase">Latest Controllers</h2>
-          <div class="btn-right">
+          <!-- <div class="btn-right">
             <a href="blog.html" class="btn btn-medium btn-normal text-uppercase">Read Blog</a>
-          </div>
+          </div> -->
         </div>
         <div class="post-grid d-flex flex-wrap justify-content-between">
           <% if (controllers && controllers.length > 0) { %>
@@ -665,14 +695,13 @@
                     <img src="/uploads/<%= product.variants[0].images[0] %>" alt="" class="img-fluid">
                   </div>
                 </div>
-                <div class="card-body text-uppercase">
-                  <div class="card-meta text-muted">
-                    <span class="meta-date"><%= new Date(product.date).toDateString() %></span>
-                    <span class="meta-category"><%= product.productCategory %></span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="#"> <%= product.productname %></a>
+                <div class="card-detail pt-3">
+                  <h3 class="card-title text-uppercase product-name mb-1">
+                    <a href="/user/productDetails/product/<%= product._id %>/variant/<%= product.variants[0]._id %>">
+                      <span class="product-name-text"><%= truncateDescription(product.productname, 60) %></span>
+                    </a>
                   </h3>
+                  <span class="item-price">₹<%= product.price %></span>
                 </div>
               </div>
             <% }) %>
@@ -685,7 +714,7 @@
   </section>
 
 
-
+<!-- 
   <section id="testimonials" class="position-relative">
     <div class="container">
       <div class="row">
@@ -765,8 +794,8 @@
       </div>
     </div>
     <div class="swiper-pagination"></div>
-  </section>
-  <section id="subscribe" class="container-grid padding-large position-relative overflow-hidden">
+  </section> -->
+  <!-- <section id="subscribe" class="container-grid padding-large position-relative overflow-hidden">
     <div class="container">
       <div class="row">
         <div class="subscribe-content bg-dark d-flex flex-wrap justify-content-center align-items-center padding-medium">
@@ -787,7 +816,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
   <section id="instagram" class="padding-large overflow-hidden no-padding-top">
     <div class="container">
       <div class="row">
@@ -849,50 +878,40 @@
       </div>
     </div>
   </section>
-  <footer id="footer" class="overflow-hidden">
+  <footer id="footer" class="footer overflow-hidden">
     <div class="container">
       <div class="row">
         <div class="footer-top-area">
           <div class="row d-flex flex-wrap justify-content-between">
             <div class="col-lg-3 col-sm-6 pb-3">
               <div class="footer-menu">
-                <img src="images/main-logo.png" alt="logo">
-                <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat aenean odio erat nullam fringilla.</p>
+                <h1 class="footer-logo">GAMZY</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent cursus nunc sit amet nulla vestibulum, non fringilla ex sollicitudin.</p>
                 <div class="social-links">
                   <ul class="d-flex list-unstyled">
                     <li>
-                      <a href="#">
-                        <svg class="facebook">
-                          <use xlink:href="#facebook" />
-                        </svg>
+                      <a href="#" class="social-icon facebook">
+                        <svg class="facebook-icon"><use xlink:href="#facebook" /></svg>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <svg class="instagram">
-                          <use xlink:href="#instagram" />
-                        </svg>
+                      <a href="#" class="social-icon instagram">
+                        <svg class="instagram-icon"><use xlink:href="#instagram" /></svg>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <svg class="twitter">
-                          <use xlink:href="#twitter" />
-                        </svg>
+                      <a href="#" class="social-icon twitter">
+                        <svg class="twitter-icon"><use xlink:href="#twitter" /></svg>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <svg class="linkedin">
-                          <use xlink:href="#linkedin" />
-                        </svg>
+                      <a href="#" class="social-icon linkedin">
+                        <svg class="linkedin-icon"><use xlink:href="#linkedin" /></svg>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <svg class="youtube">
-                          <use xlink:href="#youtube" />
-                        </svg>
+                      <a href="#" class="social-icon youtube">
+                        <svg class="youtube-icon"><use xlink:href="#youtube" /></svg>
                       </a>
                     </li>
                   </ul>
@@ -903,92 +922,69 @@
               <div class="footer-menu text-uppercase">
                 <h5 class="widget-title pb-2">Quick Links</h5>
                 <ul class="menu-list list-unstyled text-uppercase">
-                  <li class="menu-item pb-2">
-                    <a href="#">Home</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">About</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Shop</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Blogs</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Contact</a>
-                  </li>
+                  <li class="menu-item pb-2"><a href="#">Home</a></li>
+                  <li class="menu-item pb-2"><a href="#">About</a></li>
+                  <li class="menu-item pb-2"><a href="#">Shop</a></li>
+                  <li class="menu-item pb-2"><a href="#">Blogs</a></li>
+                  <li class="menu-item pb-2"><a href="#">Contact</a></li>
                 </ul>
               </div>
             </div>
             <div class="col-lg-3 col-sm-6 pb-3">
               <div class="footer-menu text-uppercase">
-                <h5 class="widget-title pb-2">Help & Info Help</h5>
+                <h5 class="widget-title pb-2">Help & Info</h5>
                 <ul class="menu-list list-unstyled">
-                  <li class="menu-item pb-2">
-                    <a href="#">Track Your Order</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Returns Policies</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Shipping + Delivery</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Contact Us</a>
-                  </li>
-                  <li class="menu-item pb-2">
-                    <a href="#">Faqs</a>
-                  </li>
+                  <li class="menu-item pb-2"><a href="#">Track Your Order</a></li>
+                  <li class="menu-item pb-2"><a href="#">Returns Policies</a></li>
+                  <li class="menu-item pb-2"><a href="#">Shipping + Delivery</a></li>
+                  <li class="menu-item pb-2"><a href="#">Contact Us</a></li>
+                  <li class="menu-item pb-2"><a href="#">FAQs</a></li>
                 </ul>
               </div>
             </div>
             <div class="col-lg-3 col-sm-6 pb-3">
               <div class="footer-menu contact-item">
                 <h5 class="widget-title text-uppercase pb-2">Contact Us</h5>
-                <p>Do you have any queries or suggestions? <a href="mailto:">yourinfo@gmail.com</a>
-                </p>
-                <p>If you need support? Just give us a call. <a href="">+55 111 222 333 44</a>
-                </p>
+                <p>Have any queries or suggestions? <a href="mailto:yourinfo@gmail.com">yourinfo@gmail.com</a></p>
+                <p>Need support? Call us at <a href="tel:+5511122233344">+55 111 222 333 44</a></p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <hr>
-  </footer>
-  <div id="footer-bottom">
-    <div class="container">
-      <div class="row d-flex flex-wrap justify-content-between">
-        <div class="col-md-4 col-sm-6">
-          <div class="Shipping d-flex">
-            <p>We ship with:</p>
-            <div class="card-wrap ps-2">
-              <img src="images/dhl.png" alt="visa">
-              <img src="images/shippingcard.png" alt="mastercard">
+    <hr class="footer-divider">
+    <div id="footer-bottom" class="footer-bottom">
+      <div class="container">
+        <div class="row d-flex flex-wrap justify-content-between">
+          <div class="col-md-4 col-sm-6">
+            <div class="shipping d-flex align-items-center">
+              <p class="mb-0">We ship with:</p>
+              <div class="card-wrap ps-2">
+                <img src="images/dhl.png" alt="DHL">
+                <img src="images/shippingcard.png" alt="Shipping Card">
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="payment-method d-flex">
-            <p>Payment options:</p>
-            <div class="card-wrap ps-2">
-              <img src="images/visa.jpg" alt="visa">
-              <img src="images/mastercard.jpg" alt="mastercard">
-              <img src="images/paypal.jpg" alt="paypal">
+          <div class="col-md-4 col-sm-6">
+            <div class="payment-method d-flex align-items-center">
+              <p class="mb-0">Payment options:</p>
+              <div class="card-wrap ps-2">
+                <img src="images/visa.jpg" alt="Visa">
+                <img src="images/mastercard.jpg" alt="MasterCard">
+                <img src="images/paypal.jpg" alt="PayPal">
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="copyright">
-            <p>© Copyright 2023 MiniStore. Design by <a href="https://templatesjungle.com/">TemplatesJungle</a> Distribution by <a href="https://themewagon.com">ThemeWagon</a>
-            </p>
+          <div class="col-md-4 col-sm-6">
+            <div class="copyright">
+              <p>© 2023 GAMZY. Designed by <a href="https://templatesjungle.com/">TemplatesJungle</a> and distributed by <a href="https://themewagon.com">ThemeWagon</a></p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </footer>
   <script src="js/jquery-1.11.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>

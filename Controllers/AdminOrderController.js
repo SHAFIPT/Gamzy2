@@ -16,8 +16,6 @@ const loadOrderPage = async (req, res) => {
     try {
         const orders = await Order.find().populate('userId', 'name').exec();
 
-        // console.log("This is my order datails ",orders);
-
         res.render('orderList', { orders });
     } catch (error) {
         console.log(error);
@@ -107,9 +105,6 @@ const updateStatus = async (req, res) => {
             });
             await wallet.save();
 
-            // Update the order's total amount and coupon discount
-            // order.totalAmount = Math.max(0, order.totalAmount - refundAmount);
-            // order.couponDiscount = Math.max(0, order.couponDiscount - productCouponDiscount);
         };
 
         // Handle return request
@@ -138,16 +133,6 @@ const updateStatus = async (req, res) => {
                 productItem.returnStatus = undefined;
             }
         }
-
-        // Check if all products are now cancelled or returned
-        // const allProductsCancelledOrReturned = order.products.every(product => 
-        //     product.status === 'Cancelled' || product.status === 'Returned'
-        // );
-        // if (allProductsCancelledOrReturned) {
-        //     order.totalAmount = 0;
-        //     order.couponDiscount = 0;
-        // }
-
         
         // Check if all products are now delivered
         const allDelivered = order.products.every(product => product.status === 'Delivered');

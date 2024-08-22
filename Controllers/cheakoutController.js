@@ -95,15 +95,10 @@ const breadCrumbCart = async (req,res) =>{
     try {
         const userId = req.session.user;
 
-        // console.log('The user is here : ',userId);
-
         const cart = await Cart.find({ userId }).populate({
             path: 'products.productId',
             populate: { path: 'variants' }
         })
-
-
-        // console.log('the cart is here :',cart);
 
         res.render('userCart', { cart }); // Render cart.ejs template with cart data
 

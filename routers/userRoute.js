@@ -132,7 +132,7 @@ router.post('/return-order/:orderId', myaccountController.orderReturn)
 //userAccount wallet
 router.get('/wallet',userMiddleware.isLogin,myaccountController.loadWalletPage);
 //userAccount wishlist
-router.get('/wishlist',myaccountController.loadWishList);
+router.get('/wishlist',userMiddleware.isLogin,myaccountController.loadWishList);
 router.post('/removeFromWishlist',userMiddleware.isLogin,myaccountController.removeWishList)
 
 //order page

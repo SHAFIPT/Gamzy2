@@ -667,7 +667,7 @@
     }
 
     .img-prod-container .wishlist-icon i {
-      color: #ff6f61;
+      color: #fb1f0b;
       /* Initial color for heart icon */
     }
 
@@ -819,7 +819,7 @@
     }
 
     .ftco-footer .text-center i.icon-heart {
-      color: #e74c3c;
+      color: #fa1b02;
     }
 
     .ftco-footer .text-center a {
@@ -1163,51 +1163,55 @@
               </div>
 
               <!-- Price Range -->
-              <div class="sidebar-box-2">
-                <h2 class="heading">Price Range</h2>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="price_from">Price from:</label>
-                      <div class="form-field">
-                        <i class="icon icon-arrow-down3"></i>
-                        <select name="price_from" id="price_from" class="form-control">
-                          <option value="" <% !price_from ? 'selected' : '' %>>Any</option>
-                          <option value="1" <% price_from=='1' ? 'selected' : '' %>>$1</option>
-                          <option value="20" <% price_from=='20' ? 'selected' : '' %>>$20</option>
-                          <option value="30" <% price_from=='30' ? 'selected' : '' %>>$30</option>
-                          <option value="40" <% price_from=='40' ? 'selected' : '' %>>$40</option>
-                          <option value="300" <% price_from=='300' ? 'selected' : '' %>>$300</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="price_to">Price to:</label>
-                      <div class="form-field">
-                        <i class="icon icon-arrow-down3"></i>
-                        <select name="price_to" id="price_to" class="form-control">
-                          <option value="" <% !price_to ? 'selected' : '' %>>Any</option>
-                          <option value="90" <% price_to=='90' ? 'selected' : '' %>>$90</option>
-                          <option value="100" <% price_to=='100' ? 'selected' : '' %>>$100</option>
-                          <option value="300" <% price_to=='300' ? 'selected' : '' %>>$300</option>
-                          <option value="600" <% price_to=='600' ? 'selected' : '' %>>$600</option>
-                          <option value="1000" <% price_to=='1000' ? 'selected' : '' %>>$1000</option>
-                          <option value="3000" <% price_to=='3000' ? 'selected' : '' %>>$3000</option>
-                          <option value="6000" <% price_to=='6000' ? 'selected' : '' %>>$6000</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                  </div>
-
-
-
-                </div>
-              </div>
+<div class="sidebar-box-2">
+  <h2 class="heading">Price Range</h2>
+  <form method="get" action="/user/ShopPage" id="price-filter-form">
+    <input type="hidden" name="category" value="<%= category %>">
+    <input type="hidden" name="subcategory" value="<%= subcategory %>">
+    <input type="hidden" name="sort" value="<%= sort %>">
+    <input type="hidden" name="brand" value="<%= brand %>">
+    <input type="hidden" name="search" value="<%= search %>">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="price_from">Price from:</label>
+          <div class="form-field">
+            <i class="icon icon-arrow-down3"></i>
+            <select name="price_from" id="price_from" class="form-control">
+              <option value="">Any</option>
+              <option value="1" <%= price_from === '1' ? 'selected' : '' %>>$1</option>
+              <option value="20" <%= price_from === '20' ? 'selected' : '' %>>$20</option>
+              <option value="30" <%= price_from === '30' ? 'selected' : '' %>>$30</option>
+              <option value="40" <%= price_from === '40' ? 'selected' : '' %>>$40</option>
+              <option value="300" <%= price_from === '300' ? 'selected' : '' %>>$300</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="price_to">Price to:</label>
+          <div class="form-field">
+            <i class="icon icon-arrow-down3"></i>
+            <select name="price_to" id="price_to" class="form-control">
+              <option value="">Any</option>
+              <option value="90" <%= price_to === '90' ? 'selected' : '' %>>$90</option>
+              <option value="100" <%= price_to === '100' ? 'selected' : '' %>>$100</option>
+              <option value="300" <%= price_to === '300' ? 'selected' : '' %>>$300</option>
+              <option value="600" <%= price_to === '600' ? 'selected' : '' %>>$600</option>
+              <option value="1000" <%= price_to === '1000' ? 'selected' : '' %>>$1000</option>
+              <option value="3000" <%= price_to === '3000' ? 'selected' : '' %>>$3000</option>
+              <option value="6000" <%= price_to === '6000' ? 'selected' : '' %>>$6000</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Apply Filter</button>
+      </div>
+    </div>
+  </form>
+</div>
 
               <!-- Brand Filter -->
               <div class="sidebar-box-2">

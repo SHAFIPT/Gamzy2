@@ -14,101 +14,89 @@ const truncateDescription = (description, maxLength) => {
 
 const LoadShopage = async (req, res) => {
     try {
-        // Extract query parameters
-        const { price_from, price_to, category, subcategory, sort, search, brand,  page = 1, limit = 9 } = req.query;
+        const { price_from, price_to, category, subcategory, sort, search, brand, page = 1, limit = 9 } = req.query;
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
-        // Build the query object for filtering products
         let query = { is_Listed: true };
 
-        // Validate and parse price range
-        const priceFrom = parseFloat(price_from);
-        const priceTo = parseFloat(price_to);
-        if (!isNaN(priceFrom) && !isNaN(priceTo)) {
-            query['price'] = { $gte: priceFrom, $lte: priceTo };
-        }
-
-        if (search) {
-            const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
-            query.$or = [
-                { productname: searchRegex },
-                { brand: searchRegex },
-                { 'productCategory.name': searchRegex }, // Assuming category name is stored in productCategory
-                { subCategory: searchRegex }
-            ];
-        }
-
-
+        // Apply category filter
         if (category) {
             query.productCategory = category;
         }
 
+        // Apply subcategory filter
         if (subcategory) {
             query.subCategory = subcategory;
         }
 
+        // Apply brand filter
         if (brand) {
             query.brand = brand;
         }
 
-      // Build sorting object
-      let sortOption = {};
-      if (sort === 'asc') {
-          sortOption['price'] = 1; // Low to High
-      } else if (sort === 'desc') {
-          sortOption['price'] = -1; // High to Low
-      } else if (sort === 'name_asc') {
-          sortOption['productname'] = 1; // A to Z
-      } else if (sort === 'name_desc') {
-          sortOption['productname'] = -1; // Z to A
-      } else {
-          sortOption['price'] = 1; // Default to Low to High
-      }
+        // Apply price range filter
+        const priceFrom = parseFloat(price_from);
+        const priceTo = parseFloat(price_to);
+        if (!isNaN(priceFrom) && !isNaN(priceTo)) {
+            query.price = { $gte: priceFrom, $lte: priceTo };
+        }
 
-        // Fetch products based on the query
-        const products = await Product.find(query)
-            .sort(sortOption)
-            .skip((pageNumber - 1) * limitNumber)
-            .limit(limitNumber)
+        // Apply search filter
+        if (search) {
+            const searchRegex = new RegExp(search, 'i');
+            query.$or = [
+                { productname: searchRegex },
+                { brand: searchRegex },
+                { 'productCategory.name': searchRegex },
+                { subCategory: searchRegex }
+            ];
+        }
+
+        // Fetch products
+        let products = await Product.find(query)
             .populate('variants')
             .populate('productCategory');
 
-        // Count total products for pagination
-        const totalProducts = await Product.countDocuments(query);
-        const totalPages = Math.ceil(totalProducts / limitNumber);
+        // Fetch active offers
+        const offers = await Offer.find({ active: true });
 
-        // Fetch all categories and subcategories
-        const categories = await Category.find({ is_listed: true });
-        const subcategories = await Product.distinct('subCategory'); // Get unique subcategories from products
-        const brands = await Product.distinct('brand'); // Get unique brands from products
-         // Fetch active offers
-         const offers = await Offer.find({ active: true });
-
-
-         // Process offers and select the highest discount for each product
-         products.forEach(product => {
+        // Process offers and calculate discounted prices
+        products = products.map(product => {
             let highestDiscount = 0;
             offers.forEach(offer => {
-                if (offer.applicableToProducts.includes(product._id) || offer.applicableToCategories.includes(product.productCategory._id)) {
+                if (offer.applicableToProducts.includes(product._id) || 
+                    offer.applicableToCategories.includes(product.productCategory._id)) {
                     if (offer.discount > highestDiscount) {
                         highestDiscount = offer.discount;
                     }
                 }
             });
             product.highestDiscount = highestDiscount;
-            console.log("this is the highestDiscount :",highestDiscount);
-            
             product.discountedPrice = product.price - (product.price * highestDiscount / 100);
-            
-            console.log("This is product discountedPrice :",product.discountedPrice);
-            
+            return product;
         });
 
+        // Sort products
+        if (sort === 'asc') {
+            products.sort((a, b) => a.discountedPrice - b.discountedPrice);
+        } else if (sort === 'desc') {
+            products.sort((a, b) => b.discountedPrice - a.discountedPrice);
+        } else if (sort === 'name_asc') {
+            products.sort((a, b) => a.productname.localeCompare(b.productname));
+        } else if (sort === 'name_desc') {
+            products.sort((a, b) => b.productname.localeCompare(a.productname));
+        }
 
+        // Apply pagination
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / limitNumber);
+        products = products.slice((pageNumber - 1) * limitNumber, pageNumber * limitNumber);
 
-        //  console.log("this my offers" , offers);
-         
+        // Fetch all categories, subcategories, and brands
+        const categories = await Category.find({ is_listed: true });
+        const subcategories = await Product.distinct('subCategory');
+        const brands = await Product.distinct('brand');
 
         res.render('Shopage', {
             products,
@@ -124,7 +112,7 @@ const LoadShopage = async (req, res) => {
             totalPages,
             brand,
             search,
-            offers, // Pass offers to the template
+            offers,
             truncateDescription
         });
 
@@ -226,8 +214,6 @@ const loadProductCart = async (req, res) => {
                 
                 productInCart.discountedPrice = discountedPrice;
                 productInCart.discount = highestDiscount;
-
-                console.log(`Product: ${product.name}, Original Price: ${product.price}, Discount: ${highestDiscount}%, Discounted Price: ${discountedPrice}`);
             });
         });
 
@@ -247,11 +233,6 @@ const addToCart = async (req, res) => {
 
 
         const { productId, variantId, quantity , price} = req.body;
-
-        console.log("This is the price for productDetails page ",price );
-        console.log("This is the productId for productDetails page ",productId );
-        console.log("This is the variantId for productDetails page ",variantId );
-        // console.log("This is the price for productDetails page ",price );
         
         const userId = req.session.user; // Assuming you have authenticated user stored in req.session.user
 
@@ -352,12 +333,8 @@ const updateCart = async (req, res) => {
 
 const removeCart = async (req,res)=>{
     try {
-        // console.log('this is remove cart')
+        
         const {data} = req.body; 
-        // console.log(req.body.data)
-        // console.log('This is remove cart ProductId:',data.productId);
-        // console.log('This is remove cart variantId:',data.variantId);
-
         const userId = req.session.user;
 
         await Cart.updateOne( 

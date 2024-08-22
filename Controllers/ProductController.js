@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 
 const LoadProduct = async (req,res)=>{
     try {
-        
         const categories = await Category.find({is_listed : true});
         res.render('addProduct',{ categories : categories})
 
@@ -21,9 +20,6 @@ async function addProduct(req, res) {
     try {
 
         const { name, description, category, price, quantity , color , subCategory , brand } = req.body;
-
-
-        // console.log("this is my subcategory",subCategory);
 
         let images = []
         req.files.forEach((file)=>{
@@ -59,9 +55,6 @@ async function addProduct(req, res) {
     }
 }
 
-    
-
-
 const LoadEditproduct = async (req,res)=>{
     try {
         
@@ -89,14 +82,8 @@ const LoadEditproduct = async (req,res)=>{
 const UpdateProduct = async (req, res) => {
     try {
         const productId = req.body.productId;
-        // console.log(productId);
-        // console.log('hellow');
+
         const { name, description, category, price, quantity ,subCategory ,brand} = req.body;
-
-        // console.log(req.files)
-
-          console.log("this is my subcategory",subCategory);
-
 
         const getCategory = await Category.findOne({ name: category });
 
@@ -219,12 +206,9 @@ const LoadAddvarient = async (req, res) => {
 
     const AddVarient = async (req,res)=>{
         try {
-            console.log('this is add variant method')
             const { color, quantity } = req.body;
             const productId=req.params.id
-            // console.log('color is not found',color);
-            // console.log('quantity is not found',quantity);
-            console.log(productId)
+
             if (!color || !quantity) {
                 return res.status(400).json({ message: 'Color and quantity are required' });
             }
@@ -279,9 +263,7 @@ const LoadAddvarient = async (req, res) => {
         try {
             const variantId = req.params.id;
             const { color, quantity } = req.body;
-            console.log('This is the color:', color);
-            console.log('This is the quantity:', quantity);
-    
+
             // Find the product containing the variant
             const product = await Product.findOne({ 'variants._id': variantId });
             if (!product) {
@@ -290,8 +272,7 @@ const LoadAddvarient = async (req, res) => {
     
             // Find the variant by ID within the product
             const variant = product.variants.id(variantId);
-            console.log('This is my Backend variant Id:', variant);
-    
+            
             // Update the color and quantity fields
             variant.color = color;
             variant.quantity = quantity;

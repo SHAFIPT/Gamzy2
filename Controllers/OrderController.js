@@ -134,12 +134,9 @@ const orderSummory = async (req, res) => {
         }
 
         const subtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
-        console.log("This is subtotal :",subtotal);
         
         const shippingCharge = subtotal < 500 ? 50 : 0;
         const totalAmount = subtotal - couponDiscount + shippingCharge;
-        console.log("This is the totalAmount yhy:",totalAmount);
-        
 
 
         if (PaymentMethod === 'Cashondelivary' && totalAmount > 1000) {
@@ -211,7 +208,6 @@ const orderSummory = async (req, res) => {
 
                 return res.json({ success: true, razorpayOrder, order_id: order._id });
             } catch (error) {
-                console.log("this orderData :",orderData);
                 
                 // orderData.paymentStatus = "Failed";
                 const order = new Order(orderData);
@@ -230,8 +226,6 @@ const orderSummory = async (req, res) => {
 
 const loadViewPage = async (req,res) =>{
     try {
-
-        
 
         res.render('OrderdView')
         
@@ -275,29 +269,14 @@ const retryPayment = async(req,res) =>{
 const updateStatus = async (req,res)=>{
 
     const { orderId, paymentId} = req.body;
-
-    console.log("This is orederId :",orderId);
-
-    console.log("This is paymentId :",paymentId);
-    
-    
-
     try {
     // Find the order and update the payment status
     const order = await Order.findById(orderId);
-    console.log('order: ', order);
-    
     if (!order) {
         return res.status(404).json({ success: false, message: 'Order not found' });
     }
 
     order.paymentStatus = 'Paid';
-
-    // Update the status of each product to 'Delivered'
-    // order.products.forEach(product => {
-    //     product.status = 'Pending';
-    // });
-
     await order.save();
 
     res.json({ success: true });
