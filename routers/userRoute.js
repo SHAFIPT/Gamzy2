@@ -77,8 +77,10 @@ router.post('/verifyOTP', userMiddleware.isLogout, userController.verifyOTP);
 router.post('/resendOTP', userMiddleware.isLogout, userController.resendOTP);
 
 //forgotPassword
-router.get('/forgotPassword',userMiddleware.isLogout, userController.forgotPassword)
-router.post('/resetPassword', userMiddleware.isLogout, userController.updatePassword)
+router.get('/forgotPassword', userMiddleware.isLogout, userController.loadForgetPage);
+router.post('/forgotPassword', userMiddleware.isLogout, userController.forgotPassword);
+router.get('/resetPassword/:token', userMiddleware.isLogout, userController.loadResetPasswordPage);
+router.post('/resetPassword/:token', userMiddleware.isLogout, userController.updatePassword);
 
 
 //logout

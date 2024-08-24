@@ -43,7 +43,6 @@
 
   </style>
   </head>
-
   <body>
    
 <nav class="navbar navbar-expand-xl">
@@ -110,6 +109,11 @@
                                 <input id="max-amount" name="max-amount" type="number" step="0.01" class="form-control validate" value="<%= coupon.maxDiscountAmount %>"required />
                                 <div class="error"></div> <!-- Error display -->
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="minimum-purchase-amount">Minimum Purchase Amount</label>
+                                <input id="minimum-purchase-amount" name="minimum-purchase-amount" type="number" step="0.01" class="form-control validate" value="<%= coupon.minimumPurchaseAmount %>" required />
+                                <div class="error"></div> <!-- Error display -->
+                            </div>
                             <div class="row">
                                 <div class="col-6">
                                     <button type="submit" class="btn btn-primary btn-block text-uppercase">Update</button>
@@ -138,35 +142,52 @@
     const limitOfUse = document.getElementById('limit-of-use');
     const discountAmount = document.getElementById('discount-amount');
     const maxAmount = document.getElementById('max-amount');
-    const couponId = document.getElementById('coupon-id').value; // Get the coupon ID
+    const minimumPurchaseAmount = document.getElementById('minimum-purchase-amount');
+    const couponId = document.getElementById('coupon-id').value;
 
-    // Define the functions before using them
+    // Define the validation logic for all fields
     const validateInputs = () => {
         const nameValue = name.value.trim();
-        const activationDateValue = activationDate.value.trim();
-        const expireDateValue = expireDate.value.trim();
+        const activationDateValue = new Date(activationDate.value.trim());
+        const expireDateValue = new Date(expireDate.value.trim());
         const limitOfUseValue = limitOfUse.value.trim();
         const discountAmountValue = discountAmount.value.trim();
         const maxAmountValue = maxAmount.value.trim();
+        const minimumPurchaseAmountValue = minimumPurchaseAmount.value.trim();
 
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // For accurate comparison
+
+        // Name validation
         if (nameValue === '') {
             setError(name, 'Coupon name is required');
         } else {
             setSuccess(name);
         }
 
-        if (activationDateValue === '') {
+        // Activation date validation
+        if (activationDate.value === '') {
             setError(activationDate, 'Activation date is required');
+        } else if (isNaN(activationDateValue.getTime())) {
+            setError(activationDate, 'Invalid activation date');
+        } else if (activationDateValue < currentDate) {
+            setError(activationDate, 'Activation date must be today or in the future');
         } else {
             setSuccess(activationDate);
         }
 
-        if (expireDateValue === '') {
+        // Expire date validation
+        if (expireDate.value === '') {
             setError(expireDate, 'Expire date is required');
+        } else if (isNaN(expireDateValue.getTime())) {
+            setError(expireDate, 'Invalid expire date');
+        } else if (activationDateValue > expireDateValue) {
+            setError(expireDate, 'Expire date must be after activation date');
         } else {
             setSuccess(expireDate);
         }
 
+        // Limit of use validation
         if (limitOfUseValue === '') {
             setError(limitOfUse, 'Limit of use is required');
         } else if (isNaN(limitOfUseValue) || limitOfUseValue <= 0) {
@@ -175,6 +196,7 @@
             setSuccess(limitOfUse);
         }
 
+        // Discount amount validation
         if (discountAmountValue === '') {
             setError(discountAmount, 'Discount amount is required');
         } else if (isNaN(discountAmountValue) || discountAmountValue <= 0) {
@@ -183,23 +205,35 @@
             setSuccess(discountAmount);
         }
 
+        // Max amount validation
         if (maxAmountValue === '') {
-            setError(maxAmount, 'maxAmount date is required');
+            setError(maxAmount, 'Max amount is required');
         } else {
             setSuccess(maxAmount);
         }
+
+        // Minimum purchase amount validation
+        if (minimumPurchaseAmountValue === '') {
+            setError(minimumPurchaseAmount, 'Minimum purchase amount is required');
+        } else if (isNaN(minimumPurchaseAmountValue) || minimumPurchaseAmountValue <= 0) {
+            setError(minimumPurchaseAmount, 'Minimum purchase amount must be a positive number');
+        } else {
+            setSuccess(minimumPurchaseAmount);
+        }
     };
 
+    // Validation check to ensure all fields are valid
     const isValid = () => {
         return name.parentElement.classList.contains('success') &&
                activationDate.parentElement.classList.contains('success') &&
                expireDate.parentElement.classList.contains('success') &&
                limitOfUse.parentElement.classList.contains('success') &&
-               limitOfUse.parentElement.classList.contains('success') &&
                maxAmount.parentElement.classList.contains('success') &&
-               discountAmount.parentElement.classList.contains('success');
+               discountAmount.parentElement.classList.contains('success') &&
+               minimumPurchaseAmount.parentElement.classList.contains('success');
     };
 
+    // Functions for setting error and success states
     const setError = (element, message) => {
         const inputControl = element.parentElement;
         const errorDisplay = inputControl.querySelector('.error');
@@ -218,6 +252,7 @@
         inputControl.classList.remove('error');
     };
 
+    // Submit event handler
     form.addEventListener('submit', async e => {
         e.preventDefault();
 
@@ -231,6 +266,7 @@
                 limitOfUse: limitOfUse.value,
                 maxAmount: maxAmount.value,
                 discountAmount: discountAmount.value,
+                minimumPurchaseAmount: minimumPurchaseAmount.value,
                 id: couponId // Include coupon ID
             };
 
@@ -273,8 +309,6 @@
             }
         }
     });
-
-    
 });
 </script>
 

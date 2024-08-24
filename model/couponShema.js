@@ -37,7 +37,11 @@ const couponSchema = new mongoose.Schema({
     },
     maxDiscountAmount : {
         type : Number
-    }
+    },
+    minimumPurchaseAmount: {
+        type: Number,
+        default: 0, // Default to 0 if not specified
+    },
 })
 
 const Coupon = mongoose.model("coupons",couponSchema);

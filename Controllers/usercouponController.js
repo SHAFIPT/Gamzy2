@@ -74,8 +74,8 @@ const applyCoupon = async (req, res) => {
         // console.log('This is orderSubtotal:', orderSubtotal);
 
         // Check if the subtotal is eligible for the coupon
-        if (orderSubtotal < 500) {
-            return res.status(400).json({ message: 'Coupon is only valid for orders over ₹500' });
+        if (orderSubtotal < coupon.minimumPurchaseAmount) {
+            return res.status(400).json({ message: `Coupon is only valid for orders over ₹${coupon.minimumPurchaseAmount}` });
         }
 
         // Calculate the discount as a percentage

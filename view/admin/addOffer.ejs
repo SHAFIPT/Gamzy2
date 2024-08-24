@@ -261,132 +261,133 @@ document.getElementById('offer-type').addEventListener('change', async function(
 
   </script>
 <script>
-  $(document).ready(function() {
+  document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('form');
     const name = document.getElementById('name');
     const activationDate = document.getElementById('activation-date');
     const expireDate = document.getElementById('expire-date');
     const discountAmount = document.getElementById('discount-amount');
-    const offerTypeBtn = document.getElementById('offer-type-btn');
-    const offerTypeMenu = document.getElementById('offer-type-menu');
     const offerTypeInput = document.getElementById('offer-type');
+    const selectionContainer = document.getElementById('selection-container');
 
-    form.addEventListener('submit', async e => {
-  e.preventDefault();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  validateInputs();
+      if (validateInputs()) {
+        const offerType = offerTypeInput.value;
+        const selectedItems = Array.from(document.querySelectorAll('#selection-container input:checked')).map(checkbox => checkbox.value);
+        
+        const formData = {
+          name: name.value.trim(),
+          activationDate: activationDate.value,
+          expireDate: expireDate.value,
+          discountAmount: discountAmount.value,
+          offerType: offerType,
+          applicableTo: selectedItems
+        };
 
-  if (isValid()) {
-    // Collect selected products or categories based on offer type
-    const offerType = offerTypeInput.value;
-    const selectedItems = offerType === 'product'
-      ? Array.from(document.querySelectorAll('#product-checkbox-container input:checked')).map(checkbox => checkbox.value)
-      : Array.from(document.querySelectorAll('#category-checkbox-container input:checked')).map(checkbox => checkbox.value);
+        try {
+          const response = await fetch('/admin/addOffer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
 
-    const formData = {
-      name: name.value.trim(),
-      activationDate: activationDate.value,
-      expireDate: expireDate.value,
-      discountAmount: discountAmount.value,
-      offerType: offerTypeInput.value,
-      applicableTo: selectedItems  // Add selected items here
-    };
+          const result = await response.json();
 
-    try {
-      const response = await fetch('/admin/addOffer', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        Swal.fire({
-          title: 'Success',
-          text: result.message,
-          icon: 'success',
-          confirmButtonText: 'OK'
-        }).then(() => {
-          window.location.href = '/admin/offerManage'; // Adjust the redirect URL as needed
-        });
-      } else {
-        Swal.fire({
-          title: 'Error',
-          text: result.message,
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
+          if (response.ok) {
+            Swal.fire({
+              title: 'Success',
+              text: result.message,
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              window.location.href = '/admin/offerManage';
+            });
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: result.message,
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        } catch (error) {
+          console.error('Error during fetch:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'An error occurred. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       }
-    } catch (error) {
-      console.error('Error during fetch:', error);
-      Swal.fire({
-        title: 'Error',
-        text: 'An error occurred. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'OK'
-      });
-    }
-  }
-});
-
-    const isValid = () => {
-      return name.parentElement.classList.contains('success') &&
-        activationDate.parentElement.classList.contains('success') &&
-        expireDate.parentElement.classList.contains('success') &&
-        discountAmount.parentElement.classList.contains('success') &&
-        offerTypeInput.value !== '';
-    };
-
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
-
-      errorDisplay.innerText = message;
-      inputControl.classList.add('error');
-      inputControl.classList.remove('success');
-    };
-
-    const setSuccess = element => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('success');
-      inputControl.classList.remove('error');
-    };
+    });
 
     const validateInputs = () => {
       const nameValue = name.value.trim();
-      const activationDateValue = activationDate.value.trim();
-      const expireDateValue = expireDate.value.trim();
+      const activationDateValue = new Date(activationDate.value);
+      const expireDateValue = new Date(expireDate.value);
       const discountAmountValue = discountAmount.value.trim();
+      const offerTypeValue = offerTypeInput.value;
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      let isValid = true;
 
-      if (nameValue === '') {
+      if (!nameValue) {
         setError(name, 'Offer name is required');
+        isValid = false;
       } else {
         setSuccess(name);
       }
 
-      if (activationDateValue === '') {
-        setError(activationDate, 'Activation date is required');
+      if (isNaN(activationDateValue.getTime()) || activationDateValue < today) {
+        setError(activationDate, 'Activation date cannot be in the past or invalid');
+        isValid = false;
       } else {
         setSuccess(activationDate);
       }
 
-      if (expireDateValue === '') {
-        setError(expireDate, 'Expire date is required');
+      if (isNaN(expireDateValue.getTime()) || expireDateValue <= activationDateValue) {
+        setError(expireDate, 'Expire date must be later than the activation date');
+        isValid = false;
       } else {
         setSuccess(expireDate);
       }
 
-      if (discountAmountValue === '' || isNaN(discountAmountValue)) {
-        setError(discountAmount, 'Discount amount is required and must be a number');
+      if (!discountAmountValue || isNaN(discountAmountValue)) {
+        setError(discountAmount, 'Discount amount must be a valid number');
+        isValid = false;
       } else {
         setSuccess(discountAmount);
       }
+
+      if (!offerTypeValue) {
+        setError(offerTypeInput, 'Offer type is required');
+        isValid = false;
+      } else {
+        setSuccess(offerTypeInput);
+      }
+
+      return isValid;
+    };
+
+    const setError = (element, message) => {
+      const errorDisplay = element.parentElement.querySelector('.error');
+      errorDisplay.innerText = message;
+      element.parentElement.classList.add('error');
+      element.parentElement.classList.remove('success');
+    };
+
+    const setSuccess = (element) => {
+      const errorDisplay = element.parentElement.querySelector('.error');
+      errorDisplay.innerText = '';
+      element.parentElement.classList.add('success');
+      element.parentElement.classList.remove('error');
     };
 
     $('.dropdown-item').click(function() {

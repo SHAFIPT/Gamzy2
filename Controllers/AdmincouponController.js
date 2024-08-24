@@ -31,7 +31,7 @@ const addCoupon = async (req,res) =>{
 const addCouponPage = async (req, res) => {
     try {
         // Extract data from the request body
-        const { name, activationDate, expireDate, limitOfUse, discountAmount ,maxAmount} = req.body;
+        const { name, activationDate, expireDate, limitOfUse, discountAmount ,maxAmount,minimumPurchaseAmount} = req.body;
 
         console.log(name);
         console.log(activationDate);
@@ -39,6 +39,7 @@ const addCouponPage = async (req, res) => {
         console.log(limitOfUse);
         console.log(discountAmount);
         console.log(maxAmount);
+        console.log("This coupon max:",minimumPurchaseAmount);
 
         // Generate a random number
         const randomNumber = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit number
@@ -57,7 +58,8 @@ const addCouponPage = async (req, res) => {
             discount: discountAmount,
             couponCode: couponCode,
             limitOfUse,
-            maxDiscountAmount:maxAmount
+            maxDiscountAmount:maxAmount,
+            minimumPurchaseAmount
 
              // Set the generated coupon code
         });

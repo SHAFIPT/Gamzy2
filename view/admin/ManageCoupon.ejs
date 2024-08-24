@@ -152,6 +152,7 @@
                         <th scope="col">Limit Of Use </th>
                         <th scope="col">Discount Amount</th>
                         <th scope="col">Max Amount</th>
+                        <th scope="col">MinimumPurchaseAmount</th>
                         <th scope="col">Actions</th> <!-- Added Actions column -->
                     </tr>
                 </thead>
@@ -165,6 +166,7 @@
                             <td><%= coupon.limitOfUse %></td>
                             <td><%= coupon.discount %>%</td>
                             <td><%= coupon.maxDiscountAmount %></td>
+                            <td><%= coupon.minimumPurchaseAmount %></td>
                           
                             <td>
                                 <a href="/admin/editCoupon/<%= coupon._id %>" class="btn btn-warning btn-sm">Edit</a>
