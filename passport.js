@@ -14,7 +14,7 @@ passport.deserializeUser((user, done) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/user/GoogleAuth", // Ensure this URL matches your route
+    callbackURL: "https://gamzy.shop/user/GoogleAuth", // Ensure this URL matches your route
     passReqToCallback: true
 }, async (request, accessToken, refreshToken, profile, done) =>{
     try {

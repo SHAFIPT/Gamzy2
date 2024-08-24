@@ -302,7 +302,7 @@ const forgotPassword = async (req, res) => {
         await user.save();
 
         // Send email with password reset link
-        const resetURL = `http://localhost:3000/user/resetPassword/${resetToken}`;
+        const resetURL = `https://gamzy.shop/user/resetPassword/${resetToken}`;
         
         // Configure nodemailer transport and send the email
         let transporter = nodemailer.createTransport({
