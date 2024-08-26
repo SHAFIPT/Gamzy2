@@ -126,7 +126,7 @@
           </div>
           <div class="row tm-edit-product-row">
             <div class="col-xl-12 col-lg-12 col-md-12">
-                <form action="/admin/editOffer/<%= offer._id %>" class="tm-edit-product-form" id="form" method="PUT">
+                <form action="/admin/editOffer" class="tm-edit-product-form" id="form" method="PUT">
                     <input type="hidden" name="_id" value="<%= offer._id %>">
                     <div class="form-group mb-3">
                         <label for="name">Offer Name</label>
@@ -281,7 +281,9 @@
     const discountAmount = document.getElementById('discount-amount');
     const offerTypeInput = document.getElementById('offer-type');
     const selectionContainer = document.getElementById('selection-container');
-
+    const offerId = document.querySelector('input[name="_id"]').value; // Get the offer ID
+    console.log("This is offerId :",offerId);
+    
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -301,8 +303,8 @@
         
 
         try {
-          const response = await fetch('/admin/editOffer', {
-            method: 'POST',
+          const response = await fetch(`/admin/editOffer/${offerId}`, {
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
