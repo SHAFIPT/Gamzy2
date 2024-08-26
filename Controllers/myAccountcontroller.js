@@ -556,7 +556,7 @@ const downloadOrderPdf = async (req, res) => {
 
     doc.moveDown();
 
-    // Product Details
+    // Product Details for Delivered Products
     doc.fontSize(16).text('Delivered Products', { underline: true });
     doc.moveDown();
 
