@@ -297,9 +297,11 @@
           offerType: offerType,
           applicableTo: selectedItems
         };
+        console.log("This is formData :",formData);
+        
 
         try {
-          const response = await fetch('/admin/addOffer', {
+          const response = await fetch('/admin/editOffer', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
