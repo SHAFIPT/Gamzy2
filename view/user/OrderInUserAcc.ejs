@@ -642,8 +642,10 @@
                                         </td>
                                         <td><%= product.quantity %></td>
                                         <td>₹<%= (product.price * product.quantity).toFixed(2) %></td>
-                                        <td>
-                                            <% if (product.returnStatus === 'Requested') { %>
+                                     <td>
+                                            <% if (order.paymentStatus === 'Pending') { %>
+                                                <!-- Hide Cancel button if paymentStatus is Pending -->
+                                            <% } else if (product.returnStatus === 'Requested') { %>
                                                 <!-- No buttons when return status is Requested -->
                                             <% } else if (product.status === 'Delivered' && !product.returnStatus) { %>
                                                 <a href="/return-order/<%= order._id %>" class="btn btn-warning btn-lg custom-btn">Return</a>
@@ -658,7 +660,9 @@
                                             <% } %>
                                         </td>
                                         <td>
-                                            <% if (product.returnStatus === 'Requested') { %>
+                                            <% if (order.paymentStatus === 'Pending') { %>
+                                                <span class="status-pending-payment">Your payment status is pending</span>
+                                            <% } else if (product.returnStatus === 'Requested') { %>
                                                 <span class="status-return-requested">Return Requested</span>
                                             <% } else if (product.status === 'Canceled') { %>
                                                 <span class="status-canceled">Canceled</span>
@@ -681,12 +685,13 @@
                             </tbody>
                         </table>
 
-             
-                        <div class="download-pdf-container">
-    <a href="/user/download-orders-pdf/<%= order._id %>" class="btn-download-pdf">
-        <i class="fas fa-file-pdf"></i> Download PDF
-    </a>
-</div>   
+                        <% const hasDeliveredProduct = order.products.some(product => product.status === 'Delivered'); %>
+                            <% if (hasDeliveredProduct) { %>
+                                <div class="download-pdf-container">
+                                    <a href="/user/download-orders-pdf/<%= order._id %>" class="btn-download-pdf">
+                                        <i class="fas fa-file-pdf"></i> Download PDF
+                                    </a>
+                                </div>  
                      
                     </div>
                     <% }); %>

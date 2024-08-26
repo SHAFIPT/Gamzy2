@@ -225,7 +225,7 @@ const orderCancel = async (req, res) => {
         console.log("This is my refundAmount :",refundAmount);
         
 
-        if (order.PaymentMethod === 'Razorpay' && order.paymentStatus === 'Paid') {
+        if (order.PaymentMethod === 'Razorpay') {
             // Handle Razorpay refund
             const razorpayRefund = await razerpay.refunds.create({
                 payment_id: order.paymentId, // Payment ID from Razorpay for the original transaction
