@@ -484,15 +484,23 @@ const removeWishList = async (req,res)=>{
     }
 };
 
-const downloadOrderPdf = async (req,res)=>{
+const downloadOrderPdf = async (req, res) => {
     const order = await Order.findOne({ _id: req.params.orderId }).populate('products.productId');
 
     if (!order) {
         return res.status(404).send('Order not found');
     }
 
+    // Filter only delivered products
+    const deliveredProducts = order.products.filter(product => product.status === 'Delivered');
+
+    // If no products are delivered, return an error
+    if (deliveredProducts.length === 0) {
+        return res.status(400).send('No delivered products found in this order');
+    }
+
     const doc = new PDFDocument({ margin: 50 });
-    const filename = `Order_${order.orderId}.pdf`;
+    const filename = `Order_${order.orderId}_Delivered.pdf`;
 
     res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
     res.setHeader('Content-Type', 'application/pdf');
@@ -514,21 +522,22 @@ const downloadOrderPdf = async (req,res)=>{
 
     // Add company name (replace with your own)
     doc.fontSize(20).text('GAMZY', 50, 57)
-    //    .fontSize(10).text('123 Business Street, City, Country', 50, 80)
        .text('Phone: +91 9876546788 | Email: Gamzy@gamil.com', 50, 95);
 
     doc.moveDown();
 
     // Order Summary
-    doc.fontSize(16).text('Order Summary', { underline: true });
+    doc.fontSize(16).text('Delivered Products Summary', { underline: true });
     doc.moveDown();
 
+    const totalDeliveredAmount = deliveredProducts.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+
     createTable(
-        ['Order ID', 'Order Date', 'Total Amount', 'Payment Status'],
+        ['Order ID', 'Order Date', 'Total Amount (Delivered)', 'Payment Status'],
         [[
             order.orderId,
             new Date(order.orderDate).toLocaleDateString(),
-            `₹${order.totalAmount.toFixed(2)}`,
+            `₹${totalDeliveredAmount.toFixed(2)}`,
             order.paymentStatus
         ]]
     );
@@ -548,10 +557,10 @@ const downloadOrderPdf = async (req,res)=>{
     doc.moveDown();
 
     // Product Details
-    doc.fontSize(16).text('Products', { underline: true });
+    doc.fontSize(16).text('Delivered Products', { underline: true });
     doc.moveDown();
 
-    const productRows = order.products.map(product => {
+    const productRows = deliveredProducts.map(product => {
         const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
         return [
             `${product.productId.productname} (${variant.color})`,
@@ -569,7 +578,7 @@ const downloadOrderPdf = async (req,res)=>{
     doc.moveDown();
 
     // Total
-    doc.fontSize(12).text(`Grand Total: ₹${order.totalAmount.toFixed(2)}`, { align: 'right' });
+    doc.fontSize(12).text(`Total (Delivered Products): ₹${totalDeliveredAmount.toFixed(2)}`, { align: 'right' });
 
     // Footer
     const pageCount = doc.bufferedPageRange().count;

@@ -237,6 +237,8 @@ const loadViewPage = async (req,res) =>{
 
 const retryPayment = async(req,res) =>{
     const { orderId } = req.params;
+    console.log("This is order id :",orderId);
+    
 
     try {
         // Fetch the order details
