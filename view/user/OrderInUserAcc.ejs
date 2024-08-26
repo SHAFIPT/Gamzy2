@@ -686,15 +686,15 @@
                         </table>
 
                         <% const hasDeliveredProduct = order.products.some(product => product.status === 'Delivered'); %>
-                            <% if (hasDeliveredProduct) { %>
-                                <div class="download-pdf-container">
-                                    <a href="/user/download-orders-pdf/<%= order._id %>" class="btn-download-pdf">
-                                        <i class="fas fa-file-pdf"></i> Download PDF
-                                    </a>
-                                </div>  
-                     
-                    </div>
-                    <% }); %>
+<% if (hasDeliveredProduct) { %>
+    <div class="download-pdf-container">
+        <a href="/user/download-orders-pdf/<%= order._id %>" class="btn-download-pdf">
+            <i class="fas fa-file-pdf"></i> Download PDF
+        </a>
+    </div>  
+<% } %>
+</div>
+<% }); %> <
 
                     <!-- Pagination controls -->
                     <div class="pagination-controls mt-4">
