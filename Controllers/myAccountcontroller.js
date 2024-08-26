@@ -485,115 +485,118 @@ const removeWishList = async (req,res)=>{
 };
 
 const downloadOrderPdf = async (req, res) => {
-    const order = await Order.findOne({ _id: req.params.orderId }).populate('products.productId');
+       // Fetch order details with populated product data
+       const order = await Order.findOne({ _id: req.params.orderId }).populate('products.productId');
 
-    if (!order) {
-        return res.status(404).send('Order not found');
-    }
-
-    // Filter only delivered products
-    const deliveredProducts = order.products.filter(product => product.status === 'Delivered');
-
-    // If no products are delivered, return an error
-    if (deliveredProducts.length === 0) {
-        return res.status(400).send('No delivered products found in this order');
-    }
-
-    const doc = new PDFDocument({ margin: 50 });
-    const filename = `Order_${order.orderId}_Delivered.pdf`;
-
-    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-    res.setHeader('Content-Type', 'application/pdf');
-
-    doc.pipe(res);
-
-    // Helper function to create a table
-    const createTable = (headers, rows) => {
-        const table = {
-            headers: headers,
-            rows: rows
-        };
-
-        doc.table(table, {
-            prepareHeader: () => doc.font('Helvetica-Bold').fontSize(10),
-            prepareRow: (row, i) => doc.font('Helvetica').fontSize(10)
-        });
-    };
-
-    // Add company name (replace with your own)
-    doc.fontSize(20).text('GAMZY', 50, 57)
-       .text('Phone: +91 9876546788 | Email: Gamzy@gamil.com', 50, 95);
-
-    doc.moveDown();
-
-    // Order Summary
-    doc.fontSize(16).text('Delivered Products Summary', { underline: true });
-    doc.moveDown();
-
-    const totalDeliveredAmount = deliveredProducts.reduce((sum, product) => sum + (product.price * product.quantity), 0);
-
-    createTable(
-        ['Order ID', 'Order Date', 'Total Amount (Delivered)', 'Payment Status'],
-        [[
-            order.orderId,
-            new Date(order.orderDate).toLocaleDateString(),
-            `₹${totalDeliveredAmount.toFixed(2)}`,
-            order.paymentStatus
-        ]]
-    );
-
-    doc.moveDown();
-
-    // Shipping Address
-    doc.fontSize(16).text('Shipping Address', { underline: true });
-    doc.moveDown();
-
-    doc.fontSize(10).text(`${order.address.name}`);
-    doc.text(`${order.address.address},`);
-    doc.text(`${order.address.Landmark},`);
-    doc.text(`${order.address.city}, ${order.address.state} - ${order.address.pincode}`);
-    doc.text(`Phone: +${order.address.number}`);
-
-    doc.moveDown();
-
-    // Product Details for Delivered Products
-    doc.fontSize(16).text('Delivered Products', { underline: true });
-    doc.moveDown();
-
-    const productRows = deliveredProducts.map(product => {
-        const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
-        return [
-            `${product.productId.productname} (${variant.color})`,
-            product.quantity,
-            `₹${product.price.toFixed(2)}`,
-            `₹${(product.price * product.quantity).toFixed(2)}`
-        ];
-    });
-
-    createTable(
-        ['Product', 'Quantity', 'Unit Price', 'Total'],
-        productRows
-    );
-
-    doc.moveDown();
-
-    // Total
-    doc.fontSize(12).text(`Total (Delivered Products): ₹${totalDeliveredAmount.toFixed(2)}`, { align: 'right' });
-
-    // Footer
-    const pageCount = doc.bufferedPageRange().count;
-    for (let i = 0; i < pageCount; i++) {
-        doc.switchToPage(i);
-        doc.fontSize(8).text(
-            `Page ${i + 1} of ${pageCount}`,
-            50,
-            doc.page.height - 50,
-            { align: 'center' }
-        );
-    }
-
-    doc.end();
-};
+       if (!order) {
+           return res.status(404).send('Order not found');
+       }
+   
+       // Filter products that have the status 'Delivered'
+       const deliveredProducts = order.products.filter(product => product.status === 'Delivered');
+   
+       // Return an error if no delivered products are found
+       if (deliveredProducts.length === 0) {
+           return res.status(400).send('No delivered products found in this order');
+       }
+   
+       // Set up PDF generation
+       const doc = new PDFDocument({ margin: 50 });
+       const filename = `Order_${order.orderId}_Delivered.pdf`;
+   
+       res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+       res.setHeader('Content-Type', 'application/pdf');
+   
+       doc.pipe(res);
+   
+       // Helper function to create a table
+       const createTable = (headers, rows) => {
+           const table = {
+               headers: headers,
+               rows: rows
+           };
+   
+           doc.table(table, {
+               prepareHeader: () => doc.font('Helvetica-Bold').fontSize(10),
+               prepareRow: (row, i) => doc.font('Helvetica').fontSize(10)
+           });
+       };
+   
+       // Add company name (replace with your own)
+       doc.fontSize(20).text('GAMZY', 50, 57)
+          .text('Phone: +91 9876546788 | Email: Gamzy@gamil.com', 50, 95);
+   
+       doc.moveDown();
+   
+       // Order Summary
+       doc.fontSize(16).text('Delivered Products Summary', { underline: true });
+       doc.moveDown();
+   
+       const totalDeliveredAmount = deliveredProducts.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+   
+       createTable(
+           ['Order ID', 'Order Date', 'Total Amount (Delivered)', 'Payment Status'],
+           [[
+               order.orderId,
+               new Date(order.orderDate).toLocaleDateString(),
+               `₹${totalDeliveredAmount.toFixed(2)}`,
+               order.paymentStatus
+           ]]
+       );
+   
+       doc.moveDown();
+   
+       // Shipping Address
+       doc.fontSize(16).text('Shipping Address', { underline: true });
+       doc.moveDown();
+   
+       doc.fontSize(10).text(`${order.address.name}`);
+       doc.text(`${order.address.address},`);
+       doc.text(`${order.address.Landmark},`);
+       doc.text(`${order.address.city}, ${order.address.state} - ${order.address.pincode}`);
+       doc.text(`Phone: +${order.address.number}`);
+   
+       doc.moveDown();
+   
+       // Product Details for Delivered Products
+       doc.fontSize(16).text('Delivered Products', { underline: true });
+       doc.moveDown();
+   
+       const productRows = deliveredProducts.map(product => {
+           const variant = product.productId.variants.find(v => v._id.toString() === product.variantId.toString());
+           return [
+               `${product.productId.productname} (${variant.color})`,
+               product.quantity,
+               `₹${product.price.toFixed(2)}`,
+               `₹${(product.price * product.quantity).toFixed(2)}`
+           ];
+       });
+   
+       createTable(
+           ['Product', 'Quantity', 'Unit Price', 'Total'],
+           productRows
+       );
+   
+       doc.moveDown();
+   
+       // Total
+       doc.fontSize(12).text(`Total (Delivered Products): ₹${totalDeliveredAmount.toFixed(2)}`, { align: 'right' });
+   
+       // Footer
+       const pageCount = doc.bufferedPageRange().count;
+       for (let i = 0; i < pageCount; i++) {
+           doc.switchToPage(i);
+           doc.fontSize(8).text(
+               `Page ${i + 1} of ${pageCount}`,
+               50,
+               doc.page.height - 50,
+               { align: 'center' }
+           );
+       }
+   
+       doc.end();
+   };
+   
 
 module.exports = {
     loadMyAccount,
