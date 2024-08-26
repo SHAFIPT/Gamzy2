@@ -219,7 +219,13 @@ const orderCancel = async (req, res) => {
         const productCouponDiscount = order.couponDiscount * productProportion;
         const refundAmount = (orderItem.price * orderItem.quantity) - productCouponDiscount;
 
-        if (order.paymentMethod === 'Razorpay' && order.paymentStatus === 'Paid') {
+        console.log("This is my totalOrderValue :",totalOrderValue);
+        console.log("This is my productProportion :",productProportion);
+        console.log("This is my productCouponDiscount :",productCouponDiscount);
+        console.log("This is my refundAmount :",refundAmount);
+        
+
+        if (order.PaymentMethod === 'Razorpay' && order.paymentStatus === 'Paid') {
             // Handle Razorpay refund
             const razorpayRefund = await razerpay.refunds.create({
                 payment_id: order.paymentId, // Payment ID from Razorpay for the original transaction
