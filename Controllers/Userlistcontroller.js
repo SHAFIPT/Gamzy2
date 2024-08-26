@@ -350,8 +350,7 @@ const removeCart = async (req,res)=>{
     }
 }
 
-
-const getQuantity = async(req,res)=>{
+const getQuantity = async (req, res) => {
     try {
         if (!req.session.user) {
             return res.status(401).json({ error: 'User not logged in' });
@@ -364,9 +363,10 @@ const getQuantity = async(req,res)=>{
             return res.json({ quantity: 0 });
         }
 
-        const quantity = cart.products.reduce((sum, product) => sum + product.quantity, 0);
+        // Get the number of distinct products in the cart
+        const distinctProductCount = cart.products.length;
 
-        res.json({ quantity });
+        res.json({ quantity: distinctProductCount });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });

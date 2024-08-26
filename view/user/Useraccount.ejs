@@ -552,10 +552,7 @@ document.getElementById('savePasswordChangesBtn').addEventListener('click', func
             icon: 'success',
             title: 'Password changed successfully!',
             text: 'Your password has been updated.',
-        }).then(() => {
-            // You can also manually close the modal here if needed
-            $('#changePasswordModal').modal('hide');
-        });
+        })
     }
 });
 </script>
@@ -711,7 +708,8 @@ document.querySelectorAll('.input-group-text').forEach((element) => {
         });
     
         // Function for changing password
-        document.getElementById('savePasswordChangesBtn').addEventListener('click', async () => {
+        document.getElementById('savePasswordChangesBtn').addEventListener('click', async (e) => {
+            e.preventDefault()
             validatePasswordChangeInputs();
                 const oldPassword = document.getElementById('oldPassword').value;
                 const newPassword = document.getElementById('newPassword').value;

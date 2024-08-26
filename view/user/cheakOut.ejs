@@ -1101,6 +1101,13 @@ rel="stylesheet">
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
+                                    <label for="wallet">
+                                        Wallet (Balance: ₹<span id="wallet-balance"><%= walletBalance %></span>)
+                                        <input type="checkbox" id="wallet" class="payment-method">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="checkout__input__checkbox">
                                     <input type="hidden" id="total-amount-hidden" value="<%= cart && cart.products.length > 0 ? cart.products.reduce((sum, product) => {
                                         const price = product.discountedPrice ? product.discountedPrice : product.productId.price;
                                         return sum + price * product.quantity;
@@ -1913,6 +1920,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const couponDiscountElement = document.getElementById("couponDiscount");
     const shippingChargeElement = document.getElementById("shippingCharge");
     const totalElement = document.getElementById("total");
+    const walletBalanceElement = document.getElementById("wallet-balance");
 
     paymentMethods.forEach(method => {
         method.addEventListener("change", function() {
@@ -1922,6 +1930,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
             placeOrderButton.disabled = !Array.from(paymentMethods).some(method => method.checked);
+
+            // If wallet is selected, check if the balance is sufficient
+            if (method.id === 'wallet') {
+                const walletBalance = parseFloat(walletBalanceElement.textContent) || 0;
+                const totalAmount = parseFloat(totalElement.textContent.replace('₹', '')) || 0;
+                if (walletBalance < totalAmount) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Insufficient Balance',
+                        text: 'Your wallet balance is not enough to complete this purchase.',
+                        customClass: {
+                        popup: 'small-modal'
+                    }
+                    });
+                    method.checked = false;
+                    placeOrderButton.disabled = true;
+                }
+            }
         });
     });
 
@@ -1933,7 +1959,10 @@ document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
                 icon: 'warning',
                 title: 'Missing Information',
-                text: 'Please select both an address and a payment method.'
+                text: 'Please select both an address and a payment method.',
+                customClass: {
+                    popup: 'small-modal'
+                  }
             });
             return;
         }
@@ -1942,6 +1971,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const couponDiscount = parseFloat(couponDiscountElement.textContent.replace('₹', '').replace('-', '')) || 0;
         const shippingCharge = parseFloat(shippingChargeElement.textContent.replace('₹', '')) || 0;
         const totalAmount = parseFloat(totalElement.textContent.replace('₹', '')) || 0;
+        const walletBalance = parseFloat(walletBalanceElement.textContent) || 0;
 
         const orderData = {
             PaymentMethod: selectedPaymentMethod,
@@ -1949,8 +1979,10 @@ document.addEventListener("DOMContentLoaded", function() {
             offerDiscount,
             couponDiscount,
             shippingCharge,
-            totalAmount
+            totalAmount,
+            walletBalance
         };
+
 
         fetch("/user/place-order", {
             method: "POST",
@@ -1962,11 +1994,14 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                if (selectedPaymentMethod === 'Cashondelivary') {
+                if (selectedPaymentMethod === 'Cashondelivary' || selectedPaymentMethod === 'wallet') {
                     Swal.fire({
                         icon: 'success',
                         title: 'Order Placed',
-                        text: 'Your order has been placed successfully!'
+                        text: 'Your order has been placed successfully!',
+                        customClass: {
+                            popup: 'small-modal'
+                             }
                     }).then(() => {
                         window.location.href = "/user/order";
                     });

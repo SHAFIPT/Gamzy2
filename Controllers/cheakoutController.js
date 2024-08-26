@@ -1,7 +1,8 @@
 const User = require('../model/UserModel');
 const  Address = require('../model/addressShema');
 const Cart = require('../model/cartShema');
-const  Offer = require('../model/offerModal')
+const  Offer = require('../model/offerModal');
+const Wallet = require("../model/walletSchema")
 
 const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
@@ -33,6 +34,11 @@ const loadCheakoutPage = async (req, res) => {
                     products: []
                 };
             }
+
+              // Fetch wallet balance
+              const wallet = await Wallet.findOne({ user: userId });
+              const walletBalance = wallet ? wallet.balance : 0;
+  
 
             // Fetch all active offers
             const offers = await Offer.find({ active: true });
@@ -76,6 +82,7 @@ const loadCheakoutPage = async (req, res) => {
                 addresses, 
                 cart, 
                 user,
+                walletBalance,
                 subtotal: subtotal.toFixed(2),
                 totalDiscount: totalDiscount.toFixed(2),
                 shippingCharge: shippingCharge.toFixed(2),

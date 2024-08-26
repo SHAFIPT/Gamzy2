@@ -1,5 +1,7 @@
 const Address = require('../model/addressShema');
 const Order = require('../model/ordreModel');
+const Wallet = require('../model/walletSchema')
+const User = require('../model/UserModel');
 const Product = require('../model/productModel');
 const Cart = require('../model/cartShema');
 const Razorpay = require('razorpay');
@@ -51,13 +53,27 @@ const razerpay = new Razorpay({
     key_id: process.env.key_id,
     key_secret: process.env.key_secret
 });
+
 const orderSummory = async (req, res) => {
     try {
         const userId = req.session.user;
 
+        console.log("This is userId :",userId);
+        
+
         if (!userId) {
             return res.status(401).json({ success: false, message: "User not authenticated" });
         }
+
+        const user = await User.findById(userId);
+
+        console.log("This is user :",user);
+        
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+
 
         const cart = await Cart.findOne({ userId }).populate({
             path: 'products.productId',
@@ -67,11 +83,18 @@ const orderSummory = async (req, res) => {
             ]
         });
 
+        console.log("this is cart :",cart);
+        
+
         if (!cart) {
             return res.status(404).json({ success: false, message: "Cart not found" });
         }
 
-        const { PaymentMethod, addressId, couponDiscount } = req.body;
+        const { PaymentMethod, addressId, couponDiscount ,walletBalance} = req.body;
+
+        console.log("This is PaymentMethod :",PaymentMethod);
+        console.log("This is walletBalance :",walletBalance);
+        
 
         if (!PaymentMethod || !addressId || couponDiscount === undefined) {
             return res.status(400).json({ success: false, message: "Missing required fields" });
@@ -136,8 +159,34 @@ const orderSummory = async (req, res) => {
         const subtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
         
         const shippingCharge = subtotal < 500 ? 50 : 0;
-        const totalAmount = subtotal - couponDiscount + shippingCharge;
+        let totalAmount = subtotal - couponDiscount + shippingCharge;
 
+        
+        // Fetch the wallet data from the Wallet schema
+        const wallet = await Wallet.findOne({ user: userId });
+
+        let walletAmountUsed = 0;
+        if (PaymentMethod === 'wallet') {
+            if (wallet.balance < totalAmount) {
+                return res.status(400).json({ success: false, message: "Insufficient wallet balance" });
+            }
+
+            walletAmountUsed = totalAmount;
+            totalAmount = 0;
+
+            // Deduct the wallet balance
+            wallet.balance -= walletAmountUsed;
+            
+            // Add transaction history
+            wallet.transactions.push({
+                amount: walletAmountUsed,
+                type: 'debit',  // or 'payment'
+                entry: 'Order Payment',
+                date: new Date(),
+            });
+
+            await wallet.save();
+        }
 
         if (PaymentMethod === 'Cashondelivary' && totalAmount > 1000) {
             return res.status(400).json({ success: false, message: "Cash on Delivery is only available for orders below 1000" });
@@ -152,6 +201,7 @@ const orderSummory = async (req, res) => {
             shippingCharge,
             offerDiscount: totalDiscount,
             couponDiscount,
+            walletAmountUsed,
             address: {
                 name: `${address.Firstname} ${address.Lastname}`,
                 number: address.number,
@@ -177,7 +227,7 @@ const orderSummory = async (req, res) => {
             }
         };
 
-        if (PaymentMethod === 'Cashondelivary') {
+        if (PaymentMethod === 'Cashondelivary' || PaymentMethod === 'wallet') {
             const order = new Order(orderData);
             await order.save();
 

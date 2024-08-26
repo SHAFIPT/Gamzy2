@@ -95,6 +95,8 @@ const loadhome = async (req, res) => {
 const loadlogin = async (req, res) => {
     try {
         const name = req.session.userName || null; // Retrieve name from session if available
+        // console.log("This is name :",name);
+        
         res.render('login', { name: name });
     } catch (error) {
         console.log(error);

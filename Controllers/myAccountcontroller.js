@@ -340,6 +340,11 @@ const updatePassword = async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;
 
+        console.log("This is oldPassword :",oldPassword);
+        console.log("This is newPassword :",newPassword);
+        
+        
+
         const userId = req.session.user;
 
         if (!userId) {
