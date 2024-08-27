@@ -50,7 +50,23 @@ body {
     cursor: pointer;
 }
 
+.small-modal {
+      width: 300px !important;
+      font-size: 0.8em !important;
+    }
 
+    .small-modal .swal2-title {
+      font-size: 1.5em !important;
+    }
+
+    .small-modal .swal2-content {
+      font-size: 1em !important;
+    }
+
+    .small-modal .swal2-confirm {
+      font-size: 0.9em !important;
+      padding: 0.5em 1em !important;
+    }
 </style>
 
 </head>
@@ -139,7 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         title: 'Success',
                         text: result.message,
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        customClass: {
+                    popup: 'small-modal'
+                  }
                     }).then(() => {
                         window.location.href = '/user/verifyOTP';
                     });
@@ -148,7 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         title: 'Error',
                         text: result.message,
                         icon: 'error',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        customClass: {
+                    popup: 'small-modal'
+                  }
                     });
                 }
             } catch (error) {
@@ -259,112 +281,5 @@ document.addEventListener('DOMContentLoaded', () => {
         this.textContent = type === 'password' ? '👁️‍🗨️' : '👁️';
     });
   </script>
-
-
-
-<!-- 
-<script>
-
-    const form = document.getElementById('form');
-    const name = document.getElementById('name');
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-        const phone = document.getElementById('phone');
-        
-    
-        form.addEventListener('submit', e => {
-          e.preventDefault();
-    
-          validateInputs();
-          if (isValid()) {
-            form.submit();
-      }
-    });
-    
-    const isValid = ()=>{
-        return name.parentElement.classList.contains('success')&&
-        email.parentElement.classList.contains('success')&&
-        password.parentElement.classList.contains('success')&&
-        phone.parentElement.classList.contains('success')
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
-    
-      errorDisplay.innerText = message;
-      inputControl.classList.add('error');
-      inputControl.classList.remove('success')
-    }
-    const setSuccess = element => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
-    
-      errorDisplay.innerText = '';
-      inputControl.classList.add('success');
-      inputControl.classList.remove('error');
-    };
-    const isValidEmail = email => {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
-    }
-    const isValidPhoneNumber = phone => {
-    // Remove any non-numeric characters
-    const numericPhone = phone.replace(/\D/g, '');
-
-    // Check if the remaining string consists of exactly 10 digits
-    // and the first digit is not '0'
-    return /^[1-9]\d{9}$/.test(numericPhone);
-}
-
-const isvalidUsername = name => {
-    const re = /^[a-zA-Z0-9-+()]*$/; // Regular expression to allow alphanumeric characters, hyphens, plus signs, and parentheses
-    return re.test(name);
-};
-    const validateInputs = () => {
-        const namevalue = name.value.trim();
-        const emailvalue = email.value.trim();
-        const passwordvalue = password.value.trim();
-        const phonevalue = phone.value.trim();
-
-
-
-
-        if(emailvalue === '') { 
-          setError(email, 'Email is required');
-      } else if (!isValidEmail(emailvalue)) {
-          setError(email, 'Provide a valid email address');
-      } else {
-          setSuccess(email);
-      }
-      if (passwordvalue === '') {
-        setError(password, 'The password is required');
-      }
-      else{
-        setSuccess(password);
-      } 
-      
-      if (phonevalue === '') {
-        setError(phone, 'Phone number is required');
-    } else if (!isValidPhoneNumber(phonevalue)) {
-        if (/^\d{10}$/.test(phonevalue)) {
-            setError(phone, 'Phone number must not start with 0 and must be exactly 10 digits');
-        } else {
-            setError(phone, 'Phone number must be exactly 10 digits');
-        }
-    } else {
-        setSuccess(phone);
-    }
-     
-    if (namevalue === '') {
-    setError(name, 'Username is required');
-    } else if (!isvalidUsername(namevalue)) {
-    setError(name, 'The name does not contain special characters');
-    } else {
-    setSuccess(name);
-    }   
-    } 
-    
-     
-    </script>  -->
 
 <%- include('../layouts/footer.ejs') %>

@@ -165,21 +165,21 @@ const orderSummory = async (req, res) => {
         // Fetch the wallet data from the Wallet schema
         const wallet = await Wallet.findOne({ user: userId });
 
-        let walletAmountUsed = 0;
+        // let walletAmountUsed = 0;
         if (PaymentMethod === 'wallet') {
             if (wallet.balance < totalAmount) {
                 return res.status(400).json({ success: false, message: "Insufficient wallet balance" });
             }
 
-            walletAmountUsed = totalAmount;
-            totalAmount = 0;
+            // walletAmountUsed = totalAmount;
+            // totalAmount = 0;
 
             // Deduct the wallet balance
-            wallet.balance -= walletAmountUsed;
+            wallet.balance -= totalAmount;
             
             // Add transaction history
             wallet.transactions.push({
-                amount: walletAmountUsed,
+                amount: totalAmount,
                 type: 'debit',  // or 'payment'
                 entry: 'Order Payment',
                 date: new Date(),
@@ -201,7 +201,6 @@ const orderSummory = async (req, res) => {
             shippingCharge,
             offerDiscount: totalDiscount,
             couponDiscount,
-            walletAmountUsed,
             address: {
                 name: `${address.Firstname} ${address.Lastname}`,
                 number: address.number,
@@ -229,6 +228,7 @@ const orderSummory = async (req, res) => {
 
         if (PaymentMethod === 'Cashondelivary' || PaymentMethod === 'wallet') {
             const order = new Order(orderData);
+            order.paymentStatus = "Paid";
             await order.save();
 
             await updateProductQuantities();

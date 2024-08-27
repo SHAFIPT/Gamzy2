@@ -130,6 +130,24 @@ body {
     transform: translateY(-50%);
     cursor: pointer;
 }
+
+.small-modal {
+      width: 300px !important;
+      font-size: 0.8em !important;
+    }
+
+    .small-modal .swal2-title {
+      font-size: 1.5em !important;
+    }
+
+    .small-modal .swal2-content {
+      font-size: 1em !important;
+    }
+
+    .small-modal .swal2-confirm {
+      font-size: 0.9em !important;
+      padding: 0.5em 1em !important;
+    }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -233,7 +251,10 @@ form.addEventListener('submit', async e => {
                     title:'success',
                     text:result.message,
                     icon:'success',
-                    confirmTextButton:'OK'
+                    confirmTextButton:'OK',
+                    customClass: {
+                        popup: 'small-modal'
+                    }
                 }).then((result) => { 
                     window.location.href='/'
                 }).catch((err) => {
@@ -244,7 +265,10 @@ form.addEventListener('submit', async e => {
             title : 'error',
             text : result.message,
             icon  : 'error',
-            confirmTextButton : 'OK'
+            confirmTextButton : 'OK',
+            customClass: {
+                        popup: 'small-modal'
+                    }
           })
       }
 

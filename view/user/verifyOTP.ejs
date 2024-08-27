@@ -1,131 +1,4 @@
 <%- include('../layouts/userheader.ejs') %>
-<!-- 
-<style>
-body {
-  margin: 0;
-  color: #4b537b;
-  background: #61557d;
-  font: 600 16px/18px 'Open Sans', sans-serif;
-}
-</style>
-
-<div class="login-wrap">
-    <div class="login-html">
-        <label for="tab-2" class="tab">OTP Verification</label>
-        <div class="login-form">
-            <div class="otp-verification-htm">
-                <% if (typeof logoutmsg !== 'undefined' && logoutmsg) { %>
-                    <div class="alert alert-success">
-                        <%= logoutmsg %>
-                    </div>
-                <% } %>
-                <form id="form">
-                    <div class="group">
-                        <label for="otp" class="label">Enter OTP</label>
-                        <input id="otp" name="otp" type="text" class="input">
-                        <div class="error"></div>
-                    </div>
-                    <div class="group">
-                        <input type="submit" class="button" value="Verify OTP">
-                    </div>
-                    <div class="group">
-                        <p id="timer"></p>
-                    </div>
-                    <div class="group">
-                        <button id="resend-otp" type="button" class="button" disabled>Resend OTP</button>
-                    </div>
-                    <div class="hr"></div>
-                    <div class="foot-lnk">
-                        <a href="/user/signUp" style="color: rgb(241, 237, 237);">Back to Sign In</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    let timerElement = document.getElementById('timer');
-    let resendButton = document.getElementById('resend-otp');
-    let timeLeft = 30; // Time in seconds
-
-    function startTimer() {
-        let timer = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                timerElement.innerText = 'You can resend the OTP now.';
-                resendButton.disabled = false;
-            } else {
-                timerElement.innerText = `Resend OTP in ${timeLeft} seconds`;
-            }
-            timeLeft -= 1;
-        }, 1000);
-    }
-
-    resendButton.addEventListener('click', () => {
-        fetch('/user/resendOTP', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: '<%= email %>' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                timeLeft = 30; // Reset the timer
-                resendButton.disabled = true;
-                startTimer();
-            } else {
-                console.error('Failed to resend OTP');
-            }
-        });
-    });
-
-    document.getElementById('form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const otp = document.getElementById('otp').value;
-
-        try {
-            const response = await fetch('/user/verifyOTP', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ otp })
-            });
-            const result = await response.json();
-
-            if (response.ok) {
-                console.log(result.message)
-                Swal.fire({
-                    title: 'Success',
-                    text: result.message,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '/user/login';
-                });
-            } else {
-                Swal.fire({
-                    title: 'Error',
-                    text: result.message,
-                    icon: 'error',
-                    confirmButtonText: 'Try Again'
-                });
-            }
-        } catch (error) {
-            console.error('Error during OTP verification:', error);
-            Swal.fire({
-                title: 'Error',
-                text: 'Something went wrong. Please try again.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    });
-
-    // Start the timer initially
-    startTimer();
-</script> -->
 
 <style>
     body {
@@ -133,6 +6,24 @@ body {
         color: #4b537b;
         background: #61557d;
         font: 600 16px/18px 'Open Sans', sans-serif;
+    }
+    
+.small-modal {
+      width: 300px !important;
+      font-size: 0.8em !important;
+    }
+
+    .small-modal .swal2-title {
+      font-size: 1.5em !important;
+    }
+
+    .small-modal .swal2-content {
+      font-size: 1em !important;
+    }
+
+    .small-modal .swal2-confirm {
+      font-size: 0.9em !important;
+      padding: 0.5em 1em !important;
     }
 </style>
 
@@ -232,7 +123,10 @@ body {
                     title: 'Success',
                     text: result.message,
                     icon: 'success',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    customClass: {
+                    popup: 'small-modal'
+                  }
                 }).then(() => {
                     window.location.href = '/user/login';
                 });
@@ -241,7 +135,10 @@ body {
                     title: 'Error',
                     text: result.message,
                     icon: 'error',
-                    confirmButtonText: 'Try Again'
+                    confirmButtonText: 'Try Again',
+                    customClass: {
+                    popup: 'small-modal'
+                  }
                 });
             }
         } catch (error) {

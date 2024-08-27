@@ -168,7 +168,7 @@ const insertSignUp = async (req, res) => {
 
         await otpEntry.save();
 
-        res.status(200).json({message:'otp send successfully'})
+        res.status(200).json({message:'OTP send successfully'})
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         
@@ -197,7 +197,7 @@ const verifyLogin = async (req, res) => {
         const userData = await User.findOne({ email: email });
 
         if (!userData) {
-            return res.status(404).json({ message: 'Email and password are incorrect' });
+            return res.status(404).json({ message: 'Email is incorrect' });
         }
  
         if (userData.is_blocked) {
@@ -212,7 +212,7 @@ const verifyLogin = async (req, res) => {
 
             return res.status(200).json({ message: 'Login successful' });
         } else {
-            return res.status(404).json({ message: 'Email and password are incorrect' });
+            return res.status(404).json({ message: 'password is incorrect' });
         }
     } catch (error) {
         console.error('Error during login:', error);
