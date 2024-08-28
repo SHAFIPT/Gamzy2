@@ -312,6 +312,14 @@ input[type="number"] {
       font-size: 0.9em !important;
       padding: 0.5em 1em !important;
     }
+
+
+    .primary-btn.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+}
 </style>
 
 <body>
@@ -495,7 +503,9 @@ input[type="number"] {
                             }, 0).toFixed(2) : 0 %>
                         </span></span></li>
                     </ul>
-                    <a href="/user/cheakOut" class="primary-btn">Proceed to checkout</a>
+                    <a href="/user/cheakOut" class="primary-btn <%= (cart && cart[0] && cart[0].products.length > 0) ? '' : 'disabled' %>">
+                        Proceed to checkout
+                    </a>
                 </div>
             </div>
         </div>
