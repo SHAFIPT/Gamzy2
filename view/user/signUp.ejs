@@ -139,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 password: password.value.trim(),
                 phonenumber: phone.value.trim(),
             };
+            console.log("This is formData :",formData);
+            
 
             try {
                 const response = await fetch('/user/signUp', {

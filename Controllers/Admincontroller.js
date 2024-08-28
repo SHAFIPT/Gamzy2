@@ -129,6 +129,10 @@ const addCategory = async (req, res) => {
     try {
         const { name, description } = req.body;
 
+        console.log("This is my name :",name)
+        console.log("This is my description :",description);
+        
+
         const exists = await Category.findOne({ name });
 
         if (exists) {
@@ -202,9 +206,13 @@ async function blockuser(req, res) {
 }
 
     const LoadProduct = async (req,res)=>{
-        try {
             
-            const products = await Product.find().populate('productCategory');
+            try {
+                const searchTerm = req.query.search || ''; // Get search term from query parameters
+                const products = await Product.find({
+                    productname: { $regex: searchTerm, $options: 'i' } // Case-insensitive search
+                }).populate('productCategory');
+
             res.render('productList' , { products: products })
 
         } catch (error) {

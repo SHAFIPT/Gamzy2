@@ -127,6 +127,15 @@ const insertSignUp = async (req, res) => {
     try {
         const { name, password, email, phonenumber } = req.body;
 
+        console.log(name);
+        console.log(password);
+        console.log(email);
+        console.log(phonenumber);
+        
+        
+        
+        
+
         // Check if the email already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -148,6 +157,9 @@ const insertSignUp = async (req, res) => {
         });
         const otp = generateOTP();
 
+        console.log("This is otp :",otp);
+        
+
         req.session.otp=otp
 
         const mailOptions = {
@@ -156,6 +168,9 @@ const insertSignUp = async (req, res) => {
             subject: 'Verify Your Email with OTP',
             text: `Your OTP for email verification is: ${otp}`
         };
+
+        console.log("This is mailOptions :",mailOptions);
+        
 
         await transporter.sendMail(mailOptions);
 

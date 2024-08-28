@@ -57,7 +57,7 @@ admin_route.post('/editCategory', auth.isLogin, Admincontroller.updateCategory);
 
 //addCategory
 admin_route.get('/addCatogory',auth.isLogin,Admincontroller.LoadCategory)
-admin_route.post('/addCatogory',auth.isLogin,Admincontroller.addCategory) 
+admin_route.post('/addCategory',auth.isLogin,Admincontroller.addCategory) 
 
 //LoadProduct
 admin_route.get('/Products', auth.isLogin,Admincontroller.LoadProduct)

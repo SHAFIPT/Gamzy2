@@ -102,6 +102,11 @@
           const form = document.getElementById('form');
           const name = document.getElementById('name');
           const description = document.getElementById('description');
+
+          console.log("This is the name :",name);
+          console.log("This is description :",description);
+          
+          
           
           form.addEventListener('submit', async e => {
               e.preventDefault();
@@ -113,6 +118,9 @@
                       name: name.value.trim(),
                       description: description.value.trim()
                   };
+
+                  console.log("This is formData",formData);
+                  
       
                   try {
                       const response = await fetch('/admin/addCategory', {
