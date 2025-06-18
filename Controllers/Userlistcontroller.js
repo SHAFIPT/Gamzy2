@@ -123,6 +123,7 @@ const LoadShopage = async (req, res) => {
 }
 
 const loadProductDetails = async (req, res) => {
+    console.log('This si hig man...........')
     try {
         const productId = req.params.productId;
         const variantId = req.params.variantId;

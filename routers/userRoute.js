@@ -33,7 +33,10 @@ const checkOrderStatus = (req, res, next) => {
 router.use(session({
     secret: config.sessionSecret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days in milliseconds
+    }
 }));
 
 router.use(passport.initialize());
@@ -90,7 +93,7 @@ router.get('/LogOut',userController.logOut)
 router.get('/ShopPage', userListcontroller.LoadShopage);
 
 // Product Details page
-router.get('/productDetails/product/:productId/variant/:variantId',userMiddleware.isLogin, userListcontroller.loadProductDetails);
+router.get('/productDetails/product/:productId/variant/:variantId', userListcontroller.loadProductDetails);
 
 
 //Product cart page
@@ -128,6 +131,9 @@ router.delete('/removeaddress/:id', myaccountController.removeAddress)
 router.get('/Userorders',userMiddleware.isLogin,myaccountController.loadOrderDetails);
 //userOrderAccout cancel
 router.post('/cancel-order/:orderId', myaccountController.orderCancel);
+
+router.post('/cancel-entire-order/:orderId', myaccountController.cancelEntireOrder);
+
 //userOrderAccout return
 router.post('/return-order/:orderId', myaccountController.orderReturn)
 

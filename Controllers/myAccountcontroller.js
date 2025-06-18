@@ -276,6 +276,100 @@ const orderCancel = async (req, res) => {
     }
 };
 
+const cancelEntireOrder = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const userId = req.session.user;
+
+        console.log('this sihte orederId : ', orderId)
+        console.log('this is hte userId :',userId)
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'User not authenticated' });
+        }
+
+        const order = await Order.findOne({ _id: orderId, userId });
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+
+        // Check if all products are already canceled
+        const allCanceled = order.products.every(product => product.status === 'Canceled');
+        if (allCanceled) {
+            return res.status(400).json({ success: false, message: 'Order already cancelled' });
+        }
+
+        let totalRefund = 0;
+
+        // Loop through each product and cancel
+        for (let item of order.products) {
+            if (item.status !== 'Canceled') {
+                // Restore product quantity
+                const product = await Product.findOne({ _id: item.productId, 'variants._id': item.variantId });
+                if (product) {
+                    const variant = product.variants.id(item.variantId);
+                    if (variant) {
+                        variant.quantity += item.quantity;
+                        await product.save();
+                    }
+                }
+
+                // Calculate refund
+                const totalOrderValue = order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+                const productProportion = (item.price * item.quantity) / totalOrderValue;
+                const productCouponDiscount = order.couponDiscount * productProportion;
+                const refundAmount = (item.price * item.quantity) - productCouponDiscount;
+
+                totalRefund += refundAmount;
+
+                item.status = "Canceled";
+                item.cancelReason = "Full Order Cancelled";
+            }
+        }
+
+        // Process refund if needed
+        if (totalRefund > 0) {
+            if (order.PaymentMethod === 'Razorpay') {
+                const razorpayRefund = await razerpay.refunds.create({
+                    payment_id: order.paymentId,
+                    amount: totalRefund * 100
+                });
+
+                if (!razorpayRefund) {
+                    return res.status(500).json({ success: false, message: 'Razorpay refund failed' });
+                }
+            }
+
+            let wallet = await Wallet.findOne({ user: userId });
+            if (!wallet) {
+                wallet = new Wallet({ user: userId, balance: 0, transactions: [] });
+            }
+
+            wallet.balance += totalRefund;
+            wallet.transactions.push({
+                amount: totalRefund,
+                type: 'credit',
+                entry: `Refund for full order cancellation (${order.orderId})`,
+                date: new Date()
+            });
+
+            await wallet.save();
+        }
+
+        order.totalAmount = 0;
+        order.couponDiscount = 0;
+
+        await order.save();
+
+        res.json({ success: true, message: 'Entire order cancelled successfully' });
+
+    } catch (error) {
+        console.error('Error in cancelEntireOrder:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
+
 const orderReturn = async (req, res) => {
     try {
         const { returnReason } = req.body;
@@ -379,11 +473,10 @@ const updatePassword = async (req, res) => {
 };
 const loadWalletPage = async (req, res) => {
     try {
-        const userId = req.session.user; // Assuming you store user ID in session
+        const userId = req.session.user;
         let wallet = await Wallet.findOne({ user: userId });
 
         if (!wallet) {
-            // If wallet doesn't exist, create a new one with zero balance
             wallet = new Wallet({
                 user: userId,
                 balance: 0,
@@ -392,8 +485,23 @@ const loadWalletPage = async (req, res) => {
             await wallet.save();
         }
 
-        // Ensure transactions is always an array
         wallet.transactions = wallet.transactions || [];
+
+        const updatedTransactions = await Promise.all(wallet.transactions.map(async (txn) => {
+            const regex = /product (\w{24})/; 
+            const match = txn.entry.match(regex);
+            
+            if (match) {
+                const productId = match[1];
+                const product = await Product.findById(productId);
+                if (product) {
+                    txn.entry = txn.entry.replace(productId, product.productname);
+                }
+            }
+            return txn;
+        }));
+
+        wallet.transactions = updatedTransactions;
 
         res.render('wallet', { wallet });
     } catch (error) {
@@ -612,6 +720,7 @@ module.exports = {
     removeAddress,
     loadOrderDetails,
     orderCancel,
+    cancelEntireOrder,
     orderReturn,
     updateProfile,
     updatePassword,

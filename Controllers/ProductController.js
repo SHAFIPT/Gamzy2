@@ -4,10 +4,20 @@ const path = require('path')
 const mongoose = require('mongoose');
 
 
-const LoadProduct = async (req,res)=>{
+const LoadProduct = async (req, res) => {
     try {
-        const categories = await Category.find({is_listed : true});
-        res.render('addProduct',{ categories : categories})
+        const categories = await Category.find({ is_listed: true });
+
+        const breadcrumb = [
+            { name: "Dashboard", url: "/admin/home" },
+            { name: "Product List", url: "/admin/Products" },
+            { name: "Add Product" } 
+        ];
+
+        res.render('addProduct', {
+            categories,
+            breadcrumb
+        });
 
     } catch (error) {
         console.log(error);

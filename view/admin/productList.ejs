@@ -82,9 +82,14 @@
             <a class="navbar-brand" href="index.html">
                 <h1 class="tm-site-title mb-0">Product Admin</h1>
             </a>
-            <ul class="breadcrumb mt-2">
-                <li class="breadcrumb-item"><a href="/admin/home">Admin &gt;&gt;</a>Dashboard</li>
-            </ul>
+            <nav aria-label="breadcrumb" class="mt-3">
+                <ol class="breadcrumb bg-light px-3 py-2 rounded shadow-sm mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="/admin/home" class="text-primary text-decoration-none">Admin</a>
+                    </li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">Dashboard</li>
+                </ol>      
+            </nav>
             <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars tm-nav-icon"></i>

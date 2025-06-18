@@ -27,11 +27,10 @@ const addCoupon = async (req,res) =>{
         res.status(500).send('Internal Server Error');
     }
 }
- 
 const addCouponPage = async (req, res) => {
     try {
         // Extract data from the request body
-        const { name, activationDate, expireDate, limitOfUse, discountAmount ,maxAmount,minimumPurchaseAmount} = req.body;
+        const { name, activationDate, expireDate, limitOfUse, discountAmount, maxAmount, minimumPurchaseAmount } = req.body;
 
         console.log(name);
         console.log(activationDate);
@@ -39,29 +38,50 @@ const addCouponPage = async (req, res) => {
         console.log(limitOfUse);
         console.log(discountAmount);
         console.log(maxAmount);
-        console.log("This coupon max:",minimumPurchaseAmount);
+        console.log("This coupon max:", minimumPurchaseAmount);
 
-        // Generate a random number
-        const randomNumber = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit number
+        // Convert values to numbers
+        const discountPercent = parseFloat(discountAmount);
+        const maxDiscount = parseFloat(maxAmount);
+        const minPurchase = parseFloat(minimumPurchaseAmount);
 
-        // Generate coupon code by appending the random number to the coupon name
+        // ✅ LOGICAL VALIDATIONS
+        if (discountPercent <= 0 || discountPercent > 100) {
+            return res.status(400).json({ message: 'Discount must be between 1% and 100%' });
+        }
+
+        if (maxDiscount <= 0) {
+            return res.status(400).json({ message: 'Max discount amount must be greater than 0' });
+        }
+
+        if (minPurchase < 0) {
+            return res.status(400).json({ message: 'Minimum purchase amount must be non-negative' });
+        }
+
+        const calculatedDiscount = minPurchase * (discountPercent / 100);
+
+        if (calculatedDiscount > maxDiscount) {
+            return res.status(400).json({
+                message: `With ${discountPercent}% discount on ₹${minPurchase}, discount = ₹${calculatedDiscount.toFixed(2)}, which exceeds the max allowed ₹${maxDiscount}`
+            });
+        }
+
+        // Generate a random number for coupon code
+        const randomNumber = Math.floor(1000 + Math.random() * 9000); // 4-digit number
         const couponCode = `${name.toLowerCase()}${randomNumber}`;
 
-        console.log("This is my couponCode",couponCode);
-        
+        console.log("This is my couponCode", couponCode);
 
         // Create a new coupon instance
         const newCoupon = new Coupon({
             couponname: name,
-            activationDate: activationDate,
-            expireDate: expireDate,
-            discount: discountAmount,
-            couponCode: couponCode,
+            activationDate,
+            expireDate,
+            discount: discountPercent,
+            couponCode,
             limitOfUse,
-            maxDiscountAmount:maxAmount,
-            minimumPurchaseAmount
-
-             // Set the generated coupon code
+            maxDiscountAmount: maxDiscount,
+            minimumPurchaseAmount: minPurchase
         });
 
         // Save the coupon to the database
@@ -70,11 +90,11 @@ const addCouponPage = async (req, res) => {
         // Send a success response
         res.status(201).json({ message: 'Coupon added successfully' });
     } catch (error) {
-        // Handle errors and send a failure response
         console.error('Error adding coupon:', error);
         res.status(500).json({ message: 'An error occurred while adding the coupon' });
     }
 };
+        
 
 const loadEditPage = async (req,res) =>{
     try {

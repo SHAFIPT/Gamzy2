@@ -426,21 +426,28 @@
                     <p class="wallet-balance">₹<%= wallet.balance %></p>
                     
                     <h5>Transaction History</h5>
-                    <% if (wallet.transactions && wallet.transactions.length > 0) { %>
+                    <% if (wallet.transactions && wallet.transactions.length> 0) { %>
                         <ul class="transaction-history">
-                            <% wallet.transactions.reverse().forEach(function(transaction) { %>
+                            <% wallet.transactions.slice().reverse().forEach(function(transaction) { %>
                                 <li>
-                                    <span class="transaction-description"><%= transaction.entry %></span>
-                                    <span class="transaction-date"><%= transaction.date.toLocaleDateString() %></span>
+                                    <span class="transaction-description">
+                                        <%= typeof transaction.entry==='string' && transaction.entry.startsWith('ObjectId') ? 'Transaction'
+                                            : transaction.entry %>
+                                    </span>
+                                    <span class="transaction-date">
+                                        <%= transaction.date instanceof Date ? transaction.date.toLocaleDateString() : new
+                                            Date(transaction.date).toLocaleDateString() %>
+                                    </span>
                                     <span class="transaction-amount <%= transaction.type === 'credit' ? 'text-success' : 'text-danger' %>">
-                                        <%= transaction.type === 'credit' ? '+' : '-' %>₹<%= transaction.amount %>
+                                        <%= transaction.type==='credit' ? '+' : '-' %>₹<%= transaction.amount %>
                                     </span>
                                 </li>
-                            <% }); %>
+                                <% }); %>
                         </ul>
-                    <% } else { %>
-                        <p>No transactions yet.</p>
-                    <% } %>
+                        <% } else { %>
+                            <p>No transactions yet.</p>
+                            <% } %>
+                    
                 </div>
             </div>
         </div>

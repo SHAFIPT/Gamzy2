@@ -127,15 +127,6 @@ const insertSignUp = async (req, res) => {
     try {
         const { name, password, email, phonenumber } = req.body;
 
-        console.log(name);
-        console.log(password);
-        console.log(email);
-        console.log(phonenumber);
-        
-        
-        
-        
-
         // Check if the email already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
