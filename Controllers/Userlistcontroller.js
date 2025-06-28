@@ -241,6 +241,10 @@ const addToCart = async (req, res) => {
         const product = await Product.findById(productId);
         const variant = product.variants.id(variantId);
 
+        if (!product || product.is_Listed === false) {
+            return res.status(400).json({ error: 'Product is not available' });
+        }
+
         if (!variant) {
             return res.status(404).json({ error: 'Variant not found' });
         }

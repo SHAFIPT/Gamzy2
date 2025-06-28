@@ -100,10 +100,19 @@ const applyCoupon = async (req, res) => {
 
 const getCoupons = async (req, res) => {
     try {
-        // console.log('Fetching coupons...'); 
+        const userId = req.session.user;
+        const currentDate = new Date();
+
         const coupons = await Coupon.find({
             isActive: true,
-            expireDate: { $gt: new Date() }
+            activationDate: { $lte: currentDate }, 
+            expireDate: { $gt: currentDate },       
+            usedUsers: { $ne: userId },              
+            $or: [
+                { limitOfUse: { $exists: false } },
+                { limitOfUse: null },
+                { $expr: { $gt: ["$limitOfUse", { $size: "$usedUsers" }] } }
+            ]
         });
 
         if (!coupons.length) {
@@ -116,6 +125,8 @@ const getCoupons = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while fetching coupons' });
     }
 };
+
+
 
 
 

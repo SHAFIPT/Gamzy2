@@ -31,13 +31,15 @@ const checkOrderStatus = (req, res, next) => {
 
 // Apply express-session middleware first
 router.use(session({
+    name: 'user.sid', // <-- different cookie name
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days in milliseconds
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }));
+
 
 router.use(passport.initialize());
 router.use(passport.session());

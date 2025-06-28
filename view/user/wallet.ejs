@@ -423,7 +423,9 @@
             <div class="col-md-9 ftco-animate">
                 <div class="wallet-section">
                     <h5>Wallet Balance</h5>
-                    <p class="wallet-balance">₹<%= wallet.balance %></p>
+                    <p class="wallet-balance">₹<%= wallet.balance.toFixed(2) %>
+                    </p>
+
                     
                     <h5>Transaction History</h5>
                     <% if (wallet.transactions && wallet.transactions.length> 0) { %>
@@ -439,7 +441,7 @@
                                             Date(transaction.date).toLocaleDateString() %>
                                     </span>
                                     <span class="transaction-amount <%= transaction.type === 'credit' ? 'text-success' : 'text-danger' %>">
-                                        <%= transaction.type==='credit' ? '+' : '-' %>₹<%= transaction.amount %>
+                                        <%= transaction.type==='credit' ? '+' : '-' %>₹<%= transaction.amount.toFixed(2) %>
                                     </span>
                                 </li>
                                 <% }); %>

@@ -32,14 +32,6 @@ const addCouponPage = async (req, res) => {
         // Extract data from the request body
         const { name, activationDate, expireDate, limitOfUse, discountAmount, maxAmount, minimumPurchaseAmount } = req.body;
 
-        console.log(name);
-        console.log(activationDate);
-        console.log(expireDate);
-        console.log(limitOfUse);
-        console.log(discountAmount);
-        console.log(maxAmount);
-        console.log("This coupon max:", minimumPurchaseAmount);
-
         // Convert values to numbers
         const discountPercent = parseFloat(discountAmount);
         const maxDiscount = parseFloat(maxAmount);

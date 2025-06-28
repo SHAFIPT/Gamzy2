@@ -219,12 +219,6 @@ const orderCancel = async (req, res) => {
         const productCouponDiscount = order.couponDiscount * productProportion;
         const refundAmount = (orderItem.price * orderItem.quantity) - productCouponDiscount;
 
-        console.log("This is my totalOrderValue :",totalOrderValue);
-        console.log("This is my productProportion :",productProportion);
-        console.log("This is my productCouponDiscount :",productCouponDiscount);
-        console.log("This is my refundAmount :",refundAmount);
-        
-
         if (order.PaymentMethod === 'Razorpay') {
             // Handle Razorpay refund
             const razorpayRefund = await razerpay.refunds.create({
@@ -416,18 +410,24 @@ const updateProfile = async (req, res) => {
             return res.status(401).json({ success: false, message: "User not authenticated" });
         }
 
+        const phoneRegex = /^[1-9][0-9]{9}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            return res.status(400).json({ success: false, message: "Invalid phone number. It must be 10 digits and not start with 0." });
+        }
+
         const user = await User.findByIdAndUpdate(userId, { name, phonenumber: phoneNumber }, { new: true });
 
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
+
         res.json({ success: true, message: 'Profile updated successfully' });
     } catch (error) {
-        console.error('Error updating profile:', error); // Log error details
-        console.error('Error stack trace:', error.stack); // Log stack trace
+        console.error('Error updating profile:', error);
         res.status(500).json({ success: false, message: 'Failed to update profile' });
     }
 }
+
 
 
 const updatePassword = async (req, res) => {
